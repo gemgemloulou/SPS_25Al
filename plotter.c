@@ -40,14 +40,14 @@ TFile *fB = new TFile("/disks/1/gwilson/25Al/hadd_v7/bmck_B9.8_D0.root");
 
  c1->cd(4);
  gPad->SetLogy();
- f->cd(); h1_de4->Draw(); h1_de4->SetLineColor(kRed);h1_de4->GetXaxis()->SetRange(0,100);
- fB->cd(); h1_de4->Draw("same"); h1_de4->SetLineColor(kBlue);h1_de4->GetXaxis()->SetRange(0,100);
+ f->cd(); h1_de4->Draw(); h1_de4->SetLineColor(kRed);
+ fB->cd(); h1_de4->Draw("same"); h1_de4->SetLineColor(kBlue);
  c1->Update();
 
  c1->cd(5);
  gPad->SetLogy();
- f->cd(); h1_de5->Draw(); h1_de5->SetLineColor(kRed);
- fB->cd(); h1_de5->Draw("same"); h1_de5->SetLineColor(kBlue);
+ f->cd(); h1_de5->Draw(); h1_de5->SetLineColor(kRed);h1_de5->GetXaxis()->SetRange(0,100);
+ fB->cd(); h1_de5->Draw("same"); h1_de5->SetLineColor(kBlue); h1_de5->GetXaxis()->SetRange(0,100);
  c1->Update();
 
 
