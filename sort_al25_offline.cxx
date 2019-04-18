@@ -63,8 +63,8 @@ Float_t Rresolution[3][16];
 Float_t Wslope[3][16];
 Float_t Woffset[3][16];
 Float_t Wresolution[3][16];
-Float_t Abeam=21,Aeject=4,Aresidue=18,Atgt=1;
-Float_t ebeam=51;
+Float_t Abeam=25.; Float_t Aeject=4.; Float_t Aresidue=22.; Float_t Atgt=1.;
+Float_t ebeam=275.;
 Int_t Tlow=300,Thi=700;
 Int_t nevent=0;
 Float_t edifflow=-2.,ediffhi=1.;
@@ -94,7 +94,9 @@ TH2F *hERtheta;
 TH2F *hTRF,*hTRFg,*hT0RF,*hT0RFg;
 TH2F *hADC2, *hADC3;
 TH2F *h2_EDE;
-TH2F *hER1_gtxrf1, *hER1_gtxrf2, *hER1_gtxde41, *hER1_gtxde42, *hER1_gtxde43, *hER1_gtxde44, *hER1_gtde4rf1, *hER1_gtde4rf2, *hER1_gtde4rf3, *hER1_gtde4rf4;
+TH2F *hER1_gtxrf1, *hER1_gtxrf2;
+TH2F *hER1_gtxde41, *hER1_gtxde42, *hER1_gtxde43, *hER1_gtxde44;
+TH2F *hER1_gtde4rf1, *hER1_gtde4rf2, *hER1_gtde4rf3, *hER1_gtde4rf4;
 
 PPAC *myppac = new PPAC("/disks/1/gwilson/25Al/offline/ppac.offline3.setup");
 
@@ -257,7 +259,8 @@ int userentry()
 
   Bool_t ical=kTRUE;
   if (ical) 
-    {readcal("k37_dssd.cal");}
+    // {readcal("k37_dssd.cal");}
+    {readcal("calglw.dat");}
   else {
     for (Int_t idet=0;idet<3; idet++) {
       for (Int_t ichan=0; ichan<16; ichan++) {
