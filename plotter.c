@@ -14,8 +14,8 @@
 using namespace std;
 int plotter(){
 
-TFile *f = new TFile("/disks/1/gwilson/25Al/hadd_v7/B8.1_D12.root");
-TFile *fB = new TFile("/disks/1/gwilson/25Al/hadd_v7/bmck_B9.05_D12.root");
+TFile *f = new TFile("/disks/1/gwilson/25Al/hadd_v7/B8.5_D0.root");
+TFile *fB = new TFile("/disks/1/gwilson/25Al/hadd_v7/bmck_B9.8_D0.root");
 
 /* ************************************************************** */
  TCanvas *c1 = new TCanvas("c1","ionisation chamber",1600,1200);
@@ -361,6 +361,138 @@ TCanvas *c13 = new TCanvas("c13","",1600,1200);
  c13->Update();
 
 /* ************************************************************** */
+TCanvas *c14 = new TCanvas("c14","detector 1 rings, not beam check",1600,1200);
+ c14->Divide(4,4);
+ f->cd();
+ c14->cd(1); gPad->SetLogy(); hER1->ProjectionX("hER1_1",0,1); hER1_1->Draw();
+ c14->cd(2); gPad->SetLogy(); hER1->ProjectionX("hER1_2",1,2); hER1_2->Draw();
+ c14->cd(3); gPad->SetLogy(); hER1->ProjectionX("hER1_3",2,3); hER1_3->Draw();
+ c14->cd(4); gPad->SetLogy(); hER1->ProjectionX("hER1_4",3,4); hER1_4->Draw();
+ c14->cd(5); gPad->SetLogy(); hER1->ProjectionX("hER1_5",4,5); hER1_5->Draw();
+ c14->cd(6); gPad->SetLogy(); hER1->ProjectionX("hER1_6",5,6); hER1_6->Draw();
+ c14->cd(7); gPad->SetLogy(); hER1->ProjectionX("hER1_7",6,7); hER1_7->Draw();
+ c14->cd(8); gPad->SetLogy(); hER1->ProjectionX("hER1_8",7,8); hER1_8->Draw();
+ c14->cd(9); gPad->SetLogy(); hER1->ProjectionX("hER1_9",8,9); hER1_9->Draw();
+ c14->cd(10); gPad->SetLogy(); hER1->ProjectionX("hER1_10",9,10); hER1_10->Draw();
+ c14->cd(11); gPad->SetLogy(); hER1->ProjectionX("hER1_11",10,11); hER1_11->Draw();
+ c14->cd(12); gPad->SetLogy(); hER1->ProjectionX("hER1_12",11,12); hER1_12->Draw();
+ c14->cd(13); gPad->SetLogy(); hER1->ProjectionX("hER1_13",12,13); hER1_13->Draw();
+ c14->cd(14); gPad->SetLogy(); hER1->ProjectionX("hER1_14",13,14); hER1_14->Draw();
+ c14->cd(15); gPad->SetLogy(); hER1->ProjectionX("hER1_15",14,15); hER1_15->Draw();
+ c14->cd(16); gPad->SetLogy(); hER1->ProjectionX("hER1_16",15,16); hER1_16->Draw();
+ c14->Update();
+
+/* ************************************************************** */
+TCanvas *c15 = new TCanvas("c15","detector 1 rings, beam check",1600,1200);
+ c15->Divide(4,4);
+ fB->cd();
+ c15->cd(1); gPad->SetLogy(); hER1->ProjectionX("hER1B_1",0,1); hER1B_1->Draw();
+ c15->cd(2); gPad->SetLogy(); hER1->ProjectionX("hER1B_2",1,2); hER1B_2->Draw();
+ c15->cd(3); gPad->SetLogy(); hER1->ProjectionX("hER1B_3",2,3); hER1B_3->Draw();
+ c15->cd(4); gPad->SetLogy(); hER1->ProjectionX("hER1B_4",3,4); hER1B_4->Draw();
+ c15->cd(5); gPad->SetLogy(); hER1->ProjectionX("hER1B_5",4,5); hER1B_5->Draw();
+ c15->cd(6); gPad->SetLogy(); hER1->ProjectionX("hER1B_6",5,6); hER1B_6->Draw();
+ c15->cd(7); gPad->SetLogy(); hER1->ProjectionX("hER1B_7",6,7); hER1B_7->Draw();
+ c15->cd(8); gPad->SetLogy(); hER1->ProjectionX("hER1B_8",7,8); hER1B_8->Draw();
+ c15->cd(9); gPad->SetLogy(); hER1->ProjectionX("hER1B_9",8,9); hER1B_9->Draw();
+ c15->cd(10); gPad->SetLogy(); hER1->ProjectionX("hER1B_10",9,10); hER1B_10->Draw();
+ c15->cd(11); gPad->SetLogy(); hER1->ProjectionX("hER1B_11",10,11); hER1B_11->Draw();
+ c15->cd(12); gPad->SetLogy(); hER1->ProjectionX("hER1B_12",11,12); hER1B_12->Draw();
+ c15->cd(13); gPad->SetLogy(); hER1->ProjectionX("hER1B_13",12,13); hER1B_13->Draw();
+ c15->cd(14); gPad->SetLogy(); hER1->ProjectionX("hER1B_14",13,14); hER1B_14->Draw();
+ c15->cd(15); gPad->SetLogy(); hER1->ProjectionX("hER1B_15",14,15); hER1B_15->Draw();
+ c15->cd(16); gPad->SetLogy(); hER1->ProjectionX("hER1B_16",15,16); hER1B_16->Draw();
+ c15->Update();
+
+/* ************************************************************** */
+TCanvas *c16 = new TCanvas("c16","detector 2 rings, not beam check",1600,1200);
+ c16->Divide(4,4);
+ f->cd();
+ c16->cd(1); gPad->SetLogy(); hER2->ProjectionX("hER2_1",0,1); hER2_1->Draw();
+ c16->cd(2); gPad->SetLogy(); hER2->ProjectionX("hER2_2",1,2); hER2_2->Draw();
+ c16->cd(3); gPad->SetLogy(); hER2->ProjectionX("hER2_3",2,3); hER2_3->Draw();
+ c16->cd(4); gPad->SetLogy(); hER2->ProjectionX("hER2_4",3,4); hER2_4->Draw();
+ c16->cd(5); gPad->SetLogy(); hER2->ProjectionX("hER2_5",4,5); hER2_5->Draw();
+ c16->cd(6); gPad->SetLogy(); hER2->ProjectionX("hER2_6",5,6); hER2_6->Draw();
+ c16->cd(7); gPad->SetLogy(); hER2->ProjectionX("hER2_7",6,7); hER2_7->Draw();
+ c16->cd(8); gPad->SetLogy(); hER2->ProjectionX("hER2_8",7,8); hER2_8->Draw();
+ c16->cd(9); gPad->SetLogy(); hER2->ProjectionX("hER2_9",8,9); hER2_9->Draw();
+ c16->cd(10); gPad->SetLogy(); hER2->ProjectionX("hER2_10",9,10); hER2_10->Draw();
+ c16->cd(11); gPad->SetLogy(); hER2->ProjectionX("hER2_11",10,11); hER2_11->Draw();
+ c16->cd(12); gPad->SetLogy(); hER2->ProjectionX("hER2_12",11,12); hER2_12->Draw();
+ c16->cd(13); gPad->SetLogy(); hER2->ProjectionX("hER2_13",12,13); hER2_13->Draw();
+ c16->cd(14); gPad->SetLogy(); hER2->ProjectionX("hER2_14",13,14); hER2_14->Draw();
+ c16->cd(15); gPad->SetLogy(); hER2->ProjectionX("hER2_15",14,15); hER2_15->Draw();
+ c16->cd(16); gPad->SetLogy(); hER2->ProjectionX("hER2_16",15,16); hER2_16->Draw();
+ c16->Update();
+
+/* ************************************************************** */
+TCanvas *c17 = new TCanvas("c17","detector 1 rings, beam check",1600,1200);
+ c17->Divide(4,4);
+ fB->cd();
+ c17->cd(1); gPad->SetLogy(); hER2->ProjectionX("hER2B_1",0,1); hER2B_1->Draw();
+ c17->cd(2); gPad->SetLogy(); hER2->ProjectionX("hER2B_2",1,2); hER2B_2->Draw();
+ c17->cd(3); gPad->SetLogy(); hER2->ProjectionX("hER2B_3",2,3); hER2B_3->Draw();
+ c17->cd(4); gPad->SetLogy(); hER2->ProjectionX("hER2B_4",3,4); hER2B_4->Draw();
+ c17->cd(5); gPad->SetLogy(); hER2->ProjectionX("hER2B_5",4,5); hER2B_5->Draw();
+ c17->cd(6); gPad->SetLogy(); hER2->ProjectionX("hER2B_6",5,6); hER2B_6->Draw();
+ c17->cd(7); gPad->SetLogy(); hER2->ProjectionX("hER2B_7",6,7); hER2B_7->Draw();
+ c17->cd(8); gPad->SetLogy(); hER2->ProjectionX("hER2B_8",7,8); hER2B_8->Draw();
+ c17->cd(9); gPad->SetLogy(); hER2->ProjectionX("hER2B_9",8,9); hER2B_9->Draw();
+ c17->cd(10); gPad->SetLogy(); hER2->ProjectionX("hER2B_10",9,10); hER2B_10->Draw();
+ c17->cd(11); gPad->SetLogy(); hER2->ProjectionX("hER2B_11",10,11); hER2B_11->Draw();
+ c17->cd(12); gPad->SetLogy(); hER2->ProjectionX("hER2B_12",11,12); hER2B_12->Draw();
+ c17->cd(13); gPad->SetLogy(); hER2->ProjectionX("hER2B_13",12,13); hER2B_13->Draw();
+ c17->cd(14); gPad->SetLogy(); hER2->ProjectionX("hER2B_14",13,14); hER2B_14->Draw();
+ c17->cd(15); gPad->SetLogy(); hER2->ProjectionX("hER2B_15",14,15); hER2B_15->Draw();
+ c17->cd(16); gPad->SetLogy(); hER2->ProjectionX("hER2B_16",15,16); hER2B_16->Draw();
+ c17->Update();
+
+/* ************************************************************** */
+TCanvas *c18 = new TCanvas("c18","detector 2 wedges, not beam check",1600,1200);
+ c18->Divide(4,4);
+ f->cd(); c18->cd(1); gPad->SetLogy(); hEW2->ProjectionX("hEW2_1",0,1); hEW2_1->Draw();
+ c18->cd(2); gPad->SetLogy(); hEW2->ProjectionX("hEW2_2",1,2); hEW2_2->Draw();
+ c18->cd(3); gPad->SetLogy(); hEW2->ProjectionX("hEW2_3",2,3); hEW2_3->Draw();
+ c18->cd(4); gPad->SetLogy(); hEW2->ProjectionX("hEW2_4",3,4); hEW2_4->Draw();
+ c18->cd(5); gPad->SetLogy(); hEW2->ProjectionX("hEW2_5",4,5); hEW2_5->Draw();
+ c18->cd(6); gPad->SetLogy(); hEW2->ProjectionX("hEW2_6",5,6); hEW2_6->Draw();
+ c18->cd(7); gPad->SetLogy(); hEW2->ProjectionX("hEW2_7",6,7); hEW2_7->Draw();
+ c18->cd(8); gPad->SetLogy(); hEW2->ProjectionX("hEW2_8",7,8); hEW2_8->Draw();
+ c18->cd(9); gPad->SetLogy(); hEW2->ProjectionX("hEW2_9",8,9); hEW2_9->Draw();
+ c18->cd(10); gPad->SetLogy(); hEW2->ProjectionX("hEW2_10",9,10); hEW2_10->Draw();
+ c18->cd(11); gPad->SetLogy(); hEW2->ProjectionX("hEW2_11",10,11); hEW2_11->Draw();
+ c18->cd(12); gPad->SetLogy(); hEW2->ProjectionX("hEW2_12",11,12); hEW2_12->Draw();
+ c18->cd(13); gPad->SetLogy(); hEW2->ProjectionX("hEW2_13",12,13); hEW2_13->Draw();
+ c18->cd(14); gPad->SetLogy(); hEW2->ProjectionX("hEW2_14",13,14); hEW2_14->Draw();
+ c18->cd(15); gPad->SetLogy(); hEW2->ProjectionX("hEW2_15",14,15); hEW2_15->Draw();
+ c18->cd(16); gPad->SetLogy(); hEW2->ProjectionX("hEW2_16",15,16); hEW2_16->Draw();
+ c18->Update();
+
+/* ************************************************************** */
+TCanvas *c19 = new TCanvas("c19","detector 1 wedges, beam check",1600,1200);
+ c19->Divide(4,4);
+ fB->cd();
+ c19->cd(1); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_1",0,1); hEW2B_1->Draw();
+ c19->cd(2); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_2",1,2); hEW2B_2->Draw();
+ c19->cd(3); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_3",2,3); hEW2B_3->Draw();
+ c19->cd(4); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_4",3,4); hEW2B_4->Draw();
+ c19->cd(5); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_5",4,5); hEW2B_5->Draw();
+ c19->cd(6); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_6",5,6); hEW2B_6->Draw();
+ c19->cd(7); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_7",6,7); hEW2B_7->Draw();
+ c19->cd(8); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_8",7,8); hEW2B_8->Draw();
+ c19->cd(9); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_9",8,9); hEW2B_9->Draw();
+ c19->cd(10); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_10",9,10); hEW2B_10->Draw();
+ c19->cd(11); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_11",10,11); hEW2B_11->Draw();
+ c19->cd(12); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_12",11,12); hEW2B_12->Draw();
+ c19->cd(13); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_13",12,13); hEW2B_13->Draw();
+ c19->cd(14); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_14",13,14); hEW2B_14->Draw();
+ c19->cd(15); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_15",14,15); hEW2B_15->Draw();
+ c19->cd(16); gPad->SetLogy(); hEW2->ProjectionX("hEW2B_16",15,16); hEW2B_16->Draw();
+ c19->Update();
+
+
+/* ************************************************************** */
  c1->SaveAs("images/IC_D12.png");
  c2->SaveAs("images/cath_grid_D12.png");
  c3->SaveAs("images/focalplane1_D12.png");
@@ -374,8 +506,11 @@ TCanvas *c13 = new TCanvas("c13","",1600,1200);
  c11->SaveAs("images/2D_7_D12.png");
  c12->SaveAs("images/2D_8_D12.png");
  c13->SaveAs("images/2D_9_D12.png");
-
-
-
+ c14->SaveAs("images/ring1.png");
+ c15->SaveAs("images/ring1_bmck.png");
+ c16->SaveAs("images/ring2.png");
+ c17->SaveAs("images/ring2_bmck.png");
+ c18->SaveAs("images/wedge2.png");
+ c19->SaveAs("images/wedge2_bmck.png");
  return 0;
 }
