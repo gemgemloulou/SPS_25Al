@@ -14,8 +14,8 @@
 using namespace std;
 int plotter(){
 
-TFile *f = new TFile("/disks/1/gwilson/25Al/hadd_v7/B8.5_D0.root");
-TFile *fB = new TFile("/disks/1/gwilson/25Al/hadd_v7/bmck_B9.8_D0.root");
+TFile *f = new TFile("/disks/1/gwilson/25Al/sorted/chain_run/B8.5_D0.root");
+TFile *fB = new TFile("/disks/1/gwilson/25Al/sorted/chain_run/bmck_B9.8_D0.root");
 
 /* ************************************************************** */
  TCanvas *c1 = new TCanvas("c1","ionisation chamber",1600,1200);

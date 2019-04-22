@@ -38,6 +38,9 @@
 // Macro Definition
 #define NSCALERS 12
 
+/* ******************************* */
+/* *** */ Bool_t iverb = 0; /* *** */
+/* ******************************* */ 
 
 // Declaration of 1D/2D Histograms for SPS
 TFile *f, *cutfile;
@@ -159,23 +162,17 @@ int readcal(Char_t *calfile, Int_t iverbose=0)
   ifstream infile(calfile);
   for (Int_t idet=0;idet<2;idet++) {
     cout <<"Reading Detector "<<idet<<" calibrations"<<endl;
-    if (iverbose==1) cout <<"Ring calibration constants:"<<endl;
+    if (iverb==1) cout <<"Ring calibration constants:"<<endl;
     for(Int_t ring=0;ring<16;ring++) {
-      infile>>dummy;
-      infile>>dummy;
       infile>>Rslope[idet][ring];
       infile>>Roffset[idet][ring];
-      infile>>Rresolution[idet][ring];
-      if (iverbose==1) cout << Rslope[idet][ring]<<" "<<Roffset[idet][ring]<<endl;
+      if (iverb==1) cout << Rslope[idet][ring]<<" "<<Roffset[idet][ring]<<endl;
     }
-    if (iverbose==1) cout <<"Wedge calibration constants:"<<endl;
+    if (iverb==1) cout <<"Wedge calibration constants:"<<endl;
     for(Int_t wedge=0;wedge<16;wedge++) {
-      infile>>dummy;
-      infile>>dummy;
       infile>>Wslope[idet][wedge];
       infile>>Woffset[idet][wedge];
-      infile>>Wresolution[idet][wedge];
-      if (iverbose==1) cout << Wslope[idet][wedge]<<" "<<Woffset[idet][wedge]<<endl;
+      if (iverb==1) cout << Wslope[idet][wedge]<<" "<<Woffset[idet][wedge]<<endl;
     }
   }
   return 0; 
