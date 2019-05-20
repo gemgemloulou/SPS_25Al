@@ -5,6 +5,10 @@
 
  Run on histogram files that have been hadded together. Execute using ROOT, using root -q plotter.c
 
+**** plotter_too.c ****
+A bit like plotter.c, but this one plots the same (data) histograms for each of the degrader settings, for a direct comparison
+Again, run on hadded histogram files within ROOT. 
+
 **** stripmaker.c ****
 Silly script to project the 2D energy vs ring/wedge into separate histograms, in order to check the calibration. 
 The input and output files are hardcoded in for now. 

@@ -155,29 +155,6 @@ Bool_t checkcutg(Char_t *cutname,Float_t x, Float_t y)
   }
 }
 
-/* Read calibration constants for DSSD */
-int readcal(Char_t *calfile, Int_t iverbose=0)
-{
-  Float_t dummy;
-  ifstream infile(calfile);
-  for (Int_t idet=0;idet<2;idet++) {
-    cout <<"Reading Detector "<<idet<<" calibrations"<<endl;
-    if (iverb==1) cout <<"Ring calibration constants:"<<endl;
-    for(Int_t ring=0;ring<16;ring++) {
-      infile>>Rslope[idet][ring];
-      infile>>Roffset[idet][ring];
-      if (iverb==1) cout << Rslope[idet][ring]<<" "<<Roffset[idet][ring]<<endl;
-    }
-    if (iverb==1) cout <<"Wedge calibration constants:"<<endl;
-    for(Int_t wedge=0;wedge<16;wedge++) {
-      infile>>Wslope[idet][wedge];
-      infile>>Woffset[idet][wedge];
-      if (iverb==1) cout << Wslope[idet][wedge]<<" "<<Woffset[idet][wedge]<<endl;
-    }
-  }
-  return 0; 
-
-}
 
 /* function to count the number of set bits in a 16 bit word */
 
@@ -254,21 +231,28 @@ int userentry()
   
   if(icut) readcuts();
 
-  Bool_t ical=kTRUE;
-  if (ical) 
-    // {readcal("k37_dssd.cal");}
-    {readcal("calglw.dat");}
-  else {
-    for (Int_t idet=0;idet<3; idet++) {
-      for (Int_t ichan=0; ichan<16; ichan++) {
-	Rslope[idet][ichan]=500.0;
-	Roffset[idet][ichan]=0.0;
-	Wslope[idet][ichan]=500.0;
-	Woffset[idet][ichan]=0.0;
-      }
+  ifstream in_dE; ifstream in_E;
+  in_dE.open("dEcal.dat");
+  in_E.open("Ecal_pre95.dat");
+  //  in_E.open("Ecal_post95.dat");
+  
+  for(int i=0;i<32;i++){
+    if(i<16){
+      in_dE >> Roffset[1][i] >> Rslope[1][i];
+      in_E >> Roffset[0][i] >> Rslope[0][i];
+    }else{
+      in_dE >> Woffset[1][i-16] >> Wslope[1][i-16];
+      in_E >> Woffset[0][i-16] >> Wslope[0][i-16];
     }
   }
-  
+  in_dE.close(); in_E.close();
+
+  for(int i=0;i<16;i++){
+    cout << Roffset[0][i] << "\t" << Rslope[0][i] << "\t" << Roffset[1][i] << "\t" << Rslope[1][i] << endl;
+  }
+ for(int i=0;i<16;i++){
+    cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << Woffset[1][i] << "\t" << Wslope[1][i] << endl;
+  }
   // Open ROOT file
   f = new TFile("output.root", "recreate");
   
@@ -360,10 +344,10 @@ int userentry()
   //  hEDiffR=new TH2F("hEDiffR","Ludwig ER-EW vs ring",500,-2.5,2.5,17,0,17);
   //  hEDiffW=new TH2F("hEDiffW","Ludwig ER-EW vs wedge",500,-2.5,2.5,17,0,17);
 
-  hER1=new TH2F("hER1","Ring1 vs E calib",2000,0,80,17,0,17);  
-  hER2=new TH2F("hER2","Ring2 vs E calib",2000,0,50,17,0,17);
-  hEW1=new TH2F("hEW1","Wedge1 vs E calib",2000,0,80,17,0,17);
-  hEW2=new TH2F("hEW2","Wedge2 vs E calib",2000,0,50,17,0,17); 
+  hER1=new TH2F("hER1","Ring1 vs E calib",400,0,10000,17,0,17);  
+  hER2=new TH2F("hER2","Ring2 vs E calib",400,0,10000,17,0,17);
+  hEW1=new TH2F("hEW1","Wedge1 vs E calib",400,0,10000,17,0,17);
+  hEW2=new TH2F("hEW2","Wedge2 vs E calib",400,0,10000,17,0,17); 
 
   hER=new TH2F("hER","Ring vs Energy all",1000,0,10,50,0,50);
   //hERg=new TH2F("hERg","Ring vs Energy Time gated",1500,0,30,30,5,15);
@@ -530,9 +514,12 @@ int userdecode(ScarletEvnt &event) {
       WChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
       //hHitW->Fill(1+((dataword & 0x0000f000)>>12),ndet);
       WRawData[ndet][ndat]=(dataword & 0x00000fff);
-      WData[ndet][ndat]=
-	(WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])/
-	Wslope[ndet][WChan[ndet][ndat]];
+      //   WData[ndet][ndat]=
+      //	(WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])/
+      // 	Wslope[ndet][WChan[ndet][ndat]];
+        WData[ndet][ndat]= Woffset[ndet][WChan[ndet][ndat]]+Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
+	//	if(WData[ndet][ndat]>7000){
+	  //	cout << WData[ndet][ndat] << " = " << Woffset[ndet][WChan[ndet][ndat]] << " + " << Wslope[ndet][WChan[ndet][ndat]]<< " * " << WRawData[ndet][ndat] << endl;}
       if (WData[ndet][ndat]>emaxW) {
 	emaxW=WData[ndet][ndat];
 	emaxrawW=WRawData[ndet][ndat];
@@ -565,11 +552,12 @@ int userdecode(ScarletEvnt &event) {
       RChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
       //hHitR->Fill(1+((dataword & 0x0000f000)>>12),ndet);
       RRawData[ndet][ndat]=(dataword & 0x00000fff);
-      RData[ndet][ndat]=
-	(RRawData[ndet][ndat] - Roffset[ndet][RChan[ndet][ndat]])/
-	Rslope[ndet][RChan[ndet][ndat]];
-      if( fabs(Rslope[ndet][RChan[ndet][ndat]])<0.0001)
-	{ cout<<"problem "<<ndet<<" "<<RChan[ndet][ndat]<<endl;}
+      //   RData[ndet][ndat]=
+      // (RRawData[ndet][ndat] - Roffset[ndet][RChan[ndet][ndat]])/
+      //	Rslope[ndet][RChan[ndet][ndat]];
+       RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
+      //  if( fabs(Rslope[ndet][RChan[ndet][ndat]])<0.0001)
+      //{ cout<<"problem "<<ndet<<" "<<RChan[ndet][ndat]<<endl;}
 
       if (RData[ndet][ndat]>emaxR) {
 	//  cout<<"hi this "<<RData[ndet][ndat]<<endl;
