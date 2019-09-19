@@ -14,8 +14,8 @@
 using namespace std;
 int plotter(){
 
-TFile *f = new TFile("/disks/1/gwilson/25Al/sorted/chain_run/B8.5_D0.root");
-TFile *fB = new TFile("/disks/1/gwilson/25Al/sorted/chain_run/bmck_B9.8_D0.root");
+TFile *f = new TFile("/disks/1/gwilson/25Al/sorted/run101.root");
+TFile *fB = new TFile("/disks/1/gwilson/25Al/sorted/run102.root");
 
 /* ************************************************************** */
  TCanvas *c1 = new TCanvas("c1","ionisation chamber",1600,1200);
@@ -493,24 +493,24 @@ TCanvas *c19 = new TCanvas("c19","detector 1 wedges, beam check",1600,1200);
 
 
 /* ************************************************************** */
- c1->SaveAs("images/IC_D12.png");
- c2->SaveAs("images/cath_grid_D12.png");
- c3->SaveAs("images/focalplane1_D12.png");
- c4->SaveAs("images/focalplane2_D12.png");
- c5->SaveAs("images/2D_1_D12.png");
- c6->SaveAs("images/2D_2_D12.png");
- c7->SaveAs("images/2D_3_D12.png");
- c8->SaveAs("images/2D_4_D12.png");
- c9->SaveAs("images/2D_5_D12.png");
- c10->SaveAs("images/2D_6_D12.png");
- c11->SaveAs("images/2D_7_D12.png");
- c12->SaveAs("images/2D_8_D12.png");
- c13->SaveAs("images/2D_9_D12.png");
- c14->SaveAs("images/ring1.png");
- c15->SaveAs("images/ring1_bmck.png");
- c16->SaveAs("images/ring2.png");
- c17->SaveAs("images/ring2_bmck.png");
- c18->SaveAs("images/wedge2.png");
- c19->SaveAs("images/wedge2_bmck.png");
+ c1->SaveAs("histograms/Run101_102/IC_D12.png");
+ c2->SaveAs("histograms/Run101_102/cath_grid_D12.png");
+ c3->SaveAs("histograms/Run101_102/focalplane1_D12.png");
+ c4->SaveAs("histograms/Run101_102/focalplane2_D12.png");
+ c5->SaveAs("histograms/Run101_102/2D_1_D12.png");
+ c6->SaveAs("histograms/Run101_102/2D_2_D12.png");
+ c7->SaveAs("histograms/Run101_102/2D_3_D12.png");
+ c8->SaveAs("histograms/Run101_102/2D_4_D12.png");
+ c9->SaveAs("histograms/Run101_102/2D_5_D12.png");
+ c10->SaveAs("histograms/Run101_102/2D_6_D12.png");
+ c11->SaveAs("histograms/Run101_102/2D_7_D12.png");
+ c12->SaveAs("histograms/Run101_102/2D_8_D12.png");
+ c13->SaveAs("histograms/Run101_102/2D_9_D12.png");
+ c14->SaveAs("histograms/Run101_102/ring1.png");
+ c15->SaveAs("histograms/Run101_102/ring1_bmck.png");
+ c16->SaveAs("histograms/Run101_102/ring2.png");
+ c17->SaveAs("histograms/Run101_102/ring2_bmck.png");
+ c18->SaveAs("histograms/Run101_102/wedge2.png");
+ c19->SaveAs("histograms/Run101_102/wedge2_bmck.png");
  return 0;
 }

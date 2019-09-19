@@ -138,16 +138,16 @@ analysis::analysis(TTree *t) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (t == 0) {
-     //#ifdef SINGLE_TREE
+     #ifdef SINGLE_TREE
       TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/disks/1/gwilson/25Al/sorted/run101.root");
       if (!f || !f->IsOpen()) {
          f = new TFile("/disks/1/gwilson/25Al/sorted/run101.root");
       }
       f->GetObject("tree",t);
-      /*#else
+      #else
       TChain *chain = new TChain("tree","");
       // 12ug
-      /*
+      /* 
       chain->Add("/disks/1/gwilson/25Al/sorted/run265.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run266.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run267.root"); 
@@ -158,7 +158,7 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run275.root");
       */
       // 8ug
-      /*    
+      /* 
       chain->Add("/disks/1/gwilson/25Al/sorted/run230.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run234.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run236.root"); 
@@ -191,9 +191,9 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run214.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run215.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run223.root");
-     */ 
+      */
       //2ug 
-      /*	 
+      /* 
       chain->Add("/disks/1/gwilson/25Al/sorted/run147.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run148.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run150.root"); 
@@ -217,9 +217,9 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run179.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run182.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run183.root"); 
-      */
+      */  
       // no degrader 
-      /*	  
+      	  
        chain->Add("/disks/1/gwilson/25Al/sorted/run99.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run100.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run101.root"); 
@@ -228,9 +228,9 @@ analysis::analysis(TTree *t) : fChain(0)
        chain->Add("/disks/1/gwilson/25Al/sorted/run113.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run116.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run117.root");
-     */
-      // t = chain;
-      // #endif
+     
+       t = chain;
+       #endif
    }
    Init(t);
 }

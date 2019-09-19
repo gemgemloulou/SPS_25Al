@@ -1,9 +1,17 @@
 # SPS_25Al
 
-**** plotter.c ****
- Plot some SPS histograms, to check differences between beam on and beam off runs, for each degrader setting.                    
+**** analysis.c ****
+A code based on MakeClass, it plots histograms from trees, so it loops over multiplicities, etc. It also reads in cut files for each degrader setting (if you comment out the others). 
+To run in root:
+.L analysis.c++; analysis t; t.Loop()
 
- Run on histogram files that have been hadded together. Execute using ROOT, using root -q plotter.c
+**** analysis_plots.c ****
+Draws everything from analysis.c. Also loads the cut files so you can see what cuts have actually been applied... Writes out lots of histograms. 
+
+**** plotter.c ****
+ Plots some SPS histograms, to check differences between beam on and beam off runs, for each degrader setting. This is for the default histograms that come out of the original sortcode. Gated things might be wonky                    
+
+ Run on histogram files that have been hadded together, or individual runs. Execute using ROOT, using root -q plotter.c
 
 **** plotter_too.c ****
 A bit like plotter.c, but this one plots the same (data) histograms for each of the degrader settings, for a direct comparison

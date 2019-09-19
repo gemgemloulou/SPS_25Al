@@ -26,7 +26,7 @@ TFile *fcuts = new TFile("cuts_0.root","read");
 
 
     int i;
-    TCanvas *c[37];
+    TCanvas *c[40];
     char can[2];
     char save[6];
     
@@ -36,7 +36,7 @@ TFile *fcuts = new TFile("cuts_0.root","read");
     TCutG *dEEcut = (TCutG*)fcuts->Get("dE-Ecut");
     
     
-    for(i=1;i<38;i++){
+    for(i=1;i<41;i++){
         sprintf(can,"c%d",i);
         c[i] = new TCanvas(can,can,1600,800);
         c[i]->Divide(3,2);
@@ -87,13 +87,13 @@ TFile *fcuts = new TFile("cuts_0.root","read");
     c[6]->cd(6); f12->cd(); hdEE_TACg6->Draw();
     
     // FP, gated on 6 TAC gates
-    
+ 
     c[7]->cd(1); f0->cd(); gPad->SetLogy(); hTACg1->Draw();
-    c[7]->cd(2); gPad->SetLogz(); hFP_TACg1->Draw("col");
-    c[7]->cd(3); f2->cd(); gPad->SetLogz(); hFP_TACg1->Draw("col");
-    c[7]->cd(4); f4->cd(); gPad->SetLogz(); hFP_TACg1->Draw("col");
-    c[7]->cd(5); f8->cd(); gPad->SetLogz(); hFP_TACg1->Draw("col");
-    c[7]->cd(6); f12->cd(); gPad->SetLogz(); hFP_TACg1->Draw("col");
+    c[7]->cd(2); hFP_TACg1->Draw(); hFP_TACg1->SetMarkerStyle(21); 
+    c[7]->cd(3); f2->cd(); hFP_TACg1->Draw();hFP_TACg1->SetMarkerStyle(21);
+    c[7]->cd(4); f4->cd(); hFP_TACg1->Draw(); hFP_TACg1->SetMarkerStyle(21);
+    c[7]->cd(5); f8->cd(); hFP_TACg1->Draw(); hFP_TACg1->SetMarkerStyle(21);
+    c[7]->cd(6); f12->cd(); hFP_TACg1->Draw(); hFP_TACg1->SetMarkerStyle(21);
     
     c[8]->cd(1); f0->cd(); gPad->SetLogy(); hTACg2->Draw();
     c[8]->cd(2); hFP_TACg2->Draw();
@@ -134,45 +134,81 @@ TFile *fcuts = new TFile("cuts_0.root","read");
     
     c[13]->cd(1); f0->cd(); gPad->SetLogy(); hTACg1->Draw();
     c[13]->cd(2); gPad->SetLogz(); hEvTh_TACg1->Draw();
+    hdEvTh_TACg1->SetMarkerStyle(21); hdEvTh_TACg1->SetMarkerSize(0.8);
     c[13]->cd(3); f2->cd(); gPad->SetLogz(); hEvTh_TACg1->Draw();
+    hdEvTh_TACg1->SetMarkerStyle(21); hdEvTh_TACg1->SetMarkerSize(0.8);
     c[13]->cd(4); f4->cd(); gPad->SetLogz(); hEvTh_TACg1->Draw();
+    hdEvTh_TACg1->SetMarkerStyle(21); hdEvTh_TACg1->SetMarkerSize(0.8);
     c[13]->cd(5); f8->cd(); gPad->SetLogz(); hEvTh_TACg1->Draw();
+    hdEvTh_TACg1->SetMarkerStyle(21); hdEvTh_TACg1->SetMarkerSize(0.8);
     c[13]->cd(6); f12->cd(); gPad->SetLogz(); hEvTh_TACg1->Draw();
+    hdEvTh_TACg1->SetMarkerStyle(21); hdEvTh_TACg1->SetMarkerSize(0.8);
+    c[13]->Update();
     
     c[14]->cd(1); f0->cd(); gPad->SetLogy(); hTACg2->Draw();
     c[14]->cd(2); hEvTh_TACg2->Draw();
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
     c[14]->cd(3); f2->cd(); hEvTh_TACg2->Draw();
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
     c[14]->cd(4); f4->cd(); hEvTh_TACg2->Draw();
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
     c[14]->cd(5); f8->cd(); hEvTh_TACg2->Draw();
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
     c[14]->cd(6); f12->cd(); hEvTh_TACg2->Draw();
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
+    c[14]->Update();
     
     c[15]->cd(1); f0->cd(); gPad->SetLogy(); hTACg3->Draw();
     c[15]->cd(2); hEvTh_TACg3->Draw();
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
     c[15]->cd(3); f2->cd(); hEvTh_TACg3->Draw();
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
     c[15]->cd(4); f4->cd(); hEvTh_TACg3->Draw();
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
     c[15]->cd(5); f8->cd(); hEvTh_TACg3->Draw();
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
     c[15]->cd(6); f12->cd(); hEvTh_TACg3->Draw();
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
+    c[15]->Update();
     
     c[16]->cd(1); f0->cd(); gPad->SetLogy(); hTACg4->Draw();
     c[16]->cd(2); hEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
     c[16]->cd(3); f2->cd(); hEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
     c[16]->cd(4); f4->cd(); hEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
     c[16]->cd(5); f8->cd(); hEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
     c[16]->cd(6); f12->cd();hEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
+    c[16]->Update();
     
     c[17]->cd(1); f0->cd(); gPad->SetLogy(); hTACg5->Draw();
     c[17]->cd(2); hEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
     c[17]->cd(3); f2->cd(); hEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
     c[17]->cd(4); f4->cd(); hEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
     c[17]->cd(5); f8->cd(); hEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
     c[17]->cd(6); f12->cd();hEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
+    c[17]->Update();
     
     c[18]->cd(1); f0->cd(); gPad->SetLogy(); hTACg6->Draw();
     c[18]->cd(2); hEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
     c[18]->cd(3); f2->cd(); hEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
     c[18]->cd(4); f4->cd(); hEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
     c[18]->cd(5); f8->cd(); hEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
     c[18]->cd(6); f12->cd(); hEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
+    c[18]->Update();
 
     // dE vs Theta, gated on 6 TAC gates
     
@@ -184,39 +220,69 @@ TFile *fcuts = new TFile("cuts_0.root","read");
     c[19]->cd(6); f12->cd(); gPad->SetLogz(); hdEvTh_TACg1->Draw("col");
     
     c[20]->cd(1); f0->cd(); gPad->SetLogy(); hTACg2->Draw();
-    c[20]->cd(2); hdEvTh_TACg2->Draw();
-    c[20]->cd(3); f2->cd(); hdEvTh_TACg2->Draw();
+    c[20]->cd(2); hdEvTh_TACg2->Draw(); 
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
+    c[20]->cd(3); f2->cd(); hdEvTh_TACg2->Draw(); 
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
     c[20]->cd(4); f4->cd(); hdEvTh_TACg2->Draw();
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
     c[20]->cd(5); f8->cd(); hdEvTh_TACg2->Draw();
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
     c[20]->cd(6); f12->cd(); hdEvTh_TACg2->Draw();
-    
+    hdEvTh_TACg2->SetMarkerStyle(21); hdEvTh_TACg2->SetMarkerSize(0.8);
+    c[20]->Update();
+
     c[21]->cd(1); f0->cd(); gPad->SetLogy(); hTACg3->Draw();
-    c[21]->cd(2); hdEvTh_TACg3->Draw();
+    c[21]->cd(2); hdEvTh_TACg3->Draw(); 
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
     c[21]->cd(3); f2->cd(); hdEvTh_TACg3->Draw();
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
     c[21]->cd(4); f4->cd(); hdEvTh_TACg3->Draw();
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
     c[21]->cd(5); f8->cd(); hdEvTh_TACg3->Draw();
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
     c[21]->cd(6); f12->cd(); hdEvTh_TACg3->Draw();
+    hdEvTh_TACg3->SetMarkerStyle(21); hdEvTh_TACg3->SetMarkerSize(0.8);
+    c[21]->Update();
     
     c[22]->cd(1); f0->cd(); gPad->SetLogy(); hTACg4->Draw();
     c[22]->cd(2); hdEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
     c[22]->cd(3); f2->cd(); hdEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
     c[22]->cd(4); f4->cd(); hdEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
     c[22]->cd(5); f8->cd(); hdEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
     c[22]->cd(6); f12->cd();hdEvTh_TACg4->Draw();
+    hdEvTh_TACg4->SetMarkerStyle(21); hdEvTh_TACg4->SetMarkerSize(0.8);
+    c[22]->Update();
     
     c[23]->cd(1); f0->cd(); gPad->SetLogy(); hTACg5->Draw();
     c[23]->cd(2); hdEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
     c[23]->cd(3); f2->cd(); hdEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
     c[23]->cd(4); f4->cd(); hdEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
     c[23]->cd(5); f8->cd(); hdEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
     c[23]->cd(6); f12->cd();hdEvTh_TACg5->Draw();
+    hdEvTh_TACg5->SetMarkerStyle(21); hdEvTh_TACg5->SetMarkerSize(0.8);
+    c[23]->Update();
    
     c[24]->cd(1); f0->cd(); gPad->SetLogy(); hTACg6->Draw();
     c[24]->cd(2); hdEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
     c[24]->cd(3); f2->cd(); hdEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
     c[24]->cd(4); f4->cd(); hdEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
     c[24]->cd(5); f8->cd(); hdEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
     c[24]->cd(6); f12->cd(); hdEvTh_TACg6->Draw();
+    hdEvTh_TACg6->SetMarkerStyle(21); hdEvTh_TACg6->SetMarkerSize(0.8);
+    c[24]->Update();
 
     /* ************************************************************** */
     
@@ -229,11 +295,11 @@ TFile *fcuts = new TFile("cuts_0.root","read");
     c[25]->cd(6); f12->cd(); gPad->SetLogy(); hTAC_dEEg->Draw();
     
     c[26]->cd(1); f0->cd(); gPad->SetLogz(); hdE_E_rings->Draw("col"); dEEcut->Draw("same");
-    c[26]->cd(2); gPad->SetLogz(); hFP_dEEg->Draw("col");
-    c[26]->cd(3); f2->cd(); gPad->SetLogz(); hFP_dEEg->Draw("col");
-    c[26]->cd(4); f4->cd(); gPad->SetLogz(); hFP_dEEg->Draw("col");
-    c[26]->cd(5); f8->cd(); gPad->SetLogz(); hFP_dEEg->Draw("col");
-    c[26]->cd(6); f12->cd();gPad->SetLogz(); hFP_dEEg->Draw("col");
+    c[26]->cd(2); gPad->SetLogz(); hFP_dEEg->Draw();
+    c[26]->cd(3); f2->cd(); gPad->SetLogz(); hFP_dEEg->Draw();
+    c[26]->cd(4); f4->cd(); gPad->SetLogz(); hFP_dEEg->Draw();
+    c[26]->cd(5); f8->cd(); gPad->SetLogz(); hFP_dEEg->Draw();
+    c[26]->cd(6); f12->cd();gPad->SetLogz(); hFP_dEEg->Draw();
     
     c[27]->cd(1); f0->cd(); gPad->SetLogz(); hdE_E_rings->Draw("col"); dEEcut->Draw("same");
     c[27]->cd(2); gPad->SetLogz(); hEvTh_dEEg->Draw("col");
@@ -244,11 +310,16 @@ TFile *fcuts = new TFile("cuts_0.root","read");
     
     c[28]->cd(1); f0->cd(); gPad->SetLogz(); hdE_E_rings->Draw("col"); dEEcut->Draw("same");
     c[28]->cd(2); gPad->SetLogz(); hdEvTh_dEEg->Draw("col");
+    hdEvTh_dEEg->GetXaxis()->SetRangeUser(0.0,6.0);
     c[28]->cd(3); f2->cd(); gPad->SetLogz(); hdEvTh_dEEg->Draw("col");
+    hdEvTh_dEEg->GetXaxis()->SetRangeUser(0.0,6.0);
     c[28]->cd(4); f4->cd(); gPad->SetLogz(); hdEvTh_dEEg->Draw("col");
+    hdEvTh_dEEg->GetXaxis()->SetRangeUser(0.0,6.0);
     c[28]->cd(5); f8->cd(); gPad->SetLogz(); hdEvTh_dEEg->Draw("col");
+    hdEvTh_dEEg->GetXaxis()->SetRangeUser(0.0,6.0);
     c[28]->cd(6); f12->cd(); gPad->SetLogz(); hdEvTh_dEEg->Draw("col");
-    
+    hdEvTh_dEEg->GetXaxis()->SetRangeUser(0.0,6.0);
+    c[28]->Update();
 
 
 /* ************************************************************** */
@@ -317,14 +388,330 @@ TFile *fcuts = new TFile("cuts_0.root","read");
     c[37]->cd(5); f8->cd(); gPad->SetLogy(); hTAC_FPgl->Draw();
     c[37]->cd(6); f12->cd(); gPad->SetLogy(); hTAC_FPgl->Draw();
 
+/* ************************************************************** */
+// Overlay Overlay! Arriba arriba!     
+    c[38]->cd(1); f0->cd(); gPad->SetLogy(); 
+    hTACg1->Draw(); hTACg1->SetLineColor(kRed);
+    hTACg2->Draw("same"); hTACg2->SetLineColor(kBlue);
+    hTACg3->Draw("same"); hTACg3->SetLineColor(kBlack);
+    hTACg4->Draw("same"); hTACg4->SetLineColor(kGreen);
+    hTACg5->Draw("same"); hTACg5->SetLineColor(kOrange);
+    hTACg6->Draw("same"); hTACg6->SetLineColor(kMagenta);
+
+    c[38]->cd(2); gPad->SetLogz(); hdE_E_rings->Draw("col");
+    hdEE_TACg1->Draw("same"); hdEE_TACg1->SetMarkerStyle(21); 
+    hdEE_TACg1->SetMarkerSize(0.8); hdEE_TACg1->SetMarkerColor(kRed); 
+
+    hdEE_TACg2->Draw("same"); hdEE_TACg2->SetMarkerStyle(21); 
+    hdEE_TACg2->SetMarkerSize(0.8); hdEE_TACg2->SetMarkerColor(kBlue); 
+
+    hdEE_TACg3->Draw("same"); hdEE_TACg3->SetMarkerStyle(21); 
+    hdEE_TACg3->SetMarkerSize(0.8); hdEE_TACg3->SetMarkerColor(kBlack); 
+
+    hdEE_TACg4->Draw("same"); hdEE_TACg4->SetMarkerStyle(21); 
+    hdEE_TACg4->SetMarkerSize(0.8); hdEE_TACg4->SetMarkerColor(kGreen); 
+
+    hdEE_TACg5->Draw("same"); hdEE_TACg5->SetMarkerStyle(21); 
+    hdEE_TACg5->SetMarkerSize(0.8); hdEE_TACg5->SetMarkerColor(kOrange); 
+
+    hdEE_TACg6->Draw("same"); hdEE_TACg6->SetMarkerStyle(21); 
+    hdEE_TACg6->SetMarkerSize(0.8); hdEE_TACg6->SetMarkerColor(kMagenta); 
+
+    c[38]->cd(3); f2->cd(); gPad->SetLogz(); hdE_E_rings->Draw("col");
+    hdEE_TACg1->Draw("same"); hdEE_TACg1->SetMarkerStyle(21); 
+    hdEE_TACg1->SetMarkerSize(0.8); hdEE_TACg1->SetMarkerColor(kRed); 
+
+    hdEE_TACg2->Draw("same"); hdEE_TACg2->SetMarkerStyle(21); 
+    hdEE_TACg2->SetMarkerSize(0.8); hdEE_TACg2->SetMarkerColor(kBlue); 
+
+    hdEE_TACg3->Draw("same"); hdEE_TACg3->SetMarkerStyle(21); 
+    hdEE_TACg3->SetMarkerSize(0.8); hdEE_TACg3->SetMarkerColor(kBlack); 
+
+    hdEE_TACg4->Draw("same"); hdEE_TACg4->SetMarkerStyle(21); 
+    hdEE_TACg4->SetMarkerSize(0.8); hdEE_TACg4->SetMarkerColor(kGreen); 
+
+    hdEE_TACg5->Draw("same"); hdEE_TACg5->SetMarkerStyle(21); 
+    hdEE_TACg5->SetMarkerSize(0.8); hdEE_TACg5->SetMarkerColor(kOrange); 
+
+    hdEE_TACg6->Draw("same"); hdEE_TACg6->SetMarkerStyle(21); 
+    hdEE_TACg6->SetMarkerSize(0.8); hdEE_TACg6->SetMarkerColor(kMagenta); 
+
+    c[38]->cd(4); f4->cd(); gPad->SetLogz(); hdE_E_rings->Draw("col");
+    hdEE_TACg1->Draw("same"); hdEE_TACg1->SetMarkerStyle(21); 
+    hdEE_TACg1->SetMarkerSize(0.8); hdEE_TACg1->SetMarkerColor(kRed); 
+
+    hdEE_TACg2->Draw("same"); hdEE_TACg2->SetMarkerStyle(21); 
+    hdEE_TACg2->SetMarkerSize(0.8); hdEE_TACg2->SetMarkerColor(kBlue); 
+
+    hdEE_TACg3->Draw("same"); hdEE_TACg3->SetMarkerStyle(21); 
+    hdEE_TACg3->SetMarkerSize(0.8); hdEE_TACg3->SetMarkerColor(kBlack); 
+
+    hdEE_TACg4->Draw("same"); hdEE_TACg4->SetMarkerStyle(21); 
+    hdEE_TACg4->SetMarkerSize(0.8); hdEE_TACg4->SetMarkerColor(kGreen); 
+
+    hdEE_TACg5->Draw("same"); hdEE_TACg5->SetMarkerStyle(21); 
+    hdEE_TACg5->SetMarkerSize(0.8); hdEE_TACg5->SetMarkerColor(kOrange); 
+
+    hdEE_TACg6->Draw("same"); hdEE_TACg6->SetMarkerStyle(21); 
+    hdEE_TACg6->SetMarkerSize(0.8); hdEE_TACg6->SetMarkerColor(kMagenta); 
+
+    c[38]->cd(5); f8->cd(); gPad->SetLogz(); hdE_E_rings->Draw("col");
+    hdEE_TACg1->Draw("same"); hdEE_TACg1->SetMarkerStyle(21); 
+    hdEE_TACg1->SetMarkerSize(0.8); hdEE_TACg1->SetMarkerColor(kRed); 
+
+    hdEE_TACg2->Draw("same"); hdEE_TACg2->SetMarkerStyle(21); 
+    hdEE_TACg2->SetMarkerSize(0.8); hdEE_TACg2->SetMarkerColor(kBlue); 
+
+    hdEE_TACg3->Draw("same"); hdEE_TACg3->SetMarkerStyle(21); 
+    hdEE_TACg3->SetMarkerSize(0.8); hdEE_TACg3->SetMarkerColor(kBlack); 
+
+    hdEE_TACg4->Draw("same"); hdEE_TACg4->SetMarkerStyle(21); 
+    hdEE_TACg4->SetMarkerSize(0.8); hdEE_TACg4->SetMarkerColor(kGreen); 
+
+    hdEE_TACg5->Draw("same"); hdEE_TACg5->SetMarkerStyle(21); 
+    hdEE_TACg5->SetMarkerSize(0.8); hdEE_TACg5->SetMarkerColor(kOrange); 
+
+    hdEE_TACg6->Draw("same"); hdEE_TACg6->SetMarkerStyle(21); 
+    hdEE_TACg6->SetMarkerSize(0.8); hdEE_TACg6->SetMarkerColor(kMagenta); 
+
+    c[38]->cd(6); f12->cd(); gPad->SetLogz(); hdE_E_rings->Draw("col");
+    hdEE_TACg1->Draw("same"); hdEE_TACg1->SetMarkerStyle(21); 
+    hdEE_TACg1->SetMarkerSize(0.8); hdEE_TACg1->SetMarkerColor(kRed); 
+
+    hdEE_TACg2->Draw("same"); hdEE_TACg2->SetMarkerStyle(21); 
+    hdEE_TACg2->SetMarkerSize(0.8); hdEE_TACg2->SetMarkerColor(kBlue); 
+
+    hdEE_TACg3->Draw("same"); hdEE_TACg3->SetMarkerStyle(21); 
+    hdEE_TACg3->SetMarkerSize(0.8); hdEE_TACg3->SetMarkerColor(kBlack); 
+
+    hdEE_TACg4->Draw("same"); hdEE_TACg4->SetMarkerStyle(21); 
+    hdEE_TACg4->SetMarkerSize(0.8); hdEE_TACg4->SetMarkerColor(kGreen); 
+
+    hdEE_TACg5->Draw("same"); hdEE_TACg5->SetMarkerStyle(21); 
+    hdEE_TACg5->SetMarkerSize(0.8); hdEE_TACg5->SetMarkerColor(kOrange); 
+
+    hdEE_TACg6->Draw("same"); hdEE_TACg6->SetMarkerStyle(21); 
+    hdEE_TACg6->SetMarkerSize(0.8); hdEE_TACg6->SetMarkerColor(kMagenta); 
+
+    c[38]->Update();
+
+    // ***********************
     
+    c[39]->cd(1); f0->cd(); gPad->SetLogy(); 
+    hTACg1->Draw(); hTACg1->SetLineColor(kRed);
+    hTACg2->Draw("same"); hTACg2->SetLineColor(kBlue);
+    hTACg3->Draw("same"); hTACg3->SetLineColor(kBlack);
+    hTACg4->Draw("same"); hTACg4->SetLineColor(kGreen);
+    hTACg5->Draw("same"); hTACg5->SetLineColor(kOrange);
+    hTACg6->Draw("same"); hTACg6->SetLineColor(kMagenta);
+   
+    c[39]->cd(2); f0->cd(); gPad->SetLogz(); hxvrftof->Draw("col");
+    hFP_TACg1->Draw("same"); hFP_TACg1->SetMarkerStyle(21); 
+    hFP_TACg1->SetMarkerSize(0.8); hFP_TACg1->SetMarkerColor(kRed); 
+
+    hFP_TACg2->Draw("same"); hFP_TACg2->SetMarkerStyle(21); 
+    hFP_TACg2->SetMarkerSize(0.8); hFP_TACg2->SetMarkerColor(kBlue);
+
+    hFP_TACg3->Draw("same"); hFP_TACg3->SetMarkerStyle(21); 
+    hFP_TACg3->SetMarkerSize(0.8); hFP_TACg3->SetMarkerColor(kBlack);
+
+    hFP_TACg4->Draw("same"); hFP_TACg4->SetMarkerStyle(21); 
+    hFP_TACg4->SetMarkerSize(0.8); hFP_TACg4->SetMarkerColor(kGreen); 
+
+    hFP_TACg5->Draw("same"); hFP_TACg5->SetMarkerStyle(21); 
+    hFP_TACg5->SetMarkerSize(0.8); hFP_TACg5->SetMarkerColor(kOrange);
+
+    hFP_TACg6->Draw("same"); hFP_TACg6->SetMarkerStyle(21); 
+    hFP_TACg6->SetMarkerSize(0.8); hFP_TACg6->SetMarkerColor(kMagenta); 
+
+    c[39]->cd(3); f2->cd(); gPad->SetLogz(); hxvrftof->Draw("col");
+    hFP_TACg1->Draw("same"); hFP_TACg1->SetMarkerStyle(21); 
+    hFP_TACg1->SetMarkerSize(0.8); hFP_TACg1->SetMarkerColor(kRed); 
+
+    hFP_TACg2->Draw("same"); hFP_TACg2->SetMarkerStyle(21); 
+    hFP_TACg2->SetMarkerSize(0.8); hFP_TACg2->SetMarkerColor(kBlue);
+
+    hFP_TACg3->Draw("same"); hFP_TACg3->SetMarkerStyle(21); 
+    hFP_TACg3->SetMarkerSize(0.8); hFP_TACg3->SetMarkerColor(kBlack);
+
+    hFP_TACg4->Draw("same"); hFP_TACg4->SetMarkerStyle(21); 
+    hFP_TACg4->SetMarkerSize(0.8); hFP_TACg4->SetMarkerColor(kGreen);
+
+    hFP_TACg5->Draw("same"); hFP_TACg5->SetMarkerStyle(21); 
+    hFP_TACg5->SetMarkerSize(0.8); hFP_TACg5->SetMarkerColor(kOrange);
+
+    hFP_TACg6->Draw("same"); hFP_TACg6->SetMarkerStyle(21); 
+    hFP_TACg6->SetMarkerSize(0.8); hFP_TACg6->SetMarkerColor(kMagenta);
+
+    c[39]->cd(4); f4->cd(); gPad->SetLogz(); hxvrftof->Draw("col");
+    hFP_TACg1->Draw("same"); hFP_TACg1->SetMarkerStyle(21); 
+    hFP_TACg1->SetMarkerSize(0.8); hFP_TACg1->SetMarkerColor(kRed); 
+
+    hFP_TACg2->Draw("same"); hFP_TACg2->SetMarkerStyle(21); 
+    hFP_TACg2->SetMarkerSize(0.8); hFP_TACg2->SetMarkerColor(kBlue); 
+
+    hFP_TACg3->Draw("same"); hFP_TACg3->SetMarkerStyle(21); 
+    hFP_TACg3->SetMarkerSize(0.8); hFP_TACg3->SetMarkerColor(kBlack);
+
+    hFP_TACg4->Draw("same"); hFP_TACg4->SetMarkerStyle(21); 
+    hFP_TACg4->SetMarkerSize(0.8); hFP_TACg4->SetMarkerColor(kGreen);
+
+    hFP_TACg5->Draw("same"); hFP_TACg5->SetMarkerStyle(21); 
+    hFP_TACg5->SetMarkerSize(0.8); hFP_TACg5->SetMarkerColor(kOrange);
+
+    hFP_TACg6->Draw("same"); hFP_TACg6->SetMarkerStyle(21); 
+    hFP_TACg6->SetMarkerSize(0.8); hFP_TACg6->SetMarkerColor(kMagenta); 
+
+    c[39]->cd(5); f8->cd(); gPad->SetLogz(); hxvrftof->Draw("col");
+    hFP_TACg1->Draw("same"); hFP_TACg1->SetMarkerStyle(21); 
+    hFP_TACg1->SetMarkerSize(0.8); hFP_TACg1->SetMarkerColor(kRed); 
+
+    hFP_TACg2->Draw("same"); hFP_TACg2->SetMarkerStyle(21); 
+    hFP_TACg2->SetMarkerSize(0.8); hFP_TACg2->SetMarkerColor(kBlue);
+
+    hFP_TACg3->Draw("same"); hFP_TACg3->SetMarkerStyle(21); 
+    hFP_TACg3->SetMarkerSize(0.8); hFP_TACg3->SetMarkerColor(kBlack); 
+
+    hFP_TACg4->Draw("same"); hFP_TACg4->SetMarkerStyle(21); 
+    hFP_TACg4->SetMarkerSize(0.8); hFP_TACg4->SetMarkerColor(kGreen);
+
+    hFP_TACg5->Draw("same"); hFP_TACg5->SetMarkerStyle(21); 
+    hFP_TACg5->SetMarkerSize(0.8); hFP_TACg5->SetMarkerColor(kOrange);
+
+    hFP_TACg6->Draw("same"); hFP_TACg6->SetMarkerStyle(21); 
+    hFP_TACg6->SetMarkerSize(0.8); hFP_TACg6->SetMarkerColor(kMagenta);
+
+    c[39]->cd(6); f12->cd(); gPad->SetLogz(); hxvrftof->Draw("col");
+    hFP_TACg1->Draw("same"); hFP_TACg1->SetMarkerStyle(21); 
+    hFP_TACg1->SetMarkerSize(0.8); hFP_TACg1->SetMarkerColor(kRed);
+
+    hFP_TACg2->Draw("same"); hFP_TACg2->SetMarkerStyle(21); 
+    hFP_TACg2->SetMarkerSize(0.8); hFP_TACg2->SetMarkerColor(kBlue);
+
+    hFP_TACg3->Draw("same"); hFP_TACg3->SetMarkerStyle(21); 
+    hFP_TACg3->SetMarkerSize(0.8); hFP_TACg3->SetMarkerColor(kBlack);
+
+    hFP_TACg4->Draw("same"); hFP_TACg4->SetMarkerStyle(21); 
+    hFP_TACg4->SetMarkerSize(0.8); hFP_TACg4->SetMarkerColor(kGreen);
+
+    hFP_TACg5->Draw("same"); hFP_TACg5->SetMarkerStyle(21); 
+    hFP_TACg5->SetMarkerSize(0.8); hFP_TACg5->SetMarkerColor(kOrange);
+
+    hFP_TACg6->Draw("same"); hFP_TACg6->SetMarkerStyle(21); 
+    hFP_TACg6->SetMarkerSize(0.8); hFP_TACg6->SetMarkerColor(kMagenta);
+
+    c[39]->Update();
+
+ // ***********************
     
-    
-    
+    c[40]->cd(1); f0->cd(); gPad->SetLogy(); 
+    hTACg1->Draw(); hTACg1->SetLineColor(kRed);
+    hTACg2->Draw("same"); hTACg2->SetLineColor(kBlue);
+    hTACg3->Draw("same"); hTACg3->SetLineColor(kBlack);
+    hTACg4->Draw("same"); hTACg4->SetLineColor(kGreen);
+    hTACg5->Draw("same"); hTACg5->SetLineColor(kOrange);
+    hTACg6->Draw("same"); hTACg6->SetLineColor(kMagenta);
+   
+    c[40]->cd(2); f0->cd(); gPad->SetLogz(); hEvTh->Draw("col");
+    hEvTh_TACg1->Draw("same"); hEvTh_TACg1->SetMarkerStyle(21); 
+    hEvTh_TACg1->SetMarkerSize(0.8); hEvTh_TACg1->SetMarkerColor(kRed); 
+
+    hEvTh_TACg2->Draw("same"); hEvTh_TACg2->SetMarkerStyle(21); 
+    hEvTh_TACg2->SetMarkerSize(0.8); hEvTh_TACg2->SetMarkerColor(kBlue);
+
+    hEvTh_TACg3->Draw("same"); hEvTh_TACg3->SetMarkerStyle(21); 
+    hEvTh_TACg3->SetMarkerSize(0.8); hEvTh_TACg3->SetMarkerColor(kBlack);
+
+    hEvTh_TACg4->Draw("same"); hEvTh_TACg4->SetMarkerStyle(21); 
+    hEvTh_TACg4->SetMarkerSize(0.8); hEvTh_TACg4->SetMarkerColor(kGreen); 
+
+    hEvTh_TACg5->Draw("same"); hEvTh_TACg5->SetMarkerStyle(21); 
+    hEvTh_TACg5->SetMarkerSize(0.8); hEvTh_TACg5->SetMarkerColor(kOrange);
+
+    hEvTh_TACg6->Draw("same"); hEvTh_TACg6->SetMarkerStyle(21); 
+    hEvTh_TACg6->SetMarkerSize(0.8); hEvTh_TACg6->SetMarkerColor(kMagenta); 
+
+    c[40]->cd(3); f2->cd(); gPad->SetLogz(); hEvTh->Draw("col");
+    hEvTh_TACg1->Draw("same"); hEvTh_TACg1->SetMarkerStyle(21); 
+    hEvTh_TACg1->SetMarkerSize(0.8); hEvTh_TACg1->SetMarkerColor(kRed); 
+
+    hEvTh_TACg2->Draw("same"); hEvTh_TACg2->SetMarkerStyle(21); 
+    hEvTh_TACg2->SetMarkerSize(0.8); hEvTh_TACg2->SetMarkerColor(kBlue);
+
+    hEvTh_TACg3->Draw("same"); hEvTh_TACg3->SetMarkerStyle(21); 
+    hEvTh_TACg3->SetMarkerSize(0.8); hEvTh_TACg3->SetMarkerColor(kBlack);
+
+    hEvTh_TACg4->Draw("same"); hEvTh_TACg4->SetMarkerStyle(21); 
+    hEvTh_TACg4->SetMarkerSize(0.8); hEvTh_TACg4->SetMarkerColor(kGreen);
+
+    hEvTh_TACg5->Draw("same"); hEvTh_TACg5->SetMarkerStyle(21); 
+    hEvTh_TACg5->SetMarkerSize(0.8); hEvTh_TACg5->SetMarkerColor(kOrange);
+
+    hEvTh_TACg6->Draw("same"); hEvTh_TACg6->SetMarkerStyle(21); 
+    hEvTh_TACg6->SetMarkerSize(0.8); hEvTh_TACg6->SetMarkerColor(kMagenta);
+
+    c[40]->cd(4); f4->cd(); gPad->SetLogz(); hEvTh->Draw("col");
+    hEvTh_TACg1->Draw("same"); hEvTh_TACg1->SetMarkerStyle(21); 
+    hEvTh_TACg1->SetMarkerSize(0.8); hEvTh_TACg1->SetMarkerColor(kRed); 
+
+    hEvTh_TACg2->Draw("same"); hEvTh_TACg2->SetMarkerStyle(21); 
+    hEvTh_TACg2->SetMarkerSize(0.8); hEvTh_TACg2->SetMarkerColor(kBlue); 
+
+    hEvTh_TACg3->Draw("same"); hEvTh_TACg3->SetMarkerStyle(21); 
+    hEvTh_TACg3->SetMarkerSize(0.8); hEvTh_TACg3->SetMarkerColor(kBlack);
+
+    hEvTh_TACg4->Draw("same"); hEvTh_TACg4->SetMarkerStyle(21); 
+    hEvTh_TACg4->SetMarkerSize(0.8); hEvTh_TACg4->SetMarkerColor(kGreen);
+
+    hEvTh_TACg5->Draw("same"); hEvTh_TACg5->SetMarkerStyle(21); 
+    hEvTh_TACg5->SetMarkerSize(0.8); hEvTh_TACg5->SetMarkerColor(kOrange);
+
+    hEvTh_TACg6->Draw("same"); hEvTh_TACg6->SetMarkerStyle(21); 
+    hEvTh_TACg6->SetMarkerSize(0.8); hEvTh_TACg6->SetMarkerColor(kMagenta); 
+
+    c[40]->cd(5); f8->cd(); gPad->SetLogz(); hEvTh->Draw("col");
+    hEvTh_TACg1->Draw("same"); hEvTh_TACg1->SetMarkerStyle(21); 
+    hEvTh_TACg1->SetMarkerSize(0.8); hEvTh_TACg1->SetMarkerColor(kRed); 
+
+    hEvTh_TACg2->Draw("same"); hEvTh_TACg2->SetMarkerStyle(21); 
+    hEvTh_TACg2->SetMarkerSize(0.8); hEvTh_TACg2->SetMarkerColor(kBlue);
+
+    hEvTh_TACg3->Draw("same"); hEvTh_TACg3->SetMarkerStyle(21); 
+    hEvTh_TACg3->SetMarkerSize(0.8); hEvTh_TACg3->SetMarkerColor(kBlack); 
+
+    hEvTh_TACg4->Draw("same"); hEvTh_TACg4->SetMarkerStyle(21); 
+    hEvTh_TACg4->SetMarkerSize(0.8); hEvTh_TACg4->SetMarkerColor(kGreen);
+
+    hEvTh_TACg5->Draw("same"); hEvTh_TACg5->SetMarkerStyle(21); 
+    hEvTh_TACg5->SetMarkerSize(0.8); hEvTh_TACg5->SetMarkerColor(kOrange);
+
+    hEvTh_TACg6->Draw("same"); hEvTh_TACg6->SetMarkerStyle(21); 
+    hEvTh_TACg6->SetMarkerSize(0.8); hEvTh_TACg6->SetMarkerColor(kMagenta);
+
+    c[40]->cd(6); f12->cd(); gPad->SetLogz(); hEvTh->Draw("col");
+    hEvTh_TACg1->Draw("same"); hEvTh_TACg1->SetMarkerStyle(21); 
+    hEvTh_TACg1->SetMarkerSize(0.8); hEvTh_TACg1->SetMarkerColor(kRed);
+
+    hEvTh_TACg2->Draw("same"); hEvTh_TACg2->SetMarkerStyle(21); 
+    hEvTh_TACg2->SetMarkerSize(0.8); hEvTh_TACg2->SetMarkerColor(kBlue);
+
+    hEvTh_TACg3->Draw("same"); hEvTh_TACg3->SetMarkerStyle(21); 
+    hEvTh_TACg3->SetMarkerSize(0.8); hEvTh_TACg3->SetMarkerColor(kBlack);
+
+    hEvTh_TACg4->Draw("same"); hEvTh_TACg4->SetMarkerStyle(21); 
+    hEvTh_TACg4->SetMarkerSize(0.8); hEvTh_TACg4->SetMarkerColor(kGreen);
+
+    hEvTh_TACg5->Draw("same"); hEvTh_TACg5->SetMarkerStyle(21); 
+    hEvTh_TACg5->SetMarkerSize(0.8); hEvTh_TACg5->SetMarkerColor(kOrange);
+
+    hEvTh_TACg6->Draw("same"); hEvTh_TACg6->SetMarkerStyle(21); 
+    hEvTh_TACg6->SetMarkerSize(0.8); hEvTh_TACg6->SetMarkerColor(kMagenta);
+
+    c[40]->Update();
 /* ************************************************************** */
 
 /* ************************************************************** */
-    for(i=1;i<38;i++){
+    for(i=1;i<41;i++){
         sprintf(save,"histograms/c%d.png",i);
         c[i]->SaveAs(save);
     }

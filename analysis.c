@@ -14,109 +14,116 @@
 void analysis::Loop()
 {
    if (fChain == 0) return;
-   TFile *output = new TFile("h_run101.root","recreate");
+   TFile *output = new TFile("0ug.root","recreate");
     TFile *fcuts = new TFile("cuts_0.root","read");
-   //  TFile *fcuts = new TFile("cuts_2.root","read");
-   //  TFile *fcuts = new TFile("cuts_4.root","read");
-   //  TFile *fcuts = new TFile("cuts_8.root","read");
-   //  TFile *fcuts = new TFile("cuts_12.root","read");
+    //  TFile *fcuts = new TFile("cuts_2.root","read");
+    // TFile *fcuts = new TFile("cuts_4.root","read");
+    //  TFile *fcuts = new TFile("cuts_8.root","read");
+    //  TFile *fcuts = new TFile("cuts_12.root","read");
 //-----------------------------------------------------------------------
    // define output histograms
 
    // ungated
-   TH2D *hdE_E_rings = new TH2D("hdE_E_rings","dE-E rings, ungated, 2ug",700,0,70,320,0.3,3.5);
-   TH1D *hTAC = new TH1D("hTAC","TAC, ungated, 2ug",256,0,4096);
-   TH2D *hEvTh = new TH2D("hEvTh","E v Ring num, ungated, 2ug",700,0,70,16,0,16);
-   TH2D *hdEvTh = new TH2D("hdEvTh","dE v Ring num, ungated, 2ug",200,0,20,16,0,16);
-   TH2D *hxvrftof = new TH2D("hxvrftof","X vs RFTOF, ungated, 2ug",1000,0,1000,4000,0,4000);
+   TH2D *hdE_E_rings = new TH2D("hdE_E_rings","dE-E rings, ungated, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH1D *hTAC = new TH1D("hTAC","TAC, ungated, 0mg/cm2",256,0,4096);
+   TH2D *hEvTh = new TH2D("hEvTh","E v Ring num, ungated, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hdEvTh = new TH2D("hdEvTh","dE v Ring num, ungated, 0mg/cm2",200,0,20,16,0,16);
+   TH2D *hxvrftof = new TH2D("hxvrftof","X vs RFTOF, ungated, 0mg/cm2",1000,0,1000,4000,0,4000);
 
    // gate on TAC, look at dE-E
-   TH2D *hdEE_TACg1 = new TH2D("hdEE_TACg1","dE-E rings, 50<TAC<500, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TACg2 = new TH2D("hdEE_TACg2","dE-E rings, 500<TAC<1200, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TACg3 = new TH2D("hdEE_TACg3","dE-E rings, 1600<TAC<2000, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TACg4 = new TH2D("hdEE_TACg4","dE-E rings, 2300<TAC<2700, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TACg5 = new TH2D("hdEE_TACg5","dE-E rings, 3100<TAC<3500, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TACg6 = new TH2D("hdEE_TACg6","dE-E rings, 3800<TAC<4096, 2ug",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TACg1 = new TH2D("hdEE_TACg1","dE-E rings, 50<TAC<500, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TACg2 = new TH2D("hdEE_TACg2","dE-E rings, 500<TAC<1200, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TACg3 = new TH2D("hdEE_TACg3","dE-E rings, 1600<TAC<2000, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TACg4 = new TH2D("hdEE_TACg4","dE-E rings, 2300<TAC<2700, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TACg5 = new TH2D("hdEE_TACg5","dE-E rings, 3100<TAC<3500, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TACg6 = new TH2D("hdEE_TACg6","dE-E rings, 3800<TAC<4096, 0mg/cm2",700,0,70,320,0.3,3.5);
 
-   TH1D *hTACg1 = new TH1D("hTACg1","50<TAC<500, 2ug",256,0,4096);
-   TH1D *hTACg2 = new TH1D("hTACg2","500<TAC<1200, 2ug",256,0,4096);
-   TH1D *hTACg3 = new TH1D("hTACg3","1600<TAC<2000, 2ug",256,0,4096);
-   TH1D *hTACg4 = new TH1D("hTACg4","2300<TAC<2700, 2ug",256,0,4096);
-   TH1D *hTACg5 = new TH1D("hTACg5","3100<TAC<3500, 2ug",256,0,4096);
-   TH1D *hTACg6 = new TH1D("hTACg6","3800<TAC<4096, 2ug",256,0,4096);
+   TH1D *hTACg1 = new TH1D("hTACg1","50<TAC<500, 0mg/cm2",256,0,4096);
+   TH1D *hTACg2 = new TH1D("hTACg2","500<TAC<1200, 0mg/cm2",256,0,4096);
+   TH1D *hTACg3 = new TH1D("hTACg3","1600<TAC<2000, 0mg/cm2",256,0,4096);
+   TH1D *hTACg4 = new TH1D("hTACg4","2300<TAC<2700, 0mg/cm2",256,0,4096);
+   TH1D *hTACg5 = new TH1D("hTACg5","3100<TAC<3500, 0mg/cm2",256,0,4096);
+   TH1D *hTACg6 = new TH1D("hTACg6","3800<TAC<4096, 0mg/cm2",256,0,4096);
 
    // gate on TAC, look at focal plane
-   TH2D *hFP_TACg1 = new TH2D("hFP_TACg1","Focal Plane, 50<TAC<500, 2ug",1000,0,1000,4000,0,4000);
-   TH2D *hFP_TACg2 = new TH2D("hFP_TACg2","Focal Plane, 500<TAC<1200, 2ug",1000,0,1000,4000,0,4000);
-   TH2D *hFP_TACg3 = new TH2D("hFP_TACg3","Focal Plane, 1600<TAC<2000, 2ug",1000,0,1000,4000,0,4000);
-   TH2D *hFP_TACg4 = new TH2D("hFP_TACg4","Focal Plane, 2300<TAC<2700, 2ug",1000,0,1000,4000,0,4000);
-   TH2D *hFP_TACg5 = new TH2D("hFP_TACg5","Focal Plane, 3100<TAC<3500, 2ug",1000,0,1000,4000,0,4000);
-   TH2D *hFP_TACg6 = new TH2D("hFP_TACg6","Focal Plane, 3800<TAC<4096, 2ug",1000,0,1000,4000,0,4000);
+   TH2D *hFP_TACg1 = new TH2D("hFP_TACg1","Focal Plane, 50<TAC<500, 0mg/cm2",1000,0,1000,4000,0,4000);
+   TH2D *hFP_TACg2 = new TH2D("hFP_TACg2","Focal Plane, 500<TAC<1200, 0mg/cm2",1000,0,1000,4000,0,4000);
+   TH2D *hFP_TACg3 = new TH2D("hFP_TACg3","Focal Plane, 1600<TAC<2000, 0mg/cm2",1000,0,1000,4000,0,4000);
+   TH2D *hFP_TACg4 = new TH2D("hFP_TACg4","Focal Plane, 2300<TAC<2700, 0mg/cm2",1000,0,1000,4000,0,4000);
+   TH2D *hFP_TACg5 = new TH2D("hFP_TACg5","Focal Plane, 3100<TAC<3500, 0mg/cm2",1000,0,1000,4000,0,4000);
+   TH2D *hFP_TACg6 = new TH2D("hFP_TACg6","Focal Plane, 3800<TAC<4096, 0mg/cm2",1000,0,1000,4000,0,4000);
 
    // gate on TAC, look at E v Theta
-   TH2D *hEvTh_TACg1 = new TH2D("hEvTh_TACg1","E v Theta, 50<TAC<500, 2ug",700,0,70,16,0,16);
-   TH2D *hEvTh_TACg2 = new TH2D("hEvTh_TACg2","E v Theta, 500<TAC<1200, 2ug",700,0,70,16,0,16);
-   TH2D *hEvTh_TACg3 = new TH2D("hEvTh_TACg3","E v Theta, 1600<TAC<2000, 2ug",700,0,70,16,0,16);
-   TH2D *hEvTh_TACg4 = new TH2D("hEvTh_TACg4","E v Theta, 2300<TAC<2700, 2ug",700,0,70,16,0,16);
-   TH2D *hEvTh_TACg5 = new TH2D("hEvTh_TACg5","E v Theta, 3100<TAC<3500, 2ug",700,0,70,16,0,16);
-   TH2D *hEvTh_TACg6 = new TH2D("hEvTh_TACg6","E v Theta, 3800<TAC<4096, 2ug",700,0,70,16,0,16);
+   TH2D *hEvTh_TACg1 = new TH2D("hEvTh_TACg1","E v Theta, 50<TAC<500, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hEvTh_TACg2 = new TH2D("hEvTh_TACg2","E v Theta, 500<TAC<1200, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hEvTh_TACg3 = new TH2D("hEvTh_TACg3","E v Theta, 1600<TAC<2000, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hEvTh_TACg4 = new TH2D("hEvTh_TACg4","E v Theta, 2300<TAC<2700, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hEvTh_TACg5 = new TH2D("hEvTh_TACg5","E v Theta, 3100<TAC<3500, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hEvTh_TACg6 = new TH2D("hEvTh_TACg6","E v Theta, 3800<TAC<4096, 0mg/cm2",700,0,70,16,0,16);
 
    // gate on TAC, look at dE v Theta
-   TH2D *hdEvTh_TACg1 = new TH2D("hdEvTh_TACg1","dE v Theta, TAC<500, 2ug",200,0,20,16,0,16);
-   TH2D *hdEvTh_TACg2 = new TH2D("hdEvTh_TACg2","dE v Theta, 500<TAC<1200, 2ug",200,0,20,16,0,16);
-   TH2D *hdEvTh_TACg3 = new TH2D("hdEvTh_TACg3","dE v Theta, 1600<TAC<2000, 2ug",200,0,20,16,0,16);
-   TH2D *hdEvTh_TACg4 = new TH2D("hdEvTh_TACg4","dE v Theta, 2300<TAC<2700, 2ug",200,0,20,16,0,16);
-   TH2D *hdEvTh_TACg5 = new TH2D("hdEvTh_TACg5","dE v Theta, 3100<TAC<3500, 2ug",200,0,20,16,0,16);
-   TH2D *hdEvTh_TACg6 = new TH2D("hdEvTh_TACg6","dE v Theta, 3800<TAC<4096, 2ug",200,0,20,16,0,16);
+   TH2D *hdEvTh_TACg1 = new TH2D("hdEvTh_TACg1","dE v Theta, TAC<500, 0mg/cm2",200,0,20,16,0,16);
+   TH2D *hdEvTh_TACg2 = new TH2D("hdEvTh_TACg2","dE v Theta, 500<TAC<1200, 0mg/cm2",200,0,20,16,0,16);
+   TH2D *hdEvTh_TACg3 = new TH2D("hdEvTh_TACg3","dE v Theta, 1600<TAC<2000, 0mg/cm2",200,0,20,16,0,16);
+   TH2D *hdEvTh_TACg4 = new TH2D("hdEvTh_TACg4","dE v Theta, 2300<TAC<2700, 0mg/cm2",200,0,20,16,0,16);
+   TH2D *hdEvTh_TACg5 = new TH2D("hdEvTh_TACg5","dE v Theta, 3100<TAC<3500, 0mg/cm2",200,0,20,16,0,16);
+   TH2D *hdEvTh_TACg6 = new TH2D("hdEvTh_TACg6","dE v Theta, 3800<TAC<4096, 0mg/cm2",200,0,20,16,0,16);
 
    // gate on dE-E
-   TH1D *hTAC_dEEg = new TH1D("hTAC_dEEg","TAC, gated on dE-E locus, 2ug",256,0,4096);
-   TH2D *hFP_dEEg = new TH2D("hFP_dEEg","Focal plane, gated on dE-E locus, 2ug",1000,0,1000,4000,0,4000);
-   TH2D *hEvTh_dEEg = new TH2D("hEvTh_dEEg","EvTh, gated on dE-E locus, 2ug",700,0,70,16,0,16);
-   TH2D *hdEvTh_dEEg = new TH2D("hdEvTh_dEEg","dEvTh, gated on dE-E locus, 2ug",200,0,20,16,0,16);
+   TH1D *hTAC_dEEg = new TH1D("hTAC_dEEg","TAC, gated on dE-E locus, 0mg/cm2",256,0,4096);
+   TH2D *hFP_dEEg = new TH2D("hFP_dEEg","Focal plane, gated on dE-E locus, 0mg/cm2",1000,0,1000,4000,0,4000);
+   TH2D *hEvTh_dEEg = new TH2D("hEvTh_dEEg","EvTh, gated on dE-E locus, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hdEvTh_dEEg = new TH2D("hdEvTh_dEEg","dEvTh, gated on dE-E locus, 0mg/cm2",200,0,20,16,0,16);
+
+   // gate on EvTh
+   TH1D *hTAC_EvTg = new TH1D("hTAC_EvTg","TAC, gated on EvTheta locus, 0mg/cm2",256,0,4096);
+   TH2D *hFP_EvTg = new TH2D("hFP_dEvTg","Focal plane, gated on EvTheta locus, 0mg/cm2",1000,0,1000,4000,0,4000);
+   TH2D *hdEE_EvTg = new TH2D("hdEE_EvTg","dE-E, gated on EvTh locus, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEvTh_EvTg = new TH2D("hdEvTh_EvTg","dEvTh, gated on EvTh locus, 0mg/cm2",200,0,20,16,0,16);
 
    // gate on FP
-   TH2D *hdEE_FPgb = new TH2D("hdEE_FPgb","dE-E, gate on beam FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_FPgu = new TH2D("hdEE_FPgu","dE-E, gate on upper FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_FPgl = new TH2D("hdEE_FPgl","dE-E, gate on lower FP, 2ug",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_FPgb = new TH2D("hdEE_FPgb","dE-E, gate on beam FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_FPgu = new TH2D("hdEE_FPgu","dE-E, gate on upper FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_FPgl = new TH2D("hdEE_FPgl","dE-E, gate on lower FP, 0mg/cm2",700,0,70,320,0.3,3.5);
 
-   TH1D *hTAC_FPgb = new TH1D("hTAC_FPgb","TAC, gated on beam FP, 2ug",256,0,4096);
-   TH1D *hTAC_FPgu = new TH1D("hTAC_FPgu","TAC, gated on upper FP, 2ug",256,0,4096);
-   TH1D *hTAC_FPgl = new TH1D("hTAC_FPgl","TAC, gated on lower FP, 2ug",256,0,4096);
+   TH1D *hTAC_FPgb = new TH1D("hTAC_FPgb","TAC, gated on beam FP, 0mg/cm2",256,0,4096);
+   TH1D *hTAC_FPgu = new TH1D("hTAC_FPgu","TAC, gated on upper FP, 0mg/cm2",256,0,4096);
+   TH1D *hTAC_FPgl = new TH1D("hTAC_FPgl","TAC, gated on lower FP, 0mg/cm2",256,0,4096);
 
-   TH2D *hEvTh_FPgb = new TH2D("hEvTh_FPgb","E v Theta, gated on beam FP, 2ug",700,0,70,16,0,16);
-   TH2D *hEvTh_FPgu = new TH2D("hEvTh_FPgu","E v Theta, gated on upper FP, 2ug",700,0,70,16,0,16);
-   TH2D *hEvTh_FPgl = new TH2D("hEvTh_FPgl","E v Theta, gated on lower FP, 2ug",700,0,70,16,0,16);
+   TH2D *hEvTh_FPgb = new TH2D("hEvTh_FPgb","E v Theta, gated on beam FP, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hEvTh_FPgu = new TH2D("hEvTh_FPgu","E v Theta, gated on upper FP, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hEvTh_FPgl = new TH2D("hEvTh_FPgl","E v Theta, gated on lower FP, 0mg/cm2",700,0,70,16,0,16);
 
-   TH2D *hdEvTh_FPgb = new TH2D("hdEvTh_FPgb","dE v Theta, gated on beam FP, 2ug",200,0,20,16,0,16);
-   TH2D *hdEvTh_FPgu = new TH2D("hdEvTh_FPgu","dE v Theta, gated on upper FP, 2ug",200,0,20,16,0,16);
-   TH2D *hdEvTh_FPgl = new TH2D("hdEvTh_FPgl","dE v Theta, gated on lower FP, 2ug",200,0,20,16,0,16);
+   TH2D *hdEvTh_FPgb = new TH2D("hdEvTh_FPgb","dE v Theta, gated on beam FP, 0mg/cm2",200,0,20,16,0,16);
+   TH2D *hdEvTh_FPgu = new TH2D("hdEvTh_FPgu","dE v Theta, gated on upper FP, 0mg/cm2",200,0,20,16,0,16);
+   TH2D *hdEvTh_FPgl = new TH2D("hdEvTh_FPgl","dE v Theta, gated on lower FP, 0mg/cm2",200,0,20,16,0,16);
 
    // double gates
-   TH2D *hdEE_TAC1_FPb = new TH2D("hdEE_TAC1_FPb","dE-E, 50<TAC<500, beam FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC1_FPu = new TH2D("hdEE_TAC1_FPu","dE-E, 50<TAC<500, upper FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC1_FPl = new TH2D("hdEE_TAC1_FPl","dE-E, 50<TAC<500, lower FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC2_FPb = new TH2D("hdEE_TAC2_FPb","dE-E, 500<TAC<1200, beam FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC2_FPu = new TH2D("hdEE_TAC2_FPu","dE-E, 500<TAC<1200, upper FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC2_FPl = new TH2D("hdEE_TAC2_FPl","dE-E, 500<TAC<1200, lower FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC3_FPb = new TH2D("hdEE_TAC3_FPb","dE-E, 1600<TAC<2000, beam FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC3_FPu = new TH2D("hdEE_TAC3_FPu","dE-E, 1600<TAC<2000, upper FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC3_FPl = new TH2D("hdEE_TAC3_FPl","dE-E, 1600<TAC<2000, lower FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC4_FPb = new TH2D("hdEE_TAC4_FPb","dE-E, 2300<TAC<2700, beam FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC4_FPu = new TH2D("hdEE_TAC4_FPu","dE-E, 2300<TAC<2700, upper FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC4_FPl = new TH2D("hdEE_TAC4_FPl","dE-E, 2300<TAC<2700, lower FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC5_FPb = new TH2D("hdEE_TAC5_FPb","dE-E, 3100<TAC<3500, beam FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC5_FPu = new TH2D("hdEE_TAC5_FPu","dE-E, 3100<TAC<3500, upper FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC5_FPl = new TH2D("hdEE_TAC5_FPl","dE-E, 3100<TAC<3500, lower FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC6_FPb = new TH2D("hdEE_TAC6_FPb","dE-E, 3800<TAC<4096, beam FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC6_FPu = new TH2D("hdEE_TAC6_FPu","dE-E, 3800<TAC<4096, upper FP, 2ug",700,0,70,320,0.3,3.5);
-   TH2D *hdEE_TAC6_FPl = new TH2D("hdEE_TAC6_FPl","dE-E, 3800<TAC<4096, lower FP, 2ug",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC1_FPb = new TH2D("hdEE_TAC1_FPb","dE-E, 50<TAC<500, beam FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC1_FPu = new TH2D("hdEE_TAC1_FPu","dE-E, 50<TAC<500, upper FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC1_FPl = new TH2D("hdEE_TAC1_FPl","dE-E, 50<TAC<500, lower FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC2_FPb = new TH2D("hdEE_TAC2_FPb","dE-E, 500<TAC<1200, beam FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC2_FPu = new TH2D("hdEE_TAC2_FPu","dE-E, 500<TAC<1200, upper FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC2_FPl = new TH2D("hdEE_TAC2_FPl","dE-E, 500<TAC<1200, lower FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC3_FPb = new TH2D("hdEE_TAC3_FPb","dE-E, 1600<TAC<2000, beam FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC3_FPu = new TH2D("hdEE_TAC3_FPu","dE-E, 1600<TAC<2000, upper FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC3_FPl = new TH2D("hdEE_TAC3_FPl","dE-E, 1600<TAC<2000, lower FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC4_FPb = new TH2D("hdEE_TAC4_FPb","dE-E, 2300<TAC<2700, beam FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC4_FPu = new TH2D("hdEE_TAC4_FPu","dE-E, 2300<TAC<2700, upper FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC4_FPl = new TH2D("hdEE_TAC4_FPl","dE-E, 2300<TAC<2700, lower FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC5_FPb = new TH2D("hdEE_TAC5_FPb","dE-E, 3100<TAC<3500, beam FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC5_FPu = new TH2D("hdEE_TAC5_FPu","dE-E, 3100<TAC<3500, upper FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC5_FPl = new TH2D("hdEE_TAC5_FPl","dE-E, 3100<TAC<3500, lower FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC6_FPb = new TH2D("hdEE_TAC6_FPb","dE-E, 3800<TAC<4096, beam FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC6_FPu = new TH2D("hdEE_TAC6_FPu","dE-E, 3800<TAC<4096, upper FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+   TH2D *hdEE_TAC6_FPl = new TH2D("hdEE_TAC6_FPl","dE-E, 3800<TAC<4096, lower FP, 0mg/cm2",700,0,70,320,0.3,3.5);
 //-----------------------------------------------------------------------
 
    TCutG *beamcut = (TCutG*)fcuts->Get("beam");
    TCutG *uppercut = (TCutG*)fcuts->Get("upper");
    TCutG *lowercut = (TCutG*)fcuts->Get("lower");
    TCutG *dEEcut = (TCutG*)fcuts->Get("dE-Ecut");
+   TCutG *EvThcut = (TCutG*)fcuts->Get("EvTh");
 
 //----------------------------------------------------------------------- 
    Long64_t nentries = fChain->GetEntries();
@@ -192,6 +199,17 @@ void analysis::Loop()
     if(spare>3800 && spare<4096) hEvTh_TACg6->Fill(E_Fenergy[j],E_Fnum[j]);
  }
 
+ for(j=0;j<E_FMult;j++){
+   if(EvThcut->IsInside(E_Fenergy[j],E_Fnum[j])){
+     hTAC_EvTg->Fill(spare);
+     hFP_EvTg->Fill(x,rftof);
+        for(k=0;k<dE_FMult;k++){
+	  hdEE_EvTg->Fill(E_Fenergy[j],dE_Fenergy[k]);
+	  hdEvTh_EvTg->Fill(dE_Fenergy[k],dE_Fnum[k]);
+	}
+   }
+ }
+
  for(k=0;k<dE_FMult;k++){
    hdEvTh->Fill(dE_Fenergy[k],dE_Fnum[k]);
     if(spare<500) hdEvTh_TACg1->Fill(dE_Fenergy[k],dE_Fnum[k]);
@@ -250,7 +268,7 @@ for(k=0;k<dE_FMult;k++){
  if(lowercut->IsInside(x,rftof)) hTAC_FPgl->Fill(spare);
      
     // TAC regions:
-    // 0ug: t<500 | 500<t<1200 | 1600<t<2000 | 2300<t<2700 | 3100<t<3500 | 3800<t<4096
+    // 0mg/cm2: t<500 | 500<t<1200 | 1600<t<2000 | 2300<t<2700 | 3100<t<3500 | 3800<t<4096
 //-----------------------------------------------------------------------
 
   if((jentry+1)%1000000==0||jentry%(nentries-1)==0){
@@ -273,6 +291,10 @@ for(k=0;k<dE_FMult;k++){
    hdEE_TACg4->Write(); 
    hdEE_TACg5->Write(); 
    hdEE_TACg6->Write(); 
+   hTAC_EvTg->Write();
+   hFP_EvTg->Write();
+   hdEE_EvTg->Write();
+   hdEvTh_EvTg->Write();
    hTACg1->Write();
    hTACg2->Write();
    hTACg3->Write();
