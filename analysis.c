@@ -14,12 +14,12 @@
 void analysis::Loop()
 {
    if (fChain == 0) return;
-   TFile *output = new TFile("0ug.root","recreate");
+   TFile *output = new TFile("0mg.root","recreate");
     TFile *fcuts = new TFile("cuts_0.root","read");
     //  TFile *fcuts = new TFile("cuts_2.root","read");
     // TFile *fcuts = new TFile("cuts_4.root","read");
     //  TFile *fcuts = new TFile("cuts_8.root","read");
-    //  TFile *fcuts = new TFile("cuts_12.root","read");
+   // TFile *fcuts = new TFile("cuts_12.root","read");
 //-----------------------------------------------------------------------
    // define output histograms
 
@@ -117,6 +117,19 @@ void analysis::Loop()
    TH2D *hdEE_TAC6_FPb = new TH2D("hdEE_TAC6_FPb","dE-E, 3800<TAC<4096, beam FP, 0mg/cm2",700,0,70,320,0.3,3.5);
    TH2D *hdEE_TAC6_FPu = new TH2D("hdEE_TAC6_FPu","dE-E, 3800<TAC<4096, upper FP, 0mg/cm2",700,0,70,320,0.3,3.5);
    TH2D *hdEE_TAC6_FPl = new TH2D("hdEE_TAC6_FPl","dE-E, 3800<TAC<4096, lower FP, 0mg/cm2",700,0,70,320,0.3,3.5);
+
+   // Emax, etc
+   TH2D *hEFmax_EBmax = new TH2D("hEFmax_EBmax","Max front v Back, E",700,0,70,700,0,70);
+   TH2D *hEF_EB = new TH2D("hEF_EB","front v Back, E",700,0,70,700,0,70);
+   TH2D *hdEFmax_dEBmax = new TH2D("hdEFmax_dEBmax","Max front v Back, dE",700,0,70,700,0,70);
+   TH2D *hdEF_dEB = new TH2D("hdEF_dEB","front v Back, dE",700,0,70,700,0,70);
+   TH2D *hdEFmax_EFmax = new TH2D("hdEFmax_EFmax","Max front dE v E",700,0,70,700,0,70);
+   TH2D *hdEBmax_EBmax = new TH2D("hdEBmax_EBmax","Max back dE v E",700,0,70,700,0,70);
+   TH2D *hEFmaxvTh = new TH2D("hEFmaxvTh","Emax v Ring num, ungated, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hdEFmaxvTh = new TH2D("hdEFmaxvTh","dEmax v Ring num, ungated, 0mg/cm2",200,0,20,16,0,16);
+   TH2D *hEBmaxvTh = new TH2D("hEBmaxvTh","Emax v wedge num, ungated, 0mg/cm2",700,0,70,16,0,16);
+   TH2D *hdEBmaxvTh = new TH2D("hdEBmaxvTh","dEmax v wedge num, ungated, 0mg/cm2",200,0,20,16,0,16);
+  
 //-----------------------------------------------------------------------
 
    TCutG *beamcut = (TCutG*)fcuts->Get("beam");
@@ -141,9 +154,19 @@ void analysis::Loop()
       b_E_Fmult->GetEntry(ientry);
       b_E_Fnum->GetEntry(ientry);
       b_E_Fenergy->GetEntry(ientry);
+      b_dE_Bmult->GetEntry(ientry);
+      b_dE_Bnum->GetEntry(ientry);
+      b_dE_Benergy->GetEntry(ientry);
+      b_E_Bmult->GetEntry(ientry);
+      b_E_Bnum->GetEntry(ientry);
+      b_E_Benergy->GetEntry(ientry);
       b_rftof->GetEntry(ientry);
       b_spare->GetEntry(ientry);
       b_x->GetEntry(ientry);
+
+
+      emaxF_E = emaxF_dE = emaxB_E = emaxB_dE = 0;
+      nmaxF_E = nmaxF_dE = nmaxB_E = nmaxB_dE = -5;
 
 //-----------------------------------------------------------------------
    
@@ -268,10 +291,56 @@ for(k=0;k<dE_FMult;k++){
  if(lowercut->IsInside(x,rftof)) hTAC_FPgl->Fill(spare);
      
     // TAC regions:
-    // 0mg/cm2: t<500 | 500<t<1200 | 1600<t<2000 | 2300<t<2700 | 3100<t<3500 | 3800<t<4096
+    // 0mg/cm2: 50<t<500 | 500<t<1200 | 1600<t<2000 | 2300<t<2700 | 3100<t<3500 | 3800<t<4096
 //-----------------------------------------------------------------------
 
-  if((jentry+1)%1000000==0||jentry%(nentries-1)==0){
+ for(i=0;i<E_FMult;i++){
+   if(E_Fenergy[i]>emaxF_E){
+     emaxF_E = E_Fenergy[i];
+     nmaxF_E = E_Fnum[i];
+   }}
+
+for(i=0;i<E_BMult;i++){
+   if(E_Benergy[i]>emaxB_E){
+     emaxB_E = E_Benergy[i];
+     nmaxB_E = E_Bnum[i];
+   }}
+
+ for(i=0;i<dE_FMult;i++){
+   if(dE_Fenergy[i]>emaxF_dE){
+     emaxF_dE = dE_Fenergy[i];
+     nmaxF_dE = dE_Fnum[i];
+   }}
+
+for(i=0;i<dE_BMult;i++){
+   if(dE_Benergy[i]>emaxB_dE){
+     emaxB_dE = dE_Benergy[i];
+     nmaxB_dE = dE_Bnum[i];
+   }}
+
+
+ hEFmax_EBmax->Fill(emaxF_E,emaxB_E);
+ hdEFmax_dEBmax->Fill(emaxF_dE,emaxB_dE);
+ hdEFmax_EFmax->Fill(emaxF_dE,emaxF_E);
+ hdEBmax_EBmax->Fill(emaxB_dE,emaxB_E);
+ hEFmaxvTh->Fill(emaxF_E,nmaxF_E);
+ hdEFmaxvTh->Fill(emaxF_dE,nmaxF_dE);
+ hEBmaxvTh->Fill(emaxB_E,nmaxB_E);
+ hdEBmaxvTh->Fill(emaxB_dE,nmaxB_dE);
+
+ for(i=0;i<E_FMult;i++){
+   for(j=0;j<E_BMult;j++){
+     hEF_EB->Fill(E_Fenergy[i],E_Benergy[j]);
+   }}
+
+ for(i=0;i<dE_FMult;i++){
+   for(j=0;j<dE_BMult;j++){
+     hdEF_dEB->Fill(dE_Fenergy[i],dE_Benergy[j]);
+   }}
+
+ 
+//-----------------------------------------------------------------------
+  if((jentry+1)%100000==0||jentry%(nentries-1)==0){
    cout << "\rProcessing. Event: " << jentry+1 << "/" << nentries << ", Done: ";
    cout << ((float) (jentry+1))/((float) nentries)*100. << "%";
    cout.flush();
@@ -354,6 +423,17 @@ for(k=0;k<dE_FMult;k++){
    hdEE_TAC6_FPb->Write();
    hdEE_TAC6_FPu->Write();
    hdEE_TAC6_FPl->Write();
+
+ hEFmax_EBmax->Write();
+ hEF_EB->Write();
+ hdEFmax_dEBmax->Write();
+ hdEF_dEB->Write();
+ hdEFmax_EFmax->Write();
+ hdEBmax_EBmax->Write();
+ hEFmaxvTh->Write();
+ hdEFmaxvTh->Write();
+ hEBmaxvTh->Write();
+ hdEBmaxvTh->Write();
 //-----------------------------------------------------------------------
    output->Close();
    fcuts->Close();

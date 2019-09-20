@@ -12,8 +12,8 @@
 using namespace std;
 int stripmaker(){
  
-  TFile *f = new TFile("cal_305.root");
-  TFile *ouf = new TFile("processed/Run305_sbs.root","RECREATE");
+  TFile *f = new TFile("calfiles/cal_20.root");
+  TFile *ouf = new TFile("processed/Run20_sbs.root","RECREATE");
 
 
 

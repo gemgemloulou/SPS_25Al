@@ -71,6 +71,8 @@ public :
    Float_t         down;
 
    Int_t i,j,k;
+   Float_t emaxF_E, emaxF_dE, emaxB_E, emaxB_dE;
+   Int_t nmaxF_E, nmaxF_dE, nmaxB_E, nmaxB_dE;
 
    // List of branches
    TBranch        *b_dE_Fmult;   //!
@@ -147,7 +149,7 @@ analysis::analysis(TTree *t) : fChain(0)
       #else
       TChain *chain = new TChain("tree","");
       // 12ug
-      /* 
+      /*  
       chain->Add("/disks/1/gwilson/25Al/sorted/run265.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run266.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run267.root"); 
@@ -219,7 +221,7 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run183.root"); 
       */  
       // no degrader 
-      	  
+        	  
        chain->Add("/disks/1/gwilson/25Al/sorted/run99.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run100.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run101.root"); 
@@ -228,7 +230,7 @@ analysis::analysis(TTree *t) : fChain(0)
        chain->Add("/disks/1/gwilson/25Al/sorted/run113.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run116.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run117.root");
-     
+      
        t = chain;
        #endif
    }
