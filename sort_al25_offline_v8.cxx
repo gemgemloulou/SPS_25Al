@@ -143,10 +143,10 @@ Float_t E_Fmax;
 Float_t E_Bmax;
 Float_t dE_Fmax;
 Float_t dE_Bmax;
-Float_t E_Fmaxnum;
-Float_t E_Bmaxnum;
-Float_t dE_Fmaxnum;
-Float_t dE_Bmaxnum;
+Int_t E_Fmaxnum;
+Int_t E_Bmaxnum;
+Int_t dE_Fmaxnum;
+Int_t dE_Bmaxnum;
 
 Float_t de[5], cathode, grid, y, rftof, mon, spare, t1, t2;
 Float_t E, DE;
@@ -156,16 +156,10 @@ Float_t x;
 Int_t testrmult0, testrmult1, testwmult0, testwmult1;
 Bool_t bmchk;
 Int_t RunNum;
+Int_t i;
 
 void treeinit(){
     if(iverb) cout << "in treeinit" << endl;
-
-    // //*********************************************
-    // /*************/ MagField = 8.1; /*************/
-    // /*************/ Degrader = 12;   /*************/
-    // /*************/ bmchk = 0;      /*************/
-    // /*************/ RunNum = 275;   /**************/
-    // //*********************************************
 
     for(Int_t i=0;i<16;i++){
       dE_Fnum[i] = 0;
@@ -183,6 +177,9 @@ void treeinit(){
     }
     dE_Fmult = 0; dE_Bmult = 0;
     E_Fmult = 0; E_Bmult = 0;
+    E_Bmax = E_Fmax = dE_Fmax = dE_Bmax = 0;
+    E_Bmaxnum = E_Fmaxnum = dE_Fmaxnum = dE_Bmaxnum = -5;
+    
 
   cathode = grid = y = rftof = mon = spare = t1 = t2 = 0;
   hepo = hepi = lepo = lepi = up = down = 0;
@@ -343,58 +340,58 @@ int userentry()
   f = new TFile("output.root","recreate");
   tree = new TTree("tree","sorted data");
 
-  tree->Branch("dE_FMult",&dE_Fmult,"dE_Fmult/i");
-  tree->Branch("dE_BMult",&dE_Bmult,"dE_Bmult/i");
-  tree->Branch("dE_Fenergy",dE_Fenergy,"dE_Fenergy[dE_Fmult]/f");
-  tree->Branch("dE_Benergy",dE_Benergy,"dE_Benergy[dE_Bmult]/f");
-  tree->Branch("dE_Fnum",dE_Fnum,"dE_Fnum[dE_Fmult]/i");
-  tree->Branch("dE_Bnum",dE_Bnum,"dE_Bnum[dE_Bmult]/i");
-  tree->Branch("dE_Fenergy_raw",dE_Fenergy_raw,"dE_Fenergy_raw[dE_Fmult]/f");
-  tree->Branch("dE_Benergy_raw",dE_Benergy_raw,"dE_Benergy_raw[dE_Bmult]/f");
+  tree->Branch("dE_Fmult",&dE_Fmult,"dE_Fmult/I");
+  tree->Branch("dE_Bmult",&dE_Bmult,"dE_Bmult/I");
+  tree->Branch("dE_Fenergy",dE_Fenergy,"dE_Fenergy[dE_Fmult]/F");
+  tree->Branch("dE_Benergy",dE_Benergy,"dE_Benergy[dE_Bmult]/F");
+  tree->Branch("dE_Fnum",dE_Fnum,"dE_Fnum[dE_Fmult]/I");
+  tree->Branch("dE_Bnum",dE_Bnum,"dE_Bnum[dE_Bmult]/I");
+  tree->Branch("dE_Fenergy_raw",dE_Fenergy_raw,"dE_Fenergy_raw[dE_Fmult]/F");
+  tree->Branch("dE_Benergy_raw",dE_Benergy_raw,"dE_Benergy_raw[dE_Bmult]/F");
   // tree->Branch("bmchk",&bmchk,"bmchk/b");
 
-  tree->Branch("E_FMult",&E_Fmult,"E_Fmult/i");
-  tree->Branch("E_BMult",&E_Bmult,"E_Bmult/i");
-  tree->Branch("E_Fenergy",E_Fenergy,"E_Fenergy[E_Fmult]/f");
-  tree->Branch("E_Benergy",E_Benergy,"E_Benergy[E_Bmult]/f");
-  tree->Branch("E_Fnum",E_Fnum,"E_Fnum[E_Fmult]/i");
-  tree->Branch("E_Bnum",E_Bnum,"E_Bnum[E_Bmult]/i");
-  tree->Branch("E_Fenergy_raw",E_Fenergy_raw,"E_Fenergy_raw[E_Fmult]/f");
-  tree->Branch("E_Benergy_raw",E_Benergy_raw,"E_Benergy_raw[E_Bmult]/f");
+  tree->Branch("E_Fmult",&E_Fmult,"E_Fmult/I");
+  tree->Branch("E_Bmult",&E_Bmult,"E_Bmult/I");
+  tree->Branch("E_Fenergy",E_Fenergy,"E_Fenergy[E_Fmult]/F");
+  tree->Branch("E_Benergy",E_Benergy,"E_Benergy[E_Bmult]/F");
+  tree->Branch("E_Fnum",E_Fnum,"E_Fnum[E_Fmult]/I");
+  tree->Branch("E_Bnum",E_Bnum,"E_Bnum[E_Bmult]/I");
+  tree->Branch("E_Fenergy_raw",E_Fenergy_raw,"E_Fenergy_raw[E_Fmult]/F");
+  tree->Branch("E_Benergy_raw",E_Benergy_raw,"E_Benergy_raw[E_Bmult]/F");
 
-  tree->Branch("E_Fmax",&E_Fmax,"E_Fmax/f"); // This is not being filled because it's called something else... 
-  tree->Branch("E_Bmax",&E_Bmax,"E_Bmax/f");
-  tree->Branch("dE_Fmax",&dE_Fmax,"dE_Fmax/f");
-  tree->Branch("dE_Bmax",&dE_Bmax,"dE_Bmax/f");
-  tree->Branch("E_Fmaxnum",&E_Fmaxnum,"E_Fmaxnum/i");
-  tree->Branch("E_Bmaxnum",&E_Bmaxnum,"E_Bmaxnum/i");
-  tree->Branch("dE_Fmaxnum",&dE_Fmaxnum,"dE_Fmaxnum/i");
-  tree->Branch("dE_Bmaxnum",&dE_Bmaxnum,"dE_Bmaxnum/i");
+  tree->Branch("E_Fmax",&E_Fmax,"E_Fmax/F"); // This is not being filled because it's called something else... 
+  tree->Branch("E_Bmax",&E_Bmax,"E_Bmax/F");
+  tree->Branch("dE_Fmax",&dE_Fmax,"dE_Fmax/F");
+  tree->Branch("dE_Bmax",&dE_Bmax,"dE_Bmax/F");
+  tree->Branch("E_Fmaxnum",&E_Fmaxnum,"E_Fmaxnum/I");
+  tree->Branch("E_Bmaxnum",&E_Bmaxnum,"E_Bmaxnum/I");
+  tree->Branch("dE_Fmaxnum",&dE_Fmaxnum,"dE_Fmaxnum/I");
+  tree->Branch("dE_Bmaxnum",&dE_Bmaxnum,"dE_Bmaxnum/I");
 
-  //  tree->Branch("Degrader",&Degrader,"Degrader/i");
-  //  tree->Branch("MagField",&MagField,"MagField/f");
-  tree->Branch("de",de,"de[5]/f");
-  tree->Branch("cathode",&cathode,"cathode/f");
-  tree->Branch("grid",&grid,"grid/f");
-  tree->Branch("x",&x,"x/f");
-  tree->Branch("y",&y,"y/f");
-  tree->Branch("rftof",&rftof,"rftof/f");
-  tree->Branch("mon",&mon,"mon/f");
-  tree->Branch("spare",&spare,"spare/f");
-  tree->Branch("t1",&t1,"t1/f");
-  tree->Branch("t2",&t2,"t2/f");
-  tree->Branch("E",&E,"E/f");
-  tree->Branch("DE",&DE,"DE/f");
-  tree->Branch("up",&up,"up/f");
-  tree->Branch("stime0",&stime0,"stime0/f");
-  tree->Branch("stime1",&stime1,"stime1/f");
-  tree->Branch("stime2",&stime2,"stime2/f");
-  tree->Branch("hepo",&hepo,"hepo/f");
-  tree->Branch("hepi",&hepi,"hepi/f");
-  tree->Branch("lepo",&lepo,"lepo/f");
-  tree->Branch("lepi",&lepi,"lepi/f");
-  tree->Branch("down",&down,"down/f");
-  // tree->Branch("RunNum",&RunNum,"RunNum/i");
+  //  tree->Branch("Degrader",&Degrader,"Degrader/I");
+  //  tree->Branch("MagField",&MagField,"MagField/F");
+  tree->Branch("de",de,"de[5]/F");
+  tree->Branch("cathode",&cathode,"cathode/F");
+  tree->Branch("grid",&grid,"grid/F");
+  tree->Branch("x",&x,"x/F");
+  tree->Branch("y",&y,"y/F");
+  tree->Branch("rftof",&rftof,"rftof/F");
+  tree->Branch("mon",&mon,"mon/F");
+  tree->Branch("spare",&spare,"spare/F");
+  tree->Branch("t1",&t1,"t1/F");
+  tree->Branch("t2",&t2,"t2/F");
+  tree->Branch("E",&E,"E/F");
+  tree->Branch("DE",&DE,"DE/F");
+  tree->Branch("up",&up,"up/F");
+  tree->Branch("stime0",&stime0,"stime0/F");
+  tree->Branch("stime1",&stime1,"stime1/F");
+  tree->Branch("stime2",&stime2,"stime2/F");
+  tree->Branch("hepo",&hepo,"hepo/F");
+  tree->Branch("hepi",&hepi,"hepi/F");
+  tree->Branch("lepo",&lepo,"lepo/F");
+  tree->Branch("lepi",&lepi,"lepi/F");
+  tree->Branch("down",&down,"down/F");
+  // tree->Branch("RunNum",&RunNum,"RunNum/I");
 
   // ************************************************************************************  
 
@@ -576,6 +573,8 @@ int userdecode(ScarletEvnt &event) {
 
   //unpack DSSD(s)
   if(iverb) cout << "unpacking DSSDs" << endl;
+  E_Bmult = E_Fmult = dE_Bmult = dE_Fmult = 0;
+
   for (Int_t ndet=0; ndet<2; ++ndet) {
     /* get Wedge hit pattern, count bits, then store data & channel */
     /* calibration constants put the energy into MeV */
@@ -589,82 +588,49 @@ int userdecode(ScarletEvnt &event) {
       dataword=*p++;
       WChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
       WRawData[ndet][ndat]=(dataword & 0x00000fff);
+      WData[ndet][ndat]= Woffset[ndet][WChan[ndet][ndat]]+Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
+      WData[ndet][ndat]= (WData[ndet][ndat])/1000;
 
-      //  if(ndet==1){ //dE
-      //	dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat];
-      //	dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
-      //	dE_Benergy[dE_Bmult] = dE_Boffset[dE_Bnum[dE_Bmult]] + dE_Bgain[dE_Bnum[dE_Bmult]] * dE_Benergy_raw[dE_Bmult];
- WData[ndet][ndat]= Woffset[ndet][WChan[ndet][ndat]]+Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
- WData[ndet][ndat]= (WData[ndet][ndat])/1000;
- // for post run 95, this ndet will still be zero for E - the gains have switched in the .dat file
-	//	dE_Bmult++;
-	//  }else if(ndet==0){ //E
-	//	E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat];
-	//	E_Bnum[E_Bmult] = WChan[ndet][ndat];
-	//	E_Benergy[E_Bmult] = E_Boffset[E_Bnum[E_Bmult]] + E_Bgain[E_Bnum[E_Bmult]] * E_Benergy_raw[E_Bmult];
-	//	WData[0][ndat] = WRawData[0][ndat]* E_Bgain[WChan[0][ndat]] + E_Boffset[WChan[0][ndat]];
-	//	WData[0][ndat] = (WData[0][ndat])/1000; //MeV
-	//	E_Bmult++;
-	//   }
-        
-      // if(iverb){
-      // 	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
-      // 	cout << "WRawData["<<ndet<<"]["<<ndat<<"] = " << WRawData[ndet][ndat] << endl;
-      // 	cout << "dE_Benergy["<<dE_Bmult<<"] = " << dE_Benergy[dE_Bmult];
-      // 	cout << ", E_Benergy["<<E_Bmult<<"] = " << E_Benergy[E_Bmult]<< endl;
-      // 	cout << "emaxW = " << emaxW << endl;
-      // }
-      // for(i=0;i<dE_Bmult;i++){
-      // if (dE_Benergy[i]>dE_Bmax){
-      // 	dE_Bmax=dE_Benergy[i];
-      // 	dE_Bmaxnum = dE_Bnum[i];
-      // }}
-      // for(i=0;i<E_Bmult;i++){
-      // if (E_Benergy[i]>E_Bmax){
-      // 	E_Bmax=E_Benergy[i];
-      // 	E_Bmaxnum = E_Bnum[i];
-      // }}
-      
-      // if(iverb){
-      // 	cout << "dE_Bmax = " << dE_Bmax << ", num = " << dE_Bmaxnum;
-      // 	cout << ", E_Bmax = " << E_Bmax << ", num = " << E_Bmaxnum;
-      // }
+      // for post run 95, W2 (ndet 1) is now E, and let's say is W1 for dE, even though it's not plugged in. 
+      // so, swapping over the if statements for the wedges only. 
+      // Note that for the calibration, the Ecal_post95.dat file is for R1 and Wedge 2.
+      // So the E detector has the right calibration factor (that's why there's a pre and post file!)
 
- // for post run 95, W2 (ndet 1) is now E, and let's say is W1 for dE, even though it's not plugged in. 
- // so, swapping over the if statements for the wedges only. 
-
-      if(ndet==1){
+      if(ndet==1){ //E
 	hELudW2->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
 	hEW2->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
 	E_Benergy[ndat] = WData[1][ndat];
 	E_Benergy_raw[ndat] = WRawData[1][ndat];
 	E_Bnum[ndat] = WChan[1][ndat];
-	E_Bmult = ndat+1; // so it's human. i.e. mult 0 is no hit, mult 1 is a single...
+	//E_Bmult = ndat+1; // so it's human. i.e. mult 0 is no hit, mult 1 is a single...
+	// not sure ndat+1 is right - what if there's data in ndat=0,2 but not ndat=1?
+	E_Bmult++;
 	testwmult1++;  
-	// if(iverb){
-	//   cout << "Wedge 0! Ewedge0["<<ndat<<"] = " << Ewedge0[ndat] << endl;
-	//   cout << "EwedgeRaw0["<<ndat<<"] = " << EwedgeRaw0[ndat] << endl;
-	//   cout << "NumWedge0["<<ndat<<"] = " << NumWedge0[ndat] << endl;
-	//   cout << "Wedgemult = " << WedgeMult0 << ", test mult = " << testwmult0 << endl << endl;
-	// }
+        if(iverb){
+          cout << "Wedge 0! Ewedge0["<<ndat<<"] = " << E_Benergy[ndat] << endl;
+          cout << "E_Benergy_raw["<<ndat<<"] = " << E_Benergy_raw[ndat] << endl;
+          cout << "E_Bnum["<<ndat<<"] = " << E_Bnum[ndat] << endl;
+          cout << "Wedgemult = " << E_Bmult << ", test mult = " << testwmult1 << endl << endl;
+	 }
       }
-      if(ndet==0){
+
+      if(ndet==0){ //dE
 	hELudW1->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
 	hEW1->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
       
-      dE_Benergy[ndat] = WData[0][ndat];
-      dE_Benergy_raw[ndat] = WRawData[0][ndat];
-      dE_Bnum[ndat] = WChan[0][ndat];
-      dE_Bmult = ndat+1; 
-      testwmult0++; 
-	// if(iverb){
-	//   cout << "Wedge 1! Ewedge1["<<ndat<<"] = " << Ewedge1[ndat] << endl;
-	//   cout << "EwedgeRaw1["<<ndat<<"] = " << EwedgeRaw1[ndat] << endl;
-	//   cout << "NumWedge1["<<ndat<<"] = " << NumWedge1[ndat] << endl;
-	//   cout << "Wedgemult = " << WedgeMult1 << ", test mult = " << testwmult1 << endl << endl;
-	// }
- 
-      }
+	dE_Benergy[ndat] = WData[0][ndat];
+	dE_Benergy_raw[ndat] = WRawData[0][ndat];
+	dE_Bnum[ndat] = WChan[0][ndat];
+	// dE_Bmult = ndat+1; 
+	dE_Bmult++;
+	testwmult0++; 
+	if(iverb){
+	  cout << "Wedge 1! Ewedge1["<<ndat<<"] = " << dE_Benergy[ndat] << endl;
+	  cout << "EwedgeRaw1["<<ndat<<"] = " << dE_Benergy_raw[ndat] << endl;
+	  cout << "NumWedge1["<<ndat<<"] = " << dE_Bnum[ndat] << endl;
+	  cout << "Wedgemult = " << dE_Bmult << ", test mult = " << testwmult0 << endl << endl;
+	}
+      } //if ndet = 0
     }
 
     /* get Ring hit pattern, count bits, then store data & channel */
@@ -679,66 +645,81 @@ int userdecode(ScarletEvnt &event) {
       dataword=*p++;
       RChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
       RRawData[ndet][ndat]=(dataword & 0x00000fff);
-      //  RData[ndet][ndat]=
-      //	(RRawData[ndet][ndat] + Roffset[ndet][RChan[ndet][ndat]])/
-      //	Rslope[ndet][RChan[ndet][ndat]]; // changed from - offset to + offset
- RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
- RData[ndet][ndat] = (RData[ndet][ndat])/1000; // MeV
-      // if( fabs(Rslope[ndet][RChan[ndet][ndat]])<0.0001)
-      //	{ cout<<"problem "<<ndet<<" "<<RChan[ndet][ndat]<<endl;}
+      RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
+      RData[ndet][ndat] = (RData[ndet][ndat])/1000; // MeV
+     
 if(iverb){
 	cout << "RChan["<<ndet<<"]["<<ndat<<"] = " << RChan[ndet][ndat] << endl;
 	cout << "RRawData["<<ndet<<"]["<<ndat<<"] = " << RRawData[ndet][ndat] << endl;
 	cout << "RData["<<ndet<<"]["<<ndat<<"] = " << RData[ndet][ndat] << endl;
-	cout << "emaxR = " << emaxR << endl;
-      }
+ }
 
-// These aren't read to the tree because they're called something else... 
-      if (RData[ndet][ndat]>emaxR) {
-	emaxR=RData[ndet][ndat];
-	emaxrawR=RRawData[ndet][ndat];
-	nmaxR=RChan[ndet][ndat];
-	detmaxR=ndet;
-      }
- if(iverb){
-   cout << "emaxR = " << emaxR << ", nmaxR = " << nmaxR << ", detmaxR = " << detmaxR << endl << endl;
-      }
-      if(ndet==0)
-	{ 
-	  hELudR1->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
-	  hER1->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
-	  E_Fenergy[ndat] = RData[0][ndat];
-	  E_Fenergy_raw[ndat] = RRawData[0][ndat];
-	  E_Fnum[ndat] = RChan[0][ndat];
-	  E_Fmult = ndat+1;
-	  testrmult0++;
-	// if(iverb){
-	//   cout << "Ring 0! Ering0["<<ndat<<"] = " << Ering0[ndat] << endl;
-	//   cout << "EringRaw0["<<ndat<<"] = " << EringRaw0[ndat] << endl;
-	//   cout << "NumRing0["<<ndat<<"] = " << NumRing0[ndat] << endl;
-	//   cout << "Ringmult = " << RingMult0 << ", test mult = " << testrmult0 << endl << endl;
-	// }
-	}
-      if(ndet==1){
+ if(ndet==0){ 
+   hELudR1->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
+   hER1->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
+   E_Fenergy[ndat] = RData[0][ndat];
+   E_Fenergy_raw[ndat] = RRawData[0][ndat];
+   E_Fnum[ndat] = RChan[0][ndat];
+   //  E_Fmult = ndat+1;
+   E_Fmult++;
+   testrmult0++;
+   if(iverb){
+     cout << "E ring ["<<ndat<<"] = " << E_Fenergy[ndat] << endl;
+     cout << "E ring Raw["<<ndat<<"] = " << E_Fenergy_raw[ndat] << endl;
+     cout << "Num Ring["<<ndat<<"] = " << E_Fnum[ndat] << endl;
+     cout << "Ringmult = " << E_Fmult << ", test mult = " << testrmult0 << endl << endl;
+   }
+ }
+ if(ndet==1){
+   hELudR2->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
+   hER2->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
+   dE_Fenergy[ndat] = RData[1][ndat];
+   dE_Fenergy_raw[ndat] = RRawData[1][ndat];
+   dE_Fnum[ndat] = RChan[1][ndat];
+   //	dE_Fmult = ndat+1;
+   dE_Fmult++;
+   testrmult1++;
+   if(iverb){
+     cout << "dE ring["<<ndat<<"] = " << dE_Fenergy[ndat] << endl;
+     cout << "EringRaw1["<<ndat<<"] = " << dE_Fenergy_raw[ndat] << endl;
+     cout << "NumRing1["<<ndat<<"] = " << dE_Fnum[ndat] << endl;
+     cout << "Ringmult = " << dE_Fmult << ", test mult = " << testrmult1 << endl << endl;
+   }
+ }
+    } // loop over Rbitcnt
+  }   // if (ndet>0) p2=p;
+ 
 
-	hELudR2->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
-	hER2->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
-	dE_Fenergy[ndat] = RData[1][ndat];
-	dE_Fenergy_raw[ndat] = RRawData[1][ndat];
-	dE_Fnum[ndat] = RChan[1][ndat];
-	dE_Fmult = ndat+1;
-	testrmult1++;
-	// if(iverb){
-	//   cout << "Ring 1! Ering1["<<ndat<<"] = " << Ering1[ndat] << endl;
-	//   cout << "EringRaw1["<<ndat<<"] = " << EringRaw1[ndat] << endl;
-	//   cout << "NumRing1["<<ndat<<"] = " << NumRing1[ndat] << endl;
-	//   cout << "Ringmult = " << RingMult1 << ", test mult = " << testrmult1 << endl << endl;
-	// }
-      }
+	for(i=0;i<dE_Bmult;i++){
+	  if (dE_Benergy[i]>dE_Bmax){
+	    dE_Bmax=dE_Benergy[i];
+	    dE_Bmaxnum = dE_Bnum[i];
+	  }}
+	for(i=0;i<E_Bmult;i++){
+	  if(iverb) cout << "E_Benergy["<<i<<"] = " << E_Benergy[i] << ", E_Bmax = " << E_Bmax << endl;
+	  if (E_Benergy[i]>E_Bmax){
+	    E_Bmax=E_Benergy[i];
+	    E_Bmaxnum = E_Bnum[i];
+	    if(iverb) cout << "Now, E_Bmax = " << E_Bmax << endl;
+	  }}
+
+ 	for(i=0;i<dE_Fmult;i++){
+	  if (dE_Fenergy[i]>dE_Fmax){
+	    dE_Fmax=dE_Fenergy[i];
+	    dE_Fmaxnum = dE_Fnum[i];
+	  }}
+	for(i=0;i<E_Fmult;i++){
+	  if(iverb) cout << "E_Fenergy["<<i<<"] = " << E_Fenergy[i] << ", E_Fmax = " << E_Fmax << endl;
+	  if (E_Fenergy[i]>E_Fmax){
+	    E_Fmax=E_Fenergy[i];
+	    E_Fmaxnum = E_Fnum[i];
+	    if (iverb) cout << "Now, E_Fmax = " << E_Fmax << endl;
+	  }}
      
-    }
-    // if (ndet>0) p2=p;
-  }
+	if(iverb){
+	  cout << "dE_Fmax = " << dE_Fmax << ", num = " << dE_Fmaxnum << ", dE_Bmax = " << dE_Bmax << ", num = " << dE_Bmaxnum << endl;
+	  cout << "E_Fmax = " << E_Fmax << ", num = " << E_Fmaxnum << ", E_Fmax = " << E_Bmax << ", num = " << E_Bmaxnum << endl; 
+	}
   p1=p;
   tree->Fill();
   if(iverb) cout << "treefill" << endl;
