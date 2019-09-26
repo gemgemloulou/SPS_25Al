@@ -17,6 +17,9 @@ Draws everything from analysis.c. Also loads the cut files so you can see what c
 A bit like plotter.c, but this one plots the same (data) histograms for each of the degrader settings, for a direct comparison
 Again, run on hadded histogram files within ROOT. 
 
+**** runbyrun.c ****
+A code to compare one histogram run by run, to look for shifts
+
 **** stripmaker.c ****
 Silly script to project the 2D energy vs ring/wedge into separate histograms, in order to check the calibration. 
 The input and output files are hardcoded in for now. 
@@ -31,4 +34,7 @@ for better version control. It needs to run with hupsort, and I don't think I ca
 Run on raw data, using:
 ssetep hupsort-1.x
 hupsort -f sort_al25_offline.cxx path/to/Run000xx
+
+**** sort_al25_offline_v8.cxx ****
+This is the latest version of the sort code with trees, and it seems to be working fine (26ix2019). 
                        
