@@ -5,6 +5,7 @@
  *       Modified by Hyeyoung Lee,    Jan. 2008 
  *       Modified by Scott Marley,    Oct. 2008
  *       Modified by Gemma Wilson,    Nov. 2017
+ *       Modified by Gemma Wilson,    2018.. 2019... (adding trees, etc)
  * Purpose: 
  *       SCARLET Data Aquisition & Histograming for experiments
  *       with Enge Split-Pole Spectrograph (SPS) and DSSD at ATLAS/ANL
@@ -34,6 +35,7 @@
 #include "TRandom.h"
 #include "TMath.h"
 #include "TDirectory.h"
+#include "TTree.h"
 
 // Macro Definition
 #define NSCALERS 12
@@ -43,7 +45,10 @@
 /* ******************************* */ 
 
 // Declaration of 1D/2D Histograms for SPS
-TFile *f, *cutfile;
+TFile *f;
+TFile *cutfile;
+TTree *tree;
+
 TH1F *h1_de[5];
 TH1F *h1_cathode, *h1_grid, *h1_y, *h1_rftof, *h1_mon, *h1_spare;
 TH1F *h1_x, *h1_posppb, *h1_pospp, *h1_time1s, *h1_target;
@@ -58,16 +63,14 @@ TH2F *xrftofg;
 TH2F *xrftofg1, *xrftofg2;
 TH2F *h2_xde23_g, *hSSBt, *h2_Erf, *h2_DErf, *h2_DErfg;
 TH2F *h2_rftof_spare;
+
 /* calibration constants, stored as slope, offset, resolution for DSSD*/
-Float_t DEGRAD=0.017453293;
-Float_t Rslope[3][16];
-Float_t Roffset[3][16];
-Float_t Rresolution[3][16];
-Float_t Wslope[3][16];
-Float_t Woffset[3][16];
-Float_t Wresolution[3][16];
-Float_t Abeam=25.; Float_t Aeject=4.; Float_t Aresidue=22.; Float_t Atgt=1.;
-Float_t ebeam=275.;
+
+Float_t Rslope[2][16];
+Float_t Roffset[2][16];
+Float_t Wslope[2][16];
+Float_t Woffset[2][16];
+
 Int_t Tlow=300,Thi=700;
 Int_t nevent=0;
 Float_t edifflow=-2.,ediffhi=1.;
@@ -100,6 +103,8 @@ TH2F *h2_EDE;
 TH2F *hER1_gtxrf1, *hER1_gtxrf2;
 TH2F *hER1_gtxde41, *hER1_gtxde42, *hER1_gtxde43, *hER1_gtxde44;
 TH2F *hER1_gtde4rf1, *hER1_gtde4rf2, *hER1_gtde4rf3, *hER1_gtde4rf4;
+TH2F *hdE_E_rings;
+TH1F *hdEshift;
 
 PPAC *myppac = new PPAC("/disks/1/gwilson/25Al/offline/ppac.offline3.setup");
 
@@ -110,6 +115,81 @@ int stopped;
 TCutG *xrfcut1, *xrfcut2,*xde4g1, *xde4g2, *xde4g3, *xde4g4, *de4rfg1, *de4rfg2, *de4rfg3, *de4rfg4, *alpha;
 
 Bool_t icut = kTRUE;
+
+// ********************************************************************************
+// branch variables - put more things here and organise int
+Int_t Degrader; // thickness of degrader, mg/cm2
+Float_t MagField; // in kG
+Int_t dE_Fmult;
+Int_t dE_Bmult;
+Int_t dE_Fnum[16];
+Int_t dE_Bnum[16];
+Float_t dE_Fenergy[16];
+Float_t dE_Benergy[16];
+Float_t dE_Fenergy_raw[16];
+Float_t dE_Benergy_raw[16];
+Int_t E_Fmult;
+Int_t E_Bmult;
+Int_t E_Fnum[16];
+Int_t E_Bnum[16];
+Float_t E_Fenergy[16];
+Float_t E_Benergy[16];
+Float_t E_Fenergy_raw[16];
+Float_t E_Benergy_raw[16];
+Float_t E_Fmax;
+Float_t E_Bmax;
+Float_t dE_Fmax;
+Float_t dE_Bmax;
+Float_t E_Fmaxnum;
+Float_t E_Bmaxnum;
+Float_t dE_Fmaxnum;
+Float_t dE_Bmaxnum;
+
+Float_t de[5], cathode, grid, y, rftof, mon, spare, t1, t2;
+Float_t E, DE;
+Float_t hepo, hepi, lepo, lepi, up, down;
+Float_t stime0, stime1, stime2;
+Float_t x;
+Int_t testrmult0, testrmult1, testwmult0, testwmult1;
+Bool_t bmchk;
+Int_t RunNum;
+
+void treeinit(){
+    if(iverb) cout << "in treeinit" << endl;
+
+    // //*********************************************
+    // /*************/ MagField = 8.1; /*************/
+    // /*************/ Degrader = 12;   /*************/
+    // /*************/ bmchk = 0;      /*************/
+    // /*************/ RunNum = 275;   /**************/
+    // //*********************************************
+
+    for(Int_t i=0;i<16;i++){
+      dE_Fnum[i] = 0;
+      dE_Bnum[i] = 0;
+      dE_Fenergy[i] = 0;
+      dE_Benergy[i] = 0;
+      dE_Fenergy_raw[i] = 0;
+      dE_Benergy_raw[i] = 0;
+      E_Fnum[i] = 0;
+      E_Bnum[i] = 0;
+      E_Fenergy[i] = 0;
+      E_Benergy[i] = 0;
+      E_Fenergy_raw[i] = 0;
+      E_Benergy_raw[i] = 0; 
+    }
+    dE_Fmult = 0; dE_Bmult = 0;
+    E_Fmult = 0; E_Bmult = 0;
+
+  cathode = grid = y = rftof = mon = spare = t1 = t2 = 0;
+  hepo = hepi = lepo = lepi = up = down = 0;
+  stime0 = stime1 = stime2 = 0;
+  x = 0;
+  for(Int_t i=0;i<5;i++){ de[i] = 0;}
+if(iverb) cout << "dE_Fmult = " << dE_Fmult << ", E_Fmult = " << E_Fmult << endl;
+}
+
+// ********************************************************************************
 
 // read the cut
 Int_t readcuts(Char_t *cutfilename="/disks/1/gwilson/25Al/offline/25Al_cuts_new.root")
@@ -168,7 +248,7 @@ Int_t cntbit(Int_t word)
 }
 
 /* function to calculate the Q value given e, theta, ebeam & masses */
-Float_t qcalc(Float_t e, Float_t theta, Float_t eb, Float_t ab, Float_t a1, 
+/*Float_t qcalc(Float_t e, Float_t theta, Float_t eb, Float_t ab, Float_t a1, 
 	      Float_t a2)
 {
   Float_t a,b,c,q;
@@ -178,7 +258,7 @@ Float_t qcalc(Float_t e, Float_t theta, Float_t eb, Float_t ab, Float_t a1,
   q=a*e + b*eb - c*TMath::Cos(theta*DEGRAD)*TMath::Sqrt(e*eb);
   return q;
 }
-
+*/
 /* function to deal with scalers, adapted from Elliot's program */
 void scalers(ScarletEvnt &e)
 {
@@ -233,8 +313,10 @@ int userentry()
 
   ifstream in_dE; ifstream in_E;
   in_dE.open("dEcal.dat");
-  in_E.open("Ecal_pre95.dat");
-  //  in_E.open("Ecal_post95.dat");
+  //in_E.open("Ecal_pre95.dat"); // the vast majority of data is actually post run 95...
+  // but what about the gain shift after run 118?
+
+    in_E.open("Ecal_post95.dat");
   
   for(int i=0;i<32;i++){
     if(i<16){
@@ -253,9 +335,71 @@ int userentry()
  for(int i=0;i<16;i++){
     cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << Woffset[1][i] << "\t" << Wslope[1][i] << endl;
   }
+
+ cout << "**************************************************************************" << endl;
+ cout << "************************ H E Y  T H E R E ! ******************************" << endl;
+ cout << "*** A R E  Y O U  U S I N G  T H E  R I G H T  C A L I B R A T I O N ? ***" << endl;
+ cout << "**************************************************************************" << endl;
+
   // Open ROOT file
-  f = new TFile("output.root", "recreate");
-  
+  f = new TFile("testoutput.root", "recreate");
+  tree = new TTree("tree","sorted data");
+
+  tree->Branch("dE_FMult",&dE_Fmult,"dE_Fmult/i");
+  tree->Branch("dE_BMult",&dE_Bmult,"dE_Bmult/i");
+  tree->Branch("dE_Fenergy",dE_Fenergy,"dE_Fenergy[dE_Fmult]/f");
+  tree->Branch("dE_Benergy",dE_Benergy,"dE_Benergy[dE_Bmult]/f");
+  tree->Branch("dE_Fnum",dE_Fnum,"dE_Fnum[dE_Fmult]/i");
+  tree->Branch("dE_Bnum",dE_Bnum,"dE_Bnum[dE_Bmult]/i");
+  tree->Branch("dE_Fenergy_raw",dE_Fenergy_raw,"dE_Fenergy_raw[dE_Fmult]/f");
+  tree->Branch("dE_Benergy_raw",dE_Benergy_raw,"dE_Benergy_raw[dE_Bmult]/f");
+  // tree->Branch("bmchk",&bmchk,"bmchk/b");
+
+  tree->Branch("E_FMult",&E_Fmult,"E_Fmult/i");
+  tree->Branch("E_BMult",&E_Bmult,"E_Bmult/i");
+  tree->Branch("E_Fenergy",E_Fenergy,"E_Fenergy[E_Fmult]/f");
+  tree->Branch("E_Benergy",E_Benergy,"E_Benergy[E_Bmult]/f");
+  tree->Branch("E_Fnum",E_Fnum,"E_Fnum[E_Fmult]/i");
+  tree->Branch("E_Bnum",E_Bnum,"E_Bnum[E_Bmult]/i");
+  tree->Branch("E_Fenergy_raw",E_Fenergy_raw,"E_Fenergy_raw[E_Fmult]/f");
+  tree->Branch("E_Benergy_raw",E_Benergy_raw,"E_Benergy_raw[E_Bmult]/f");
+
+  tree->Branch("E_Fmax",&E_Fmax,"E_Fmax/f");
+  tree->Branch("E_Bmax",&E_Bmax,"E_Bmax/f");
+  tree->Branch("dE_Fmax",&dE_Fmax,"dE_Fmax/f");
+  tree->Branch("dE_Bmax",&dE_Bmax,"dE_Bmax/f");
+  tree->Branch("E_Fmaxnum",&E_Fmaxnum,"E_Fmaxnum/i");
+  tree->Branch("E_Bmaxnum",&E_Bmaxnum,"E_Bmaxnum/i");
+  tree->Branch("dE_Fmaxnum",&dE_Fmaxnum,"dE_Fmaxnum/i");
+  tree->Branch("dE_Bmaxnum",&dE_Bmaxnum,"dE_Bmaxnum/i");
+
+  //  tree->Branch("Degrader",&Degrader,"Degrader/i");
+  //  tree->Branch("MagField",&MagField,"MagField/f");
+  tree->Branch("de",de,"de[5]/f");
+  tree->Branch("cathode",&cathode,"cathode/f");
+  tree->Branch("grid",&grid,"grid/f");
+  tree->Branch("x",&x,"x/f");
+  tree->Branch("y",&y,"y/f");
+  tree->Branch("rftof",&rftof,"rftof/f");
+  tree->Branch("mon",&mon,"mon/f");
+  tree->Branch("spare",&spare,"spare/f");
+  tree->Branch("t1",&t1,"t1/f");
+  tree->Branch("t2",&t2,"t2/f");
+  tree->Branch("E",&E,"E/f");
+  tree->Branch("DE",&DE,"DE/f");
+  tree->Branch("up",&up,"up/f");
+  tree->Branch("stime0",&stime0,"stime0/f");
+  tree->Branch("stime1",&stime1,"stime1/f");
+  tree->Branch("stime2",&stime2,"stime2/f");
+  tree->Branch("hepo",&hepo,"hepo/f");
+  tree->Branch("hepi",&hepi,"hepi/f");
+  tree->Branch("lepo",&lepo,"lepo/f");
+  tree->Branch("lepi",&lepi,"lepi/f");
+  tree->Branch("down",&down,"down/f");
+  // tree->Branch("RunNum",&RunNum,"RunNum/i");
+
+  // ************************************************************************************  
+
   // 1d histograms
   h1_de[0] = new TH1F("h1_de1","de1", 4096,0,4096);
   h1_de[1] = new TH1F("h1_de2","de2", 4096,0,4096);
@@ -325,10 +469,8 @@ int userentry()
   h2_Erf = new TH2F("h2_Erf","rf vs. E",512, 0., 4096.,512, 0., 4096.); 
   h2_DErf = new TH2F("h2_DErf","rf vs. DE",512, 0., 4096.,512, 0., 4096.); 
   h2_DErfg = new TH2F("h2_DErfg","rf vs. DE",512, 0., 4096.,512, 0., 4096.); 
-  /******************DSSD histograms***************************/
 
-  
-  
+  /******************DSSD histograms***************************/
   //  hHitR=new TH2F("hHitR","Ludwig ring hits",17,0,17,4,0,4);
   //  hHitW=new TH2F("hHitW","Ludwig wedge hits",17,0,17,4,0,4);
   //  hNR=new TH2F("hNR","N hits Ludwig rings",17,0,17,4,0,4);
@@ -339,6 +481,9 @@ int userentry()
  
   hELudR2=new TH2F("hELudR2","Ring2 vs E raw",4096,0,4096,17,0,17);   
   hELudW2=new TH2F("hELudW2","Wedge2 vs E raw",4096,0,4096,17,0,17); 
+
+  hdE_E_rings = new TH2F("hdE_E_rings","dE v E for rings",700,0,70,320,0.3,3.5);
+  hdEshift = new TH1F("hdEshift","hdEshift",1000,0,10);
  
   //  hEDiff=new TH2F("hEDiff","Ludwig ER-EW",1000,-5,5,4,0,4);
   //  hEDiffR=new TH2F("hEDiffR","Ludwig ER-EW vs ring",500,-2.5,2.5,17,0,17);
@@ -405,7 +550,9 @@ int userentry()
 }
 
 int userdecode(ScarletEvnt &event) {
-
+  if(iverb) cout << "_______________________________________ " << endl;
+  if(iverb) cout << "Event " << nevent << endl << endl;
+  treeinit();
   ScarletEvnt subevent1;
   Int_t dataword;
     
@@ -416,21 +563,26 @@ int userdecode(ScarletEvnt &event) {
   int *p;
   
   Float_t lowthresh=100;
-  
+  testrmult0 = 0; testrmult1 = 0; testwmult0 = 0; testwmult1 = 0;
+
   Bool_t done=kFALSE;
   Float_t ering,ewedge;
   Float_t ediff;
   Float_t phi[16];
   Float_t Qvalue, Qvalue1;
-  Int_t Rpat[3],Wpat[3],Rbitcnt[3]={0,0,0},Wbitcnt[3]={0,0,0};
-  Int_t RRawData[3][16],WRawData[3][16];
-  Int_t RChan[3][16],WChan[3][16];
-  Float_t RData[3][16],WData[3][16];
+  Int_t Rpat[2],Wpat[2],Rbitcnt[2]={0,0},Wbitcnt[2]={0,0}; // all changed from 3
+  Int_t RRawData[2][16],WRawData[2][16];
+  Int_t RChan[2][16],WChan[2][16];
+  Float_t RData[2][16],WData[2][16];
   Float_t emaxR=0,emaxW=0,theta_max;
   Float_t emaxrawR=0, emaxrawW=0, DSSD_E=0., DSSD_DE=0.;
   Int_t nmaxR=-1,nmaxW=-1,detmaxR=-1,detmaxW=-1;
   Int_t DSSD_E_ring, DSSD_DE_ring;
   Int_t ndet=0;
+
+  // I think the following needs to be changed... but I actually don't know what the 3 represent
+  // there aren't three sets of anything, right? Even when it was just one detector...
+  /*
   Int_t ipixel[3]={-1,-1,-1};
   Int_t Rremap[3][16]={{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},
 		       {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},
@@ -448,22 +600,22 @@ int userdecode(ScarletEvnt &event) {
 			 135.2,134.0,132.9,131.9,130.9,129.9,130.0,128.0},
 			{126.0,124.4,123.0,121.6,120.3,119.2,118.1,117.1,
 			 116.1,115.2,114.4,113.6,112.8,112.1,111.5,110.9}};
-
-  // de1..5, cathode, grid, y, RFTOF, MON, SPARE
-  float de[5], cathode, grid, y, rftof, mon, spare, t1, t2;
-  float E,DE;
-  float hepo, hepi, lepo, lepi, up, down;
-  float stime0, stime1, stime2;
+  */
+ 
+ // de1..5, cathode, grid, y, RFTOF, MON, SPARE
+  //  float de[5], cathode, grid, y, rftof, mon, spare, t1, t2;
+  //float E,DE;
+  //float hepo, hepi, lepo, lepi, up, down;
+  //float stime0, stime1, stime2;
   double stime, stime_1s;
   Bool_t goodCl=kFALSE;
   Bool_t goodAr=kFALSE;
   Bool_t garbage=kFALSE;
  
   nevent++;
-  //  cout <<"Event "<<nevent<<endl;
-
-  //  cout <<"Enter unpack..."<<endl;
-
+ 
+  if(iverb) cout << "enter unpacking routine" << endl;
+  
   /* unpack fixed length beginning of subevent 1 */
   // ADC part
   dataword=*p1++; 
@@ -497,6 +649,7 @@ int userdecode(ScarletEvnt &event) {
   p=p1;
 
   //unpack DSSD(s)
+ if(iverb) cout << "unpacking DSSDs" << endl;
   for (Int_t ndet=0; ndet<2; ++ndet) {
 
     // p=(ndet==0)=p1;  //:p2; //Since there is no ROC2!
@@ -510,16 +663,14 @@ int userdecode(ScarletEvnt &event) {
       
     Wbitcnt[ndet]=cntbit(Wpat[ndet]);
     for (Int_t ndat=0;ndat<Wbitcnt[ndet];ndat++) {
+      if(iverb) cout << "wedge " << ndet << endl;
       dataword=*p++;
       WChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
       //hHitW->Fill(1+((dataword & 0x0000f000)>>12),ndet);
       WRawData[ndet][ndat]=(dataword & 0x00000fff);
-      //   WData[ndet][ndat]=
-      //	(WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])/
-      // 	Wslope[ndet][WChan[ndet][ndat]];
-        WData[ndet][ndat]= Woffset[ndet][WChan[ndet][ndat]]+Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
-	//	if(WData[ndet][ndat]>7000){
-	  //	cout << WData[ndet][ndat] << " = " << Woffset[ndet][WChan[ndet][ndat]] << " + " << Wslope[ndet][WChan[ndet][ndat]]<< " * " << WRawData[ndet][ndat] << endl;}
+      WData[ndet][ndat]= Woffset[ndet][WChan[ndet][ndat]]+Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
+      WData[ndet][ndat]= (WData[ndet][ndat])/1000; // MeV
+
       if (WData[ndet][ndat]>emaxW) {
 	emaxW=WData[ndet][ndat];
 	emaxrawW=WRawData[ndet][ndat];
@@ -531,10 +682,32 @@ int userdecode(ScarletEvnt &event) {
 	hELudW1->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
 	hEW1->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
 	//hEW2->Fill(emaxW,nmaxW);
+	dE_Benergy[ndat] = WData[0][ndat];
+	dE_Benergy_raw[ndat] = WRawData[0][ndat];
+	dE_Bnum[ndat] = WChan[0][ndat];
+	dE_Bmult = ndat+1; 
+	testwmult0++; 
+	// if(iverb){
+	//   cout << "Wedge 1! Ewedge1["<<ndat<<"] = " << Ewedge1[ndat] << endl;
+	//   cout << "EwedgeRaw1["<<ndat<<"] = " << EwedgeRaw1[ndat] << endl;
+	//   cout << "NumWedge1["<<ndat<<"] = " << NumWedge1[ndat] << endl;
+	//   cout << "Wedgemult = " << WedgeMult1 << ", test mult = " << testwmult1 << endl << endl;
+	// }
       }
       if(ndet==1){
 	hELudW2->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
 	hEW2->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
+	E_Benergy[ndat] = WData[1][ndat];
+	E_Benergy_raw[ndat] = WRawData[1][ndat];
+	E_Bnum[ndat] = WChan[1][ndat];
+	E_Bmult = ndat+1; // so it's human. i.e. mult 0 is no hit, mult 1 is a single...
+	testwmult1++;  
+	// if(iverb){
+	//   cout << "Wedge 0! Ewedge0["<<ndat<<"] = " << Ewedge0[ndat] << endl;
+	//   cout << "EwedgeRaw0["<<ndat<<"] = " << EwedgeRaw0[ndat] << endl;
+	//   cout << "NumWedge0["<<ndat<<"] = " << NumWedge0[ndat] << endl;
+	//   cout << "Wedgemult = " << WedgeMult0 << ", test mult = " << testwmult0 << endl << endl;
+	// }
 	//hEW2->Fill(emaxW,nmaxW);
       }
 	    
@@ -548,17 +721,19 @@ int userdecode(ScarletEvnt &event) {
     Rpat[ndet]=*p++;
     Rbitcnt[ndet]=cntbit(Rpat[ndet]);
     for (Int_t ndat=0;ndat<Rbitcnt[ndet];ndat++) {
+      if(iverb) cout << "Ring " << ndet << endl;
       dataword=*p++;
       RChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
       //hHitR->Fill(1+((dataword & 0x0000f000)>>12),ndet);
       RRawData[ndet][ndat]=(dataword & 0x00000fff);
-      //   RData[ndet][ndat]=
-      // (RRawData[ndet][ndat] - Roffset[ndet][RChan[ndet][ndat]])/
-      //	Rslope[ndet][RChan[ndet][ndat]];
-       RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
-      //  if( fabs(Rslope[ndet][RChan[ndet][ndat]])<0.0001)
-      //{ cout<<"problem "<<ndet<<" "<<RChan[ndet][ndat]<<endl;}
-
+      RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
+      RData[ndet][ndat] = (RData[ndet][ndat])/1000; // MeV
+      if(iverb){
+	cout << "RChan["<<ndet<<"]["<<ndat<<"] = " << RChan[ndet][ndat] << endl;
+	cout << "RRawData["<<ndet<<"]["<<ndat<<"] = " << RRawData[ndet][ndat] << endl;
+	cout << "RData["<<ndet<<"]["<<ndat<<"] = " << RData[ndet][ndat] << endl;
+	cout << "emaxR = " << emaxR << endl;
+      }
       if (RData[ndet][ndat]>emaxR) {
 	//  cout<<"hi this "<<RData[ndet][ndat]<<endl;
 	emaxR=RData[ndet][ndat];
@@ -566,18 +741,42 @@ int userdecode(ScarletEvnt &event) {
 	nmaxR=RChan[ndet][ndat];
 	detmaxR=ndet;
       }
-
+ if(iverb){
+   cout << "emaxR = " << emaxR << ", nmaxR = " << nmaxR << ", detmaxR = " << detmaxR << endl << endl;
+ }
       //hADC3->Fill(emaxrawR,nmaxR);
       if(ndet==0)
 	{
 	  hELudR1->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
 	  hER1->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
 	  //hER2->Fill(emaxR,nmaxR);
+	  E_Fenergy[ndat] = RData[0][ndat];
+	  E_Fenergy_raw[ndat] = RRawData[0][ndat];
+	  E_Fnum[ndat] = RChan[0][ndat];
+	  E_Fmult = ndat+1;
+	  testrmult0++;
+	 if(iverb){
+	   cout << "Ring 0! E_Fenergy["<<ndat<<"] = " << E_Fenergy[ndat] << endl;
+	   cout << "EringRaw0["<<ndat<<"] = " << E_Fenergy_raw[ndat] << endl;
+	   cout << "NumRing0["<<ndat<<"] = " << E_Fnum[ndat] << endl;
+	   cout << "Ringmult = " << E_Fmult << ", test mult = " << testrmult0 << endl << endl;
+	 }
 	}
       if(ndet==1){
 	hELudR2->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
 	hER2->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
 	//hER2->Fill(emaxR,nmaxR);
+	dE_Fenergy[ndat] = RData[1][ndat];
+	dE_Fenergy_raw[ndat] = RRawData[1][ndat];
+	dE_Fnum[ndat] = RChan[1][ndat];
+	dE_Fmult = ndat+1;
+	testrmult1++;
+	 if(iverb){
+	   cout << "Ring 1! Ering1["<<ndat<<"] = " << dE_Fenergy[ndat] << endl;
+	   cout << "EringRaw1["<<ndat<<"] = " << dE_Fenergy_raw[ndat] << endl;
+	   cout << "NumRing1["<<ndat<<"] = " << dE_Fnum[ndat] << endl;
+	   cout << "Ringmult = " << dE_Fmult << ", test mult = " << testrmult1 << endl << endl;
+	 }
       }
 	
     }
@@ -613,9 +812,11 @@ int userdecode(ScarletEvnt &event) {
   stime_1s = stime/1e6;
 
   myppac->GetPosition(hepo,hepi,lepo,lepi,up,down); // old version
+ if(iverb) cout << endl << "myppac routine: " << hepo << " " << hepi << " " << lepo << " " << lepi << " " << up << " " << down << endl;
 
   // select whether high/low/both (he/le/pospp) energy side  
-  float x = myppac->pospp;
+  //float x = myppac->pospp;
+ x = myppac->pospp;
   float Ypos=0.;
   Ypos=0.5*(up-down)+2000.;
   Ypos=myppac->ud;
@@ -625,6 +826,7 @@ int userdecode(ScarletEvnt &event) {
     posppb = 1000.0*(de[1]-de[2])/(de[1]+de[2]);
 
   // fill 1d histograms
+  if(iverb) cout << "filling premade histograms... " << endl;
   for(int i=0;i<5;i++) { h1_de[i]->Fill(de[i]);}
   h1_cathode->Fill(cathode);
   h1_grid->Fill(grid);
@@ -636,6 +838,15 @@ int userdecode(ScarletEvnt &event) {
   // if(mon>50 && mon<120) h1_target->Fill(stime_1s);
   h1_spare->Fill(spare); //spare is TAC between DSSD and PPAC =t1
   t1=spare;
+
+  if(iverb) cout <<"Filling dE-E histogram, E mult = " << E_Fmult << ", dE mult = " << dE_Fmult << endl;
+  for(int j=0;j<E_Fmult;j++){
+    for(int k=0;k<dE_Fmult;k++){
+      hdE_E_rings->Fill(E_Fenergy[j],dE_Fenergy[k]);
+      if(iverb) cout << "Filling histo E["<<j<<"] = " << E_Fenergy[j] << ", dE["<<k<<"] = " << dE_Fenergy[k] << endl;
+      if(E_Fenergy[j]>30 && E_Fenergy[j]<60){
+	hdEshift->Fill(dE_Fenergy[k]);
+      }}}
 
   h1_E->Fill(E);
   h1_DE->Fill(DE);
@@ -757,6 +968,7 @@ int userdecode(ScarletEvnt &event) {
   //if (goodediff) {
   //  if (t1>50) hTAC->Fill(t1,detmaxR);
   //hEPixel1g->Fill(emaxR,ipixel[0]);
+  /*
   Float_t ran1,ran2,newR, newW;
   ran1 = 1.5 *(rand()%10000)/10000;
   ran2 = 22.5 *(rand()%10000)/10000;
@@ -773,12 +985,13 @@ int userdecode(ScarletEvnt &event) {
       hHitxy1->Fill(x2,y2);
       if(goodT) hHitxy2->Fill(x2,y2);
       break;
-    }
+      }*/
   /*if(goodT) { 
     hHitxy2->Fill(x,y);
     if(goodNe) hHitxy3->Fill(x,y);
     }*/
-  //} 		   
+  //} 	
+  tree->Fill();	   
   delete rannum;
   return 0;
 }

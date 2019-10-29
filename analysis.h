@@ -24,30 +24,30 @@ public :
    Int_t           fCurrent; //!current Tree number in a TChain
 
    // Declaration of leaf types
-   UInt_t          dE_FMult;
-   UInt_t          dE_BMult;
+   Int_t          dE_Fmult;
+   Int_t          dE_Bmult;
    Float_t         dE_Fenergy[16];   //[dE_Fmult]
    Float_t         dE_Benergy[16];   //[dE_Bmult]
-   UInt_t          dE_Fnum[16];   //[dE_Fmult]
-   UInt_t          dE_Bnum[16];   //[dE_Bmult]
+   Int_t          dE_Fnum[16];   //[dE_Fmult]
+   Int_t          dE_Bnum[16];   //[dE_Bmult]
    Float_t         dE_Fenergy_raw[16];   //[dE_Fmult]
    Float_t         dE_Benergy_raw[16];   //[dE_Bmult]
-   UInt_t          E_FMult;
-   UInt_t          E_BMult;
+   Int_t          E_Fmult;
+   Int_t          E_Bmult;
    Float_t         E_Fenergy[16];   //[E_Fmult]
    Float_t         E_Benergy[16];   //[E_Bmult]
-   UInt_t          E_Fnum[16];   //[E_Fmult]
-   UInt_t          E_Bnum[16];   //[E_Bmult]
+   Int_t          E_Fnum[16];   //[E_Fmult]
+   Int_t          E_Bnum[16];   //[E_Bmult]
    Float_t         E_Fenergy_raw[16];   //[E_Fmult]
    Float_t         E_Benergy_raw[16];   //[E_Bmult]
    Float_t         E_Fmax;
    Float_t         E_Bmax;
    Float_t         dE_Fmax;
    Float_t         dE_Bmax;
-   UInt_t          E_Fmaxnum;
-   UInt_t          E_Bmaxnum;
-   UInt_t          dE_Fmaxnum;
-   UInt_t          dE_Bmaxnum;
+   Int_t          E_Fmaxnum;
+   Int_t          E_Bmaxnum;
+   Int_t          dE_Fmaxnum;
+   Int_t          dE_Bmaxnum;
    Float_t         de[5];
    Float_t         cathode;
    Float_t         grid;
@@ -149,7 +149,7 @@ analysis::analysis(TTree *t) : fChain(0)
       #else
       TChain *chain = new TChain("tree","");
       // 12ug
-      /*  
+      /* 
       chain->Add("/disks/1/gwilson/25Al/sorted/run265.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run266.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run267.root"); 
@@ -160,7 +160,7 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run275.root");
       */
       // 8ug
-      /* 
+      /*
       chain->Add("/disks/1/gwilson/25Al/sorted/run230.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run234.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run236.root"); 
@@ -195,7 +195,7 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run223.root");
       */
       //2ug 
-      /* 
+      /*
       chain->Add("/disks/1/gwilson/25Al/sorted/run147.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run148.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run150.root"); 
@@ -219,9 +219,9 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run179.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run182.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run183.root"); 
-      */  
+      */
       // no degrader 
-        	  
+      	  
        chain->Add("/disks/1/gwilson/25Al/sorted/run99.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run100.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run101.root"); 
@@ -278,16 +278,16 @@ void analysis::Init(TTree *t)
    fCurrent = -1;
    fChain->SetMakeClass(1);
 
-   fChain->SetBranchAddress("dE_FMult", &dE_FMult, &b_dE_Fmult);
-   fChain->SetBranchAddress("dE_BMult", &dE_BMult, &b_dE_Bmult);
+   fChain->SetBranchAddress("dE_Fmult", &dE_Fmult, &b_dE_Fmult);
+   fChain->SetBranchAddress("dE_Bmult", &dE_Bmult, &b_dE_Bmult);
    fChain->SetBranchAddress("dE_Fenergy", dE_Fenergy, &b_dE_Fenergy);
    fChain->SetBranchAddress("dE_Benergy", dE_Benergy, &b_dE_Benergy);
    fChain->SetBranchAddress("dE_Fnum", dE_Fnum, &b_dE_Fnum);
    fChain->SetBranchAddress("dE_Bnum", dE_Bnum, &b_dE_Bnum);
    fChain->SetBranchAddress("dE_Fenergy_raw", dE_Fenergy_raw, &b_dE_Fenergy_raw);
    fChain->SetBranchAddress("dE_Benergy_raw", dE_Benergy_raw, &b_dE_Benergy_raw);
-   fChain->SetBranchAddress("E_FMult", &E_FMult, &b_E_Fmult);
-   fChain->SetBranchAddress("E_BMult", &E_BMult, &b_E_Bmult);
+   fChain->SetBranchAddress("E_Fmult", &E_Fmult, &b_E_Fmult);
+   fChain->SetBranchAddress("E_Bmult", &E_Bmult, &b_E_Bmult);
    fChain->SetBranchAddress("E_Fenergy", E_Fenergy, &b_E_Fenergy);
    fChain->SetBranchAddress("E_Benergy", E_Benergy, &b_E_Benergy);
    fChain->SetBranchAddress("E_Fnum", E_Fnum, &b_E_Fnum);

@@ -14,8 +14,8 @@
 using namespace std;
 int plotter(){
 
-TFile *f = new TFile("/disks/1/gwilson/25Al/sorted/run101.root");
-TFile *fB = new TFile("/disks/1/gwilson/25Al/sorted/run102.root");
+TFile *f = new TFile("~/Desktop/33Cl/below32S_gated_runs186_189.root");
+TFile *fB = new TFile("~/Desktop/33Cl/beam_run188.root");
 
 /* ************************************************************** */
  TCanvas *c1 = new TCanvas("c1","ionisation chamber",1600,1200);
@@ -217,14 +217,14 @@ TCanvas *c6 = new TCanvas("c6","",1600,1200);
  f->cd(); hELudW1->Draw("col");
  c6->cd(6); gPad->SetLogz();
  fB->cd(); hELudW1->Draw("col");
- c6->cd(3); gPad->SetLogz();
- f->cd(); hELudR2->Draw("col");
+ /*c6->cd(3); gPad->SetLogz();
+  f->cd(); hELudR2->Draw("col");
  c6->cd(7); gPad->SetLogz();
  fB->cd(); hELudR1->Draw("col");
  c6->cd(4); gPad->SetLogz();
  f->cd(); hELudW2->Draw("col");
  c6->cd(8); gPad->SetLogz();
- fB->cd(); hELudW2->Draw("col");
+ fB->cd(); hELudW2->Draw("col");*/
  c6->Update();
 
 /* ************************************************************** */
@@ -281,7 +281,7 @@ TCanvas *c9 = new TCanvas("c9","",1600,1200);
  c9->Update();
 
 /* ************************************************************** */
-TCanvas *c10 = new TCanvas("c10","",1600,1200);
+/*TCanvas *c10 = new TCanvas("c10","",1600,1200);
  c10->Divide(2,2);
  
  c10->cd(1); gPad->SetLogz();
@@ -293,9 +293,9 @@ TCanvas *c10 = new TCanvas("c10","",1600,1200);
  c10->cd(4); gPad->SetLogz();
  fB->cd(); hER1_gtxrf2->Draw("col");
  c10->Update();
-
+*/
 /* ************************************************************** */
-TCanvas *c11 = new TCanvas("c11","",1600,1200);
+/*TCanvas *c11 = new TCanvas("c11","",1600,1200);
  c11->Divide(4,2);
  
  c11->cd(1); gPad->SetLogz();
@@ -315,9 +315,9 @@ TCanvas *c11 = new TCanvas("c11","",1600,1200);
  c11->cd(8); gPad->SetLogz();
  fB->cd(); hER1_gtxde44->Draw("col");
  c11->Update();
-
+*/
 /* ************************************************************** */
-TCanvas *c12 = new TCanvas("c12","",1600,1200);
+/*TCanvas *c12 = new TCanvas("c12","",1600,1200);
  c12->Divide(4,2);
  
  c12->cd(1); gPad->SetLogz();
@@ -337,7 +337,7 @@ TCanvas *c12 = new TCanvas("c12","",1600,1200);
  c12->cd(8); gPad->SetLogz();
  fB->cd(); hER1_gtde4rf4->Draw("col");
  c12->Update();
-
+*/
 /* ************************************************************** */
 TCanvas *c13 = new TCanvas("c13","",1600,1200);
  c13->Divide(4,2);
@@ -493,24 +493,24 @@ TCanvas *c19 = new TCanvas("c19","detector 1 wedges, beam check",1600,1200);
 
 
 /* ************************************************************** */
- c1->SaveAs("histograms/Run101_102/IC_D12.png");
- c2->SaveAs("histograms/Run101_102/cath_grid_D12.png");
- c3->SaveAs("histograms/Run101_102/focalplane1_D12.png");
- c4->SaveAs("histograms/Run101_102/focalplane2_D12.png");
- c5->SaveAs("histograms/Run101_102/2D_1_D12.png");
- c6->SaveAs("histograms/Run101_102/2D_2_D12.png");
- c7->SaveAs("histograms/Run101_102/2D_3_D12.png");
- c8->SaveAs("histograms/Run101_102/2D_4_D12.png");
- c9->SaveAs("histograms/Run101_102/2D_5_D12.png");
- c10->SaveAs("histograms/Run101_102/2D_6_D12.png");
- c11->SaveAs("histograms/Run101_102/2D_7_D12.png");
- c12->SaveAs("histograms/Run101_102/2D_8_D12.png");
- c13->SaveAs("histograms/Run101_102/2D_9_D12.png");
- c14->SaveAs("histograms/Run101_102/ring1.png");
- c15->SaveAs("histograms/Run101_102/ring1_bmck.png");
- c16->SaveAs("histograms/Run101_102/ring2.png");
- c17->SaveAs("histograms/Run101_102/ring2_bmck.png");
- c18->SaveAs("histograms/Run101_102/wedge2.png");
- c19->SaveAs("histograms/Run101_102/wedge2_bmck.png");
+ c1->SaveAs("~/Desktop/IC_D12.png");
+ c2->SaveAs("~/Desktop/cath_grid_D12.png");
+ c3->SaveAs("~/Desktop/focalplane1_D12.png");
+ c4->SaveAs("~/Desktop/focalplane2_D12.png");
+ c5->SaveAs("~/Desktop/2D_1_D12.png");
+ c6->SaveAs("~/Desktop/2D_2_D12.png");
+ c7->SaveAs("~/Desktop/2D_3_D12.png");
+ c8->SaveAs("~/Desktop/2D_4_D12.png");
+ c9->SaveAs("~/Desktop/2D_5_D12.png");
+ // c10->SaveAs("~/Desktop/2D_6_D12.png");
+ //c11->SaveAs("~/Desktop/2D_7_D12.png");
+ //c12->SaveAs("~/Desktop/2D_8_D12.png");
+ c13->SaveAs("~/Desktop/2D_9_D12.png");
+ c14->SaveAs("~/Desktop/ring1.png");
+ c15->SaveAs("~/Desktop/ring1_bmck.png");
+ c16->SaveAs("~/Desktop/ring2.png");
+ c17->SaveAs("~/Desktop/ring2_bmck.png");
+ c18->SaveAs("~/Desktop/wedge2.png");
+ c19->SaveAs("~/Desktop/wedge2_bmck.png");
  return 0;
 }
