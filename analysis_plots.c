@@ -17,16 +17,16 @@ using namespace std;
 
 int analysis_plots(){
 
-TFile *f0 = new TFile("0ug.root","read");
-TFile *f2 = new TFile("2ug.root","read");
-TFile *f4 = new TFile("4ug.root","read");
-TFile *f8 = new TFile("8ug.root","read");
-TFile *f12 = new TFile("12ug.root","read");
-TFile *fcuts = new TFile("cuts_0.root","read");
+TFile *f0 = new TFile("0mg.root","read");
+TFile *f2 = new TFile("2mg.root","read");
+TFile *f4 = new TFile("4mg.root","read");
+TFile *f8 = new TFile("8mg.root","read");
+TFile *f12 = new TFile("12mg.root","read");
+ TFile *fcuts = new TFile("cuts_0.root","read"); // this is just for illustrating!
 
 
     int i;
-    TCanvas *c[40];
+    TCanvas *c[41];
     char can[2];
     char save[6];
     
@@ -34,6 +34,7 @@ TFile *fcuts = new TFile("cuts_0.root","read");
     TCutG *uppercut = (TCutG*)fcuts->Get("upper");
     TCutG *lowercut = (TCutG*)fcuts->Get("lower");
     TCutG *dEEcut = (TCutG*)fcuts->Get("dE-Ecut");
+    TCutG *FB = (TCutG*)fcuts->Get("frontback");
     
     
     for(i=1;i<41;i++){

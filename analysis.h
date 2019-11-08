@@ -26,49 +26,49 @@ public :
    // Declaration of leaf types
    Int_t          dE_Fmult;
    Int_t          dE_Bmult;
-   Float_t         dE_Fenergy[16];   //[dE_Fmult]
-   Float_t         dE_Benergy[16];   //[dE_Bmult]
+   Float_t        dE_Fenergy[16];   //[dE_Fmult]
+   Float_t        dE_Benergy[16];   //[dE_Bmult]
    Int_t          dE_Fnum[16];   //[dE_Fmult]
    Int_t          dE_Bnum[16];   //[dE_Bmult]
-   Float_t         dE_Fenergy_raw[16];   //[dE_Fmult]
-   Float_t         dE_Benergy_raw[16];   //[dE_Bmult]
+   Float_t        dE_Fenergy_raw[16];   //[dE_Fmult]
+   Float_t        dE_Benergy_raw[16];   //[dE_Bmult]
    Int_t          E_Fmult;
    Int_t          E_Bmult;
-   Float_t         E_Fenergy[16];   //[E_Fmult]
-   Float_t         E_Benergy[16];   //[E_Bmult]
+   Float_t        E_Fenergy[16];   //[E_Fmult]
+   Float_t        E_Benergy[16];   //[E_Bmult]
    Int_t          E_Fnum[16];   //[E_Fmult]
    Int_t          E_Bnum[16];   //[E_Bmult]
-   Float_t         E_Fenergy_raw[16];   //[E_Fmult]
-   Float_t         E_Benergy_raw[16];   //[E_Bmult]
-   Float_t         E_Fmax;
-   Float_t         E_Bmax;
-   Float_t         dE_Fmax;
-   Float_t         dE_Bmax;
+   Float_t        E_Fenergy_raw[16];   //[E_Fmult]
+   Float_t        E_Benergy_raw[16];   //[E_Bmult]
+   Float_t        E_Fmax;
+   Float_t        E_Bmax;
+   Float_t        dE_Fmax;
+   Float_t        dE_Bmax;
    Int_t          E_Fmaxnum;
    Int_t          E_Bmaxnum;
    Int_t          dE_Fmaxnum;
    Int_t          dE_Bmaxnum;
-   Float_t         de[5];
-   Float_t         cathode;
-   Float_t         grid;
-   Float_t         x;
-   Float_t         y;
-   Float_t         rftof;
-   Float_t         mon;
-   Float_t         spare;
-   Float_t         t1;
-   Float_t         t2;
-   Float_t         E;
-   Float_t         DE;
-   Float_t         up;
-   Float_t         stime0;
-   Float_t         stime1;
-   Float_t         stime2;
-   Float_t         hepo;
-   Float_t         hepi;
-   Float_t         lepo;
-   Float_t         lepi;
-   Float_t         down;
+   Float_t        de[5];
+   Float_t        cathode;
+   Float_t        grid;
+   Float_t        x;
+   Float_t        y;
+   Float_t        rftof;
+   Float_t        mon;
+   Float_t        spare;
+   Float_t        t1;
+   Float_t        t2;
+   Float_t        E;
+   Float_t        DE;
+   Float_t        up;
+   Float_t        stime0;
+   Float_t        stime1;
+   Float_t        stime2;
+   Float_t        hepo;
+   Float_t        hepi;
+   Float_t        lepo;
+   Float_t        lepi;
+   Float_t        down;
 
    Int_t i,j,k;
    Float_t emaxF_E, emaxF_dE, emaxB_E, emaxB_dE;
@@ -148,7 +148,7 @@ analysis::analysis(TTree *t) : fChain(0)
       f->GetObject("tree",t);
       #else
       TChain *chain = new TChain("tree","");
-      // 12ug
+      // 12mg
       /* 
       chain->Add("/disks/1/gwilson/25Al/sorted/run265.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run266.root"); 
@@ -159,7 +159,7 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run273.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run275.root");
       */
-      // 8ug
+      // 8mg
       /*
       chain->Add("/disks/1/gwilson/25Al/sorted/run230.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run234.root"); 
@@ -178,7 +178,7 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run232.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run259.root"); 
       */
-      //4ug
+      //4mg
       /*
       chain->Add("/disks/1/gwilson/25Al/sorted/run197.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run200.root"); 
@@ -194,8 +194,8 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run215.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run223.root");
       */
-      //2ug 
-      /*
+      //2mg 
+      
       chain->Add("/disks/1/gwilson/25Al/sorted/run147.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run148.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run150.root"); 
@@ -219,9 +219,9 @@ analysis::analysis(TTree *t) : fChain(0)
       chain->Add("/disks/1/gwilson/25Al/sorted/run179.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run182.root"); 
       chain->Add("/disks/1/gwilson/25Al/sorted/run183.root"); 
-      */
+      
       // no degrader 
-      	  
+      /*  	  
        chain->Add("/disks/1/gwilson/25Al/sorted/run99.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run100.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run101.root"); 
@@ -230,7 +230,7 @@ analysis::analysis(TTree *t) : fChain(0)
        chain->Add("/disks/1/gwilson/25Al/sorted/run113.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run116.root"); 
        chain->Add("/disks/1/gwilson/25Al/sorted/run117.root");
-      
+      */
        t = chain;
        #endif
    }

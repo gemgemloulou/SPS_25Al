@@ -14,10 +14,10 @@ void analysis::Loop()
    if (fChain == 0) return;
     TFile *output = new TFile("0mg.root","recreate");
     TFile *fcuts = new TFile("cuts_0.root","read");
-   //  TFile *fcuts = new TFile("cuts_2.root","read");
-   //  TFile *fcuts = new TFile("cuts_4.root","read");
-   //  TFile *fcuts = new TFile("cuts_8.root","read");
-    //  TFile *fcuts = new TFile("cuts_12.root","read");
+  //  TFile *fcuts = new TFile("cuts_2.root","read");
+  //  TFile *fcuts = new TFile("cuts_4.root","read");
+  //  TFile *fcuts = new TFile("cuts_8.root","read");
+  //  TFile *fcuts = new TFile("cuts_12.root","read");
 //-----------------------------------------------------------------------
    // define output histograms
 
@@ -69,6 +69,9 @@ void analysis::Loop()
    TH2D *hdEvTh_TACg5 = new TH2D("hdEvTh_TACg5","dE v Theta, 3100<TAC<3500, 0mg/cm2",200,0,20,16,0,16);
    TH2D *hdEvTh_TACg6 = new TH2D("hdEvTh_TACg6","dE v Theta, 3800<TAC<4096, 0mg/cm2",200,0,20,16,0,16);
 
+   // E v Theta with front-back requirement
+   TH2D *hEvTh_FB = new TH2D("hEvTh_FB","E v Theta, Front-back, 0mg/cm2",200,0,20,16,0,16);
+
    // gate on dE-E
    TH1D *hTAC_dEEg = new TH1D("hTAC_dEEg","TAC, gated on dE-E locus, 0mg/cm2",256,0,4096);
    TH2D *hFP_dEEg = new TH2D("hFP_dEEg","Focal plane, gated on dE-E locus, 0mg/cm2",1000,0,1000,4000,0,4000);
@@ -119,7 +122,7 @@ void analysis::Loop()
    TH2D *hdEE_TAC6_FPl = new TH2D("hdEE_TAC6_FPl","dE-E, 3800<TAC<4096, lower FP, 0mg/cm2",700,0,70,320,0.3,3.5);
 
    // Emax, etc
-   TH2D *hEFmax_EBmax = new TH2D("hEFmax_EBmax","Max front v Back, E",700,0,70,700,0,70);
+   TH2D *hEFmax_EBmax = new TH2D("hEFmax_EBmax","Max front v Back, E",700,0,12,700,0,70);
    TH2D *hEF_EB = new TH2D("hEF_EB","front v Back, E",700,0,70,700,0,70);
    TH2D *hdEFmax_dEBmax = new TH2D("hdEFmax_dEBmax","Max front v Back, dE",700,0,70,700,0,70);
    TH2D *hdEF_dEB = new TH2D("hdEF_dEB","front v Back, dE",700,0,70,700,0,70);
@@ -139,6 +142,7 @@ void analysis::Loop()
    TCutG *lowercut = (TCutG*)fcuts->Get("lower");
    TCutG *dEEcut = (TCutG*)fcuts->Get("dE-Ecut");
    TCutG *EvThcut = (TCutG*)fcuts->Get("EvTh");
+   TCutG *FB = (TCutG*)fcuts->Get("frontback");
 
 //----------------------------------------------------------------------- 
    Long64_t nentries = fChain->GetEntries();
