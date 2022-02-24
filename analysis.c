@@ -12,8 +12,8 @@
 void analysis::Loop()
 {
    if (fChain == 0) return;
-    TFile *output = new TFile("0mg.root","recreate");
-    TFile *fcuts = new TFile("cuts_0.root","read");
+    TFile *output = new TFile("2mg_dec8.root","recreate");
+    TFile *fcuts = new TFile("/disks/1/gwilson/25Al/sorted/cuts_2.root","read");
   //  TFile *fcuts = new TFile("cuts_2.root","read");
   //  TFile *fcuts = new TFile("cuts_4.root","read");
   //  TFile *fcuts = new TFile("cuts_8.root","read");
@@ -143,6 +143,8 @@ void analysis::Loop()
    TCutG *dEEcut = (TCutG*)fcuts->Get("dE-Ecut");
    TCutG *EvThcut = (TCutG*)fcuts->Get("EvTh");
    TCutG *FB = (TCutG*)fcuts->Get("frontback");
+   TCutG *fpR = (TCutG*)fcuts->Get("rightdiag"); // that right diagonal bit... 
+   TCutG *fpL = (TCutG*)fcuts->Get("leftdiag"); // that right diagonal bit... 
 
 //----------------------------------------------------------------------- 
    Long64_t nentries = fChain->GetEntries();
@@ -160,15 +162,17 @@ void analysis::Loop()
       b_E_Fmult->GetEntry(ientry);
       b_E_Fnum->GetEntry(ientry);
       b_E_Fenergy->GetEntry(ientry);
-      b_dE_Bmult->GetEntry(ientry);
-      b_dE_Bnum->GetEntry(ientry);
-      b_dE_Benergy->GetEntry(ientry);
+      // b_dE_Bmult->GetEntry(ientry);
+      // b_dE_Bnum->GetEntry(ientry);
+      // b_dE_Benergy->GetEntry(ientry);
       b_E_Bmult->GetEntry(ientry);
       b_E_Bnum->GetEntry(ientry);
       b_E_Benergy->GetEntry(ientry);
       b_rftof->GetEntry(ientry);
       b_spare->GetEntry(ientry);
       b_x->GetEntry(ientry);
+      b_E_Fmax->GetEntry(ientry);
+      b_E_Bmax->GetEntry(ientry);
 
 
       emaxF_E = emaxF_dE = emaxB_E = emaxB_dE = 0;

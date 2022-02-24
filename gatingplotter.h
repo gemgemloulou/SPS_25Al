@@ -141,113 +141,113 @@ analysis::analysis(TTree *t) : fChain(0)
 // used to generate this class and read the Tree.
    if (t == 0) {
      #ifdef SINGLE_TREE
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/disks/1/gwilson/25Al/new/run101.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/disks/1/gwilson/25Al/sorted/run101.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/disks/1/gwilson/25Al/new/run101.root");
+         f = new TFile("/disks/1/gwilson/25Al/sorted/run101.root");
       }
       f->GetObject("tree",t);
       #else
       TChain *chain = new TChain("tree","");
       // 12mg
       /* 
-      chain->Add("/disks/1/gwilson/25Al/new/run265.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run266.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run267.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run268.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run270.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run271.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run273.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run275.root");
+      chain->Add("/disks/1/gwilson/25Al/sorted/run265.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run266.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run267.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run268.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run270.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run271.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run273.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run275.root");
       */
       // 8mg
       /*
-      chain->Add("/disks/1/gwilson/25Al/new/run230.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run234.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run236.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run243.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run244.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run246.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run247.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run249.root");
-      chain->Add("/disks/1/gwilson/25Al/new/run250.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run252.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run253.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run257.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run258.root");
-      chain->Add("/disks/1/gwilson/25Al/new/run231.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run232.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run259.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run230.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run234.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run236.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run243.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run244.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run246.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run247.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run249.root");
+      chain->Add("/disks/1/gwilson/25Al/sorted/run250.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run252.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run253.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run257.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run258.root");
+      chain->Add("/disks/1/gwilson/25Al/sorted/run231.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run232.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run259.root"); 
       */
       //4mg
       /*
-      chain->Add("/disks/1/gwilson/25Al/new/run197.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run200.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run201.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run203.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run204.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run206.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run207.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run209.root");
-      chain->Add("/disks/1/gwilson/25Al/new/run210.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run213.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run214.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run215.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run223.root");
+      chain->Add("/disks/1/gwilson/25Al/sorted/run197.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run200.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run201.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run203.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run204.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run206.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run207.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run209.root");
+      chain->Add("/disks/1/gwilson/25Al/sorted/run210.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run213.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run214.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run215.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run223.root");
       */
       //2mg 
-      
-      chain->Add("/disks/1/gwilson/25Al/new/run147.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run148.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run150.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run153.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run154.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run155.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run157.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run158.root");
-      chain->Add("/disks/1/gwilson/25Al/new/run160.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run161.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run162.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run164.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run165.root");
-      chain->Add("/disks/1/gwilson/25Al/new/run167.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run169.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run170.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run172.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run173.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run175.root");
-      chain->Add("/disks/1/gwilson/25Al/new/run176.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run179.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run182.root"); 
-      chain->Add("/disks/1/gwilson/25Al/new/run183.root"); 
-      
+      /*
+      chain->Add("/disks/1/gwilson/25Al/sorted/run147.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run148.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run150.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run153.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run154.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run155.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run157.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run158.root");
+      chain->Add("/disks/1/gwilson/25Al/sorted/run160.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run161.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run162.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run164.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run165.root");
+      chain->Add("/disks/1/gwilson/25Al/sorted/run167.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run169.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run170.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run172.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run173.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run175.root");
+      chain->Add("/disks/1/gwilson/25Al/sorted/run176.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run179.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run182.root"); 
+      chain->Add("/disks/1/gwilson/25Al/sorted/run183.root"); 
+      */
       // no degrader, pre 119
         	  
-      /*chain->Add("/disks/1/gwilson/25Al/new/run99.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run100.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run101.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run105.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run106.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run113.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run116.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run117.root");
+      /*chain->Add("/disks/1/gwilson/25Al/sorted/run99.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run100.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run101.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run105.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run106.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run113.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run116.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run117.root");
       */
        // no degrader, post 119
-      /* chain->Add("/disks/1/gwilson/25Al/new/run119.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run120.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run123.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run125.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run126.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run128.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run129.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run130.root");
-       chain->Add("/disks/1/gwilson/25Al/new/run133.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run134.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run135.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run137.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run138.root");
-       chain->Add("/disks/1/gwilson/25Al/new/run139.root"); 
-       chain->Add("/disks/1/gwilson/25Al/new/run141.root"); 
-      */
+       chain->Add("/disks/1/gwilson/25Al/sorted/run119.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run120.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run123.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run125.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run126.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run128.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run129.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run130.root");
+       chain->Add("/disks/1/gwilson/25Al/sorted/run133.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run134.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run135.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run137.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run138.root");
+       chain->Add("/disks/1/gwilson/25Al/sorted/run139.root"); 
+       chain->Add("/disks/1/gwilson/25Al/sorted/run141.root"); 
+      
        t = chain;
        #endif
    }

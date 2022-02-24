@@ -30,6 +30,7 @@ TFile *f12 = new TFile("12mg.root","read");
     char can[2];
     char save[6];
     
+    TCutG *fp = (TCutG*)fcuts->Get("focalplane";
     TCutG *beamcut = (TCutG*)fcuts->Get("beam");
     TCutG *uppercut = (TCutG*)fcuts->Get("upper");
     TCutG *lowercut = (TCutG*)fcuts->Get("lower");

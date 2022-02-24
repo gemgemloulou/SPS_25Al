@@ -6,7 +6,7 @@ To run in root:
 .L analysis.c++; analysis t; t.Loop()
 
 **** analysis_plots.c ****
-Draws everything from analysis.c. Also loads the cut files so you can see what cuts have actually been applied... Writes out lots of histograms. 
+Draws everything FROM analysis.c. Also loads the cut files so you can see what cuts have actually been applied... Writes out lots of histograms. 
 
 **** plotter.c ****
  Plots some SPS histograms, to check differences between beam on and beam off runs, for each degrader setting. This is for the default histograms that come out of the original sortcode. Gated things might be wonky                    
