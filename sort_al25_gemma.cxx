@@ -560,7 +560,7 @@ for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
       WChan[ndet][ndat] = ((dataword & 0x0000f000)>>12);
       WRawData[ndet][ndat] = (dataword & 0x00000fff);
 
-    WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat]; // keep as a test
+    WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
         
     if(ndet==1){ //dE
         if(WData[ndet][ndat]>1000){  // threshold of 1 MeV in calibrated wedge energy
@@ -577,29 +577,27 @@ for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
             E_Benergy[E_Bmult] = WData[ndet][ndat]/1000; // MeV
         }
     }
-        
-      // if(iverb){
-      // 	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
-      // 	cout << "WRawData["<<ndet<<"]["<<ndat<<"] = " << WRawData[ndet][ndat] << endl;
-      // 	cout << "dE_Benergy["<<dE_Bmult<<"] = " << dE_Benergy[dE_Bmult];
-      // 	cout << ", E_Benergy["<<E_Bmult<<"] = " << E_Benergy[E_Bmult]<< endl;
-      // 	cout << "emaxW = " << emaxW << endl;
-      // }
-      // for(i=0;i<dE_Bmult;i++){
-      // if (dE_Benergy[i]>dE_Bmax){
-      // 	dE_Bmax=dE_Benergy[i];
-      // 	dE_Bmaxnum = dE_Bnum[i];
-      // }}
-      // for(i=0;i<E_Bmult;i++){
-      // if (E_Benergy[i]>E_Bmax){
-      // 	E_Bmax=E_Benergy[i];
-      // 	E_Bmaxnum = E_Bnum[i];
-      // }}
+       
+    for(i=0;i<dE_Bmult;i++){
+     if (dE_Benergy[i]>dE_Bmax){
+         dE_Bmax=dE_Benergy[i];
+         dE_Bmaxnum = dE_Bnum[i];
+     }}
+     for(i=0;i<E_Bmult;i++){
+     if (E_Benergy[i]>E_Bmax){
+         E_Bmax=E_Benergy[i];
+         E_Bmaxnum = E_Bnum[i];
+     }}
+    
+       if(iverb){
+       	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
+       	cout << "WRawData["<<ndet<<"]["<<ndat<<"] = " << WRawData[ndet][ndat] << endl;
+        for(i=0;i<dE_Bmult;i++) cout << "dE_Benergy["<<dE_Bmult<<"]["<<dE_Bnum[dE_Bmult]<<"] = " << dE_Benergy[dE_Bmult] << endl;
+       	for(i=0;i<E_Bmult;i++) cout << ", E_Benergy["<<E_Bmult<<"]["<<E_Bnum[E_Bmult]<<"] = " << E_Benergy[E_Bmult] << endl;
+       	cout << "dE_Bmax = " << dE_Bmax << ", dE_Bmaxnum = " << dE_Bmaxnum << endl;
+        cout << "E_Bmax = " << E_Bmax << ", E_Bmaxnum = " << E_Bmaxnum << endl;
+       }
       
-      // if(iverb){
-      // 	cout << "dE_Bmax = " << dE_Bmax << ", num = " << dE_Bmaxnum;
-      // 	cout << ", E_Bmax = " << E_Bmax << ", num = " << E_Bmaxnum;
-      // }
       if(ndet==0){
 	hELudW1->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
 	hEW1->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
