@@ -43,7 +43,7 @@
 
 /********************************
  ********************************/
-/****/ Bool_t iverb = 0; /****/
+/****/ Bool_t iverb = 1; /****/
 /********************************
  ********************************/
 
@@ -436,8 +436,8 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
   hELudR2=new TH2F("hELudR2","Ring2 vs E raw",4096,0,4096,17,0,17); 
   hELudW2=new TH2F("hELudW2","Wedge2 vs E raw",4096,0,4096,17,0,17);
 
-  hER1=new TH2F("hER1","Ring1 vs E calib",400,0,10000,17,0,17);  
-  hER2=new TH2F("hER2","Ring2 vs E calib",400,0,10000,17,0,17);
+  hER1=new TH2F("hER1","Ring1 vs E calib",4000,0,100,17,0,17);  
+  hER2=new TH2F("hER2","Ring2 vs E calib",4000,0,100,17,0,17);
   hEW1=new TH2F("hEW1","Wedge1 vs E calib",400,0,10000,17,0,17);
   hEW2=new TH2F("hEW2","Wedge2 vs E calib",400,0,10000,17,0,17); 
 
@@ -563,14 +563,14 @@ for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
     WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
         
     if(ndet==1){ //dE
-        if(WData[ndet][ndat]>1000){  // threshold of 1 MeV in calibrated wedge energy
+        if(WData[ndet][ndat]>100){  // threshold of 0.1 MeV in calibrated wedge energy
             dE_Bmult++; // there's an event, so start at mult = 1
             dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat]/1000;
             dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
             dE_Benergy[dE_Bmult] = WData[ndet][ndat]/1000; //MeV
         }
     }else if(ndet==0){ //E
-        if(WData[ndet][ndat]>1000){
+        if(WData[ndet][ndat]>100){
             E_Bmult++;
             E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat]/1000;
             E_Bnum[E_Bmult] = WChan[ndet][ndat];
@@ -621,7 +621,7 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
         RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
         
         if(ndet==1){ //dE
-              if(RData[ndet][ndat]>1000){  // threshold of 1 MeV in calibrated ring energy
+              if(RData[ndet][ndat]>100){  // threshold of 0.1 MeV in calibrated ring energy
                   dE_Fmult++; // there's an event, so start at mult = 1
                   dE_Fenergy_raw[dE_Fmult] = RRawData[ndet][ndat]/1000;
                   dE_Fnum[dE_Fmult] = RChan[ndet][ndat];
@@ -710,9 +710,11 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
   h1_cathode->Fill(cathode);
   h1_grid->Fill(grid);
   t2=grid; // grid is TAC between RF and SSB =t2
+if(iverb) cout << "TAC between RF and SSB = " << grid << endl;
   h1_rftof->Fill(rftof);
   h1_mon->Fill(mon);
   h1_spare->Fill(spare); //spare is TAC between DSSD and PPAC =t1
+if(iverb) cout << "spare = TAC between DSSD and PPAC = " << spare << endl;
   t1=spare;
 
   h1_E->Fill(E);
