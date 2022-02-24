@@ -118,8 +118,6 @@ Bool_t icut = kTRUE;
 
 // ********************************************************************************
 // branch variables - put more things here and organise int
-Int_t Degrader; // thickness of degrader, mg/cm2
-Float_t MagField; // in kG
 Int_t dE_Fmult;
 Int_t dE_Bmult;
 Int_t dE_Fnum[16];
@@ -151,8 +149,6 @@ Float_t hepo, hepi, lepo, lepi, up, down;
 Float_t stime0, stime1, stime2;
 Float_t x;
 Int_t testrmult0, testrmult1, testwmult0, testwmult1;
-Bool_t bmchk;
-Int_t RunNum;
 
 void treeinit(){
     if(iverb) cout << "in treeinit" << endl;
@@ -242,40 +238,39 @@ Int_t cntbit(Int_t word)
 }
 
 /* function to deal with scalers, adapted from Elliot's program */
-void scalers(ScarletEvnt &e)
-{
-  /* Adapted from Kanter's scaler program
-   */
-  unsigned int *p = reinterpret_cast<unsigned int*>(e.body());
-  unsigned int ttotal, tdiff, ithscaler, ithrate;
-  FILE *sf;
-
-  /* On the first sync event after a stop, the following tests for the
-   * existence of a file called scalers.zap.  If it exists, the scaler
-   * totals are reset.
-   */
-  if (stopped) {
-    struct stat st;
-    stopped = 0;
-    if (stat("scalers.zap", &st) == 0) {
-      printf("Clearing scalers...\n");
-      for (int i = 0; i < NSCALERS; ++i) {totals[i] = 0.0; rates[i]=0.0;}
+void scalers(ScarletEvnt &e){
+    /* Adapted from Kanter's scaler program
+     */
+    unsigned int *p = reinterpret_cast<unsigned int*>(e.body());
+    unsigned int ttotal, tdiff, ithscaler, ithrate;
+    FILE *sf;
+    
+    /* On the first sync event after a stop, the following tests for the
+     * existence of a file called scalers.zap.  If it exists, the scaler
+     * totals are reset.
+     */
+    if (stopped) {
+        struct stat st;
+        stopped = 0;
+        if (stat("scalers.zap", &st) == 0) {
+            printf("Clearing scalers...\n");
+            for (int i = 0; i < NSCALERS; ++i) {totals[i] = 0.0; rates[i]=0.0;}
+        }
     }
-  }
-
-  if ((sf = fopen("scalers.dat", "w")) == 0) return;
-  ttotal = *p++;
-  tdiff = *p++;
-  fprintf(sf, "%u %u\n", ttotal, tdiff);
-  for (int i = 0; i < NSCALERS; ++i) {
-    int dataword = *p++;
-    ithscaler = dataword & 0x00ffffff;
-    totals[i] += ithscaler;
-    ithrate = tdiff != 0 ? ithscaler/tdiff : 0;
-    if(i==10) totals[10]=totals[8]/totals[6]*1000;
-    fprintf(sf, "%.0f %u\n", totals[i], ithrate);
-  }
-  fclose(sf);
+    
+    if ((sf = fopen("scalers.dat", "w")) == 0) return;
+    ttotal = *p++;
+    tdiff = *p++;
+    fprintf(sf, "%u %u\n", ttotal, tdiff);
+    for (int i = 0; i < NSCALERS; ++i) {
+        int dataword = *p++;
+        ithscaler = dataword & 0x00ffffff;
+        totals[i] += ithscaler;
+        ithrate = tdiff != 0 ? ithscaler/tdiff : 0;
+        if(i==10) totals[10]=totals[8]/totals[6]*1000;
+        fprintf(sf, "%.0f %u\n", totals[i], ithrate);
+    }
+    fclose(sf);
 }
 // end of scaler part
 
@@ -292,39 +287,37 @@ int userentry()
   // read cuts from cut_file.root
   if(icut) readcuts();
 
-  // read in calibration coefficients
-  ifstream in_dE; ifstream in_E;
-  in_dE.open("~/25Al/analysis/dEcal.dat");
-  // if(RunNum<95){
-    in_E.open("~/25Al/analysis/Ecal_pre95.dat");
-    // }else{
-    //   in_E.open("Ecal_post95.dat");
-    // }
+// read in calibration coefficients
+ifstream in_dEf; ifstream in_dEb;
+ifstream in_Ef; ifstream in_Eb;
+in_dEf.open("dEfrontcal.dat");
+in_dEb.open("dEcal.dat");
+in_Ef.open("Efrontcal.dat");
+in_Eb.open("Ebackcal.dat");
 
-  for(int i=0;i<32;i++){
-    if(i<16){
-      in_dE >> Roffset[1][i] >> Rslope[1][i];
-      in_E >> Roffset[0][i] >> Rslope[0][i];
-    }else{
-      in_dE >> Woffset[1][i-16] >> Wslope[1][i-16];
-      in_E >> Woffset[0][i-16] >> Wslope[0][i-16];
+// using old cal for dE backs
+for (int i=0;i<16;i++){
+    in_dEf >> Rslope[1][i] >> Roffset[1][i];
+    in_Ef >> Rslope[0][i] >> Roffset[0][i];
+    in_Eb >> Wslope[0][i] >> Woffset[0][i];
     }
-  }
-  in_dE.close(); in_E.close();
- for(int i=0;i<16;i++){
+       
+for(int i=16;i<32;i++){ // old values
+    in_dEb >> Woffset[1][i-16] >> Wslope[1][i-16];
+    }
+    
+     in_dEf.close(); in_Ef.close(); in_dEb.close(); in_Eb.close();
+    
+for(int i=0;i<16;i++){
     cout << Roffset[0][i] << "\t" << Rslope[0][i] << "\t" << Roffset[1][i] << "\t" << Rslope[1][i] << endl;
-  }
- for(int i=0;i<16;i++){
+    }
+for(int i=0;i<16;i++){
     cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << Woffset[1][i] << "\t" << Wslope[1][i] << endl;
-  }
-
+    }
 
   // ************************************************************************************  
   // Open ROOT file
-  //char buffer[256];
-  //sprintf(buffer,"out_run_%d_%d.root",RunNum,Degrader);
-  //printf("out_run_%d_%d.root",RunNum,Degrader);
-  //f = new TFile(buffer, "recreate");
+  
   f = new TFile("output.root","recreate");
   tree = new TTree("tree","sorted data");
 
@@ -336,7 +329,6 @@ int userentry()
   tree->Branch("dE_Bnum",dE_Bnum,"dE_Bnum[dE_Bmult]/i");
   tree->Branch("dE_Fenergy_raw",dE_Fenergy_raw,"dE_Fenergy_raw[dE_Fmult]/f");
   tree->Branch("dE_Benergy_raw",dE_Benergy_raw,"dE_Benergy_raw[dE_Bmult]/f");
-  // tree->Branch("bmchk",&bmchk,"bmchk/b");
 
   tree->Branch("E_FMult",&E_Fmult,"E_Fmult/i");
   tree->Branch("E_BMult",&E_Bmult,"E_Bmult/i");
@@ -356,8 +348,6 @@ int userentry()
   tree->Branch("dE_Fmaxnum",&dE_Fmaxnum,"dE_Fmaxnum/i");
   tree->Branch("dE_Bmaxnum",&dE_Bmaxnum,"dE_Bmaxnum/i");
 
-  //  tree->Branch("Degrader",&Degrader,"Degrader/i");
-  //  tree->Branch("MagField",&MagField,"MagField/f");
   tree->Branch("de",de,"de[5]/f");
   tree->Branch("cathode",&cathode,"cathode/f");
   tree->Branch("grid",&grid,"grid/f");
@@ -379,7 +369,6 @@ int userentry()
   tree->Branch("lepo",&lepo,"lepo/f");
   tree->Branch("lepi",&lepi,"lepi/f");
   tree->Branch("down",&down,"down/f");
-  // tree->Branch("RunNum",&RunNum,"RunNum/i");
 
   // ************************************************************************************  
 
@@ -568,17 +557,21 @@ int userdecode(ScarletEvnt &event) {
     Wpat[ndet]=*p++;
       
     Wbitcnt[ndet]=cntbit(Wpat[ndet]);
-    for (Int_t ndat=0;ndat<Wbitcnt[ndet];ndat++) {
+      
+for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
       if(iverb) cout << "wedge " << ndet << endl;
       dataword=*p++;
-      WChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
-      WRawData[ndet][ndat]=(dataword & 0x00000fff);
+      WChan[ndet][ndat] = ((dataword & 0x0000f000)>>12);
+      WRawData[ndet][ndat] = (dataword & 0x00000fff);
 
-      //  if(ndet==1){ //dE
-      //	dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat];
-      //	dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
-      //	dE_Benergy[dE_Bmult] = dE_Boffset[dE_Bnum[dE_Bmult]] + dE_Bgain[dE_Bnum[dE_Bmult]] * dE_Benergy_raw[dE_Bmult];
- WData[ndet][ndat]= Woffset[ndet][WChan[ndet][ndat]]+Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
+    WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat]; // keep as a test
+        
+    if(ndet==1){ //dE
+        dE_Bmult++; // there's an event, so start at mult = 1
+        dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat];
+      	dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
+      	dE_Benergy[dE_Bmult] = dE_Boffset[dE_Bnum[dE_Bmult]] + dE_Bgain[dE_Bnum[dE_Bmult]] * dE_Benergy_raw[dE_Bmult];
+ 
 	//	dE_Bmult++;
 	//  }else if(ndet==0){ //E
 	//	E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat];
