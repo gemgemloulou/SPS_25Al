@@ -306,14 +306,10 @@ for(int i=16;i<32;i++){ // old values
     in_dEb >> Woffset[1][i-16] >> Wslope[1][i-16];
     }
     
-     in_dEf.close(); in_Ef.close(); in_dEb.close(); in_Eb.close();
+in_dEf.close(); in_Ef.close(); in_dEb.close(); in_Eb.close();
     
-for(int i=0;i<16;i++){
-    cout << Roffset[0][i] << "\t" << Rslope[0][i] << "\t" << Roffset[1][i] << "\t" << Rslope[1][i] << endl;
-    }
-for(int i=0;i<16;i++){
-    cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << Woffset[1][i] << "\t" << Wslope[1][i] << endl;
-    }
+for(int i=0;i<16;i++) cout << Roffset[0][i] << "\t" << Rslope[0][i] << "\t" << Roffset[1][i] << "\t" << Rslope[1][i] << endl;
+for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << Woffset[1][i] << "\t" << Wslope[1][i] << endl;
 
   // ************************************************************************************  
   // Open ROOT file
@@ -432,7 +428,7 @@ for(int i=0;i<16;i++){
   h2_DErf = new TH2F("h2_DErf","rf vs. DE",512,0.,4096.,512,0.,4096.);
   h2_DErfg = new TH2F("h2_DErfg","rf vs. DE",512,0.,4096.,512,0.,4096.);
  
-  /******************DSSD histograms***************************/
+  // DSSD histograms
 
   hELudR1=new TH2F("hELudR1","Ring1 vs E raw",4096,0,4096,17,0,17); 
   hELudW1=new TH2F("hELudW1","Wedge1 vs E raw",4096,0,4096,17,0,17); 
@@ -567,20 +563,20 @@ for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
     WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat]; // keep as a test
         
     if(ndet==1){ //dE
-        dE_Bmult++; // there's an event, so start at mult = 1
-        dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat];
-      	dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
-      	dE_Benergy[dE_Bmult] = dE_Boffset[dE_Bnum[dE_Bmult]] + dE_Bgain[dE_Bnum[dE_Bmult]] * dE_Benergy_raw[dE_Bmult];
- 
-	//	dE_Bmult++;
-	//  }else if(ndet==0){ //E
-	//	E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat];
-	//	E_Bnum[E_Bmult] = WChan[ndet][ndat];
-	//	E_Benergy[E_Bmult] = E_Boffset[E_Bnum[E_Bmult]] + E_Bgain[E_Bnum[E_Bmult]] * E_Benergy_raw[E_Bmult];
-	//	WData[0][ndat] = WRawData[0][ndat]* E_Bgain[WChan[0][ndat]] + E_Boffset[WChan[0][ndat]];
-	//	WData[0][ndat] = (WData[0][ndat])/1000; //MeV
-	//	E_Bmult++;
-	//   }
+        if(WData[ndet][ndat]>1000){  // threshold of 1 MeV in calibrated wedge energy
+            dE_Bmult++; // there's an event, so start at mult = 1
+            dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat]/1000;
+            dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
+            dE_Benergy[dE_Bmult] = WData[ndet][ndat]/1000; //MeV
+        }
+    }else if(ndet==0){ //E
+        if(WData[ndet][ndat]>1000){
+            E_Bmult++;
+            E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat]/1000;
+            E_Bnum[E_Bmult] = WChan[ndet][ndat];
+            E_Benergy[E_Bmult] = WData[ndet][ndat]/1000; // MeV
+        }
+    }
         
       // if(iverb){
       // 	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
