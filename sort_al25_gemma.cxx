@@ -156,14 +156,6 @@ Int_t RunNum;
 
 void treeinit(){
     if(iverb) cout << "in treeinit" << endl;
-
-    // //*********************************************
-    // /*************/ MagField = 8.43; /*************/
-    // /*************/ Degrader = 2;   /*************/
-    // /*************/ bmchk = 0;      /*************/
-    // /*************/ RunNum = BONER;   /**************/
-    // //*********************************************
-
     for(Int_t i=0;i<16;i++){
       dE_Fnum[i] = 0;
       dE_Bnum[i] = 0;
@@ -724,8 +716,7 @@ if(iverb){
     // if (ndet>0) p2=p;
   }
   p1=p;
-  tree->Fill();
-  if(iverb) cout << "treefill" << endl;
+  
   // TDC part
   dataword=*p1++;
   hepo=(dataword & 0x00000fff);
@@ -758,7 +749,6 @@ if(iverb){
   // select whether high/low/both (he/le/pospp) energy side  
   //Float_t x = myppac->pospp;
   x = myppac->pospp;
-  tree->Fill();
   Float_t Ypos=0.;
   Ypos=0.5*(up-down)+2000.;
   Ypos=myppac->ud;
@@ -888,6 +878,7 @@ if(iverb){
   //     break;
   //   }	   
   tree->Fill();
+    if(iverb) cout << "treefill" << endl;
   delete rannum;
   return 0;
 }
