@@ -598,110 +598,70 @@ for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
         cout << "E_Bmax = " << E_Bmax << ", E_Bmaxnum = " << E_Bmaxnum << endl;
        }
       
-      if(ndet==0){
-	hELudW1->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
-	hEW1->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
-	E_Benergy[ndat] = WData[0][ndat];
-	E_Benergy_raw[ndat] = WRawData[0][ndat];
-	E_Bnum[ndat] = WChan[0][ndat];
-	E_Bmult = ndat+1; // so it's human. i.e. mult 0 is no hit, mult 1 is a single...
-	testwmult0++;  
-	// if(iverb){
-	//   cout << "Wedge 0! Ewedge0["<<ndat<<"] = " << Ewedge0[ndat] << endl;
-	//   cout << "EwedgeRaw0["<<ndat<<"] = " << EwedgeRaw0[ndat] << endl;
-	//   cout << "NumWedge0["<<ndat<<"] = " << NumWedge0[ndat] << endl;
-	//   cout << "Wedgemult = " << WedgeMult0 << ", test mult = " << testwmult0 << endl << endl;
-	// }
-      }
-      if(ndet==1){
-	hELudW2->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
-	hEW2->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
-      
-      dE_Benergy[ndat] = WData[1][ndat];
-      dE_Benergy_raw[ndat] = WRawData[1][ndat];
-      dE_Bnum[ndat] = WChan[1][ndat];
-      dE_Bmult = ndat+1; 
-      testwmult1++; 
-	// if(iverb){
-	//   cout << "Wedge 1! Ewedge1["<<ndat<<"] = " << Ewedge1[ndat] << endl;
-	//   cout << "EwedgeRaw1["<<ndat<<"] = " << EwedgeRaw1[ndat] << endl;
-	//   cout << "NumWedge1["<<ndat<<"] = " << NumWedge1[ndat] << endl;
-	//   cout << "Wedgemult = " << WedgeMult1 << ", test mult = " << testwmult1 << endl << endl;
-	// }
- 
-      }
+	hELudW1->Fill(WRawData[0][ndat],WChan[0][ndat]);
+	hEW1->Fill(WData[0][ndat],WChan[0][ndat]);
+	hELudW2->Fill(WRawData[1][ndat],WChan[1][ndat]);
+	hEW2->Fill(WData[1][ndat],WChan[1][ndat]);
     }
+  }
 
+for (Int_t ndet=0; ndet<2; ++ndet) {
     /* get Ring hit pattern, count bits, then store data & channel */
     /* calibration constants put the energy into MeV */
-    /* emaxR holds largest Ring energy, nmaxR holds ring number of */
-    /* largest Ring energy, detmaxR holds detector number */
-
+    
     Rpat[ndet]=*p++;
     Rbitcnt[ndet]=cntbit(Rpat[ndet]);
+
     for (Int_t ndat=0;ndat<Rbitcnt[ndet];ndat++) {
-      if(iverb) cout << "Ring " << ndet << endl;
-      dataword=*p++;
-      RChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
-      RRawData[ndet][ndat]=(dataword & 0x00000fff);
-      //  RData[ndet][ndat]=
-      //	(RRawData[ndet][ndat] + Roffset[ndet][RChan[ndet][ndat]])/
-      //	Rslope[ndet][RChan[ndet][ndat]]; // changed from - offset to + offset
- RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
- // RData[ndet][ndat] = (RData[ndet][ndat])/1000; // MeV
-      // if( fabs(Rslope[ndet][RChan[ndet][ndat]])<0.0001)
-      //	{ cout<<"problem "<<ndet<<" "<<RChan[ndet][ndat]<<endl;}
-if(iverb){
-	cout << "RChan["<<ndet<<"]["<<ndat<<"] = " << RChan[ndet][ndat] << endl;
-	cout << "RRawData["<<ndet<<"]["<<ndat<<"] = " << RRawData[ndet][ndat] << endl;
-	cout << "RData["<<ndet<<"]["<<ndat<<"] = " << RData[ndet][ndat] << endl;
-	cout << "emaxR = " << emaxR << endl;
-      }
-      if (RData[ndet][ndat]>emaxR) {
-	emaxR=RData[ndet][ndat];
-	emaxrawR=RRawData[ndet][ndat];
-	nmaxR=RChan[ndet][ndat];
-	detmaxR=ndet;
-      }
- if(iverb){
-   cout << "emaxR = " << emaxR << ", nmaxR = " << nmaxR << ", detmaxR = " << detmaxR << endl << endl;
-      }
-      if(ndet==0)
-	{ // Ring 1 is good
-	  hELudR1->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
-	  hER1->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
-	  E_Fenergy[ndat] = RData[0][ndat];
-	  E_Fenergy_raw[ndat] = RRawData[0][ndat];
-	  E_Fnum[ndat] = RChan[0][ndat];
-	  E_Fmult = ndat+1;
-	  testrmult0++;
-	// if(iverb){
-	//   cout << "Ring 0! Ering0["<<ndat<<"] = " << Ering0[ndat] << endl;
-	//   cout << "EringRaw0["<<ndat<<"] = " << EringRaw0[ndat] << endl;
-	//   cout << "NumRing0["<<ndat<<"] = " << NumRing0[ndat] << endl;
-	//   cout << "Ringmult = " << RingMult0 << ", test mult = " << testrmult0 << endl << endl;
-	// }
-	}
-      if(ndet==1){
-	//Ring 2 is bad
-	hELudR2->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
-	hER2->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
-	dE_Fenergy[ndat] = RData[1][ndat];
-	dE_Fenergy_raw[ndat] = RRawData[1][ndat];
-	dE_Fnum[ndat] = RChan[1][ndat];
-	dE_Fmult = ndat+1;
-	testrmult1++;
-	// if(iverb){
-	//   cout << "Ring 1! Ering1["<<ndat<<"] = " << Ering1[ndat] << endl;
-	//   cout << "EringRaw1["<<ndat<<"] = " << EringRaw1[ndat] << endl;
-	//   cout << "NumRing1["<<ndat<<"] = " << NumRing1[ndat] << endl;
-	//   cout << "Ringmult = " << RingMult1 << ", test mult = " << testrmult1 << endl << endl;
-	// }
-      }
-     
+        if(iverb) cout << "Ring " << ndet << endl;
+        dataword=*p++;
+      
+        RChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
+        RRawData[ndet][ndat]=(dataword & 0x00000fff);
+        RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
+        
+        if(ndet==1){ //dE
+              if(RData[ndet][ndat]>1000){  // threshold of 1 MeV in calibrated ring energy
+                  dE_Fmult++; // there's an event, so start at mult = 1
+                  dE_Fenergy_raw[dE_Fmult] = RRawData[ndet][ndat]/1000;
+                  dE_Fnum[dE_Fmult] = RChan[ndet][ndat];
+                  dE_Fenergy[dE_Fmult] = RData[ndet][ndat]/1000; //MeV
+              }
+          }else if(ndet==0){ //E
+              if(RData[ndet][ndat]>1000){
+                  E_Fmult++;
+                  E_Fenergy_raw[E_Fmult] = RRawData[ndet][ndat]/1000;
+                  E_Fnum[E_Fmult] = RChan[ndet][ndat];
+                  E_Fenergy[E_Fmult] = RData[ndet][ndat]/1000; // MeV
+              }
+          }
+             
+          for(i=0;i<dE_Fmult;i++){
+           if (dE_Fenergy[i]>dE_Fmax){
+               dE_Fmax=dE_Fenergy[i];
+               dE_Fmaxnum = dE_Fnum[i];
+           }}
+           for(i=0;i<E_Fmult;i++){
+           if (E_Fenergy[i]>E_Fmax){
+               E_Fmax=E_Fenergy[i];
+               E_Fmaxnum = E_Fnum[i];
+           }}
+          
+             if(iverb){
+              cout << "RChan["<<ndet<<"]["<<ndat<<"] = " << RChan[ndet][ndat] << endl;
+              cout << "RRawData["<<ndet<<"]["<<ndat<<"] = " << RRawData[ndet][ndat] << endl;
+              for(i=0;i<dE_Fmult;i++) cout << "dE_Fenergy["<<dE_Fmult<<"]["<<dE_Fnum[dE_Fmult]<<"] = " << dE_Fenergy[dE_Fmult] << endl;
+              for(i=0;i<E_Fmult;i++) cout << ", E_Fenergy["<<E_Fmult<<"]["<<E_Fnum[E_Fmult]<<"] = " << E_Fenergy[E_Fmult] << endl;
+              cout << "dE_Fmax = " << dE_Fmax << ", dE_Fmaxnum = " << dE_Fmaxnum << endl;
+              cout << "E_Fmax = " << E_Fmax << ", E_Fmaxnum = " << E_Fmaxnum << endl;
+             }
+            
+          hELudR1->Fill(RRawData[0][ndat],RChan[0][ndat]);
+          hER1->Fill(RData[0][ndat],RChan[0][ndat]);
+          hELudR2->Fill(RRawData[1][ndat],RChan[1][ndat]);
+          hER2->Fill(RData[1][ndat],RChan[1][ndat]);
     }
-    // if (ndet>0) p2=p;
-  }
+}
   p1=p;
   
   // TDC part
@@ -766,12 +726,9 @@ if(iverb){
   h1_lepi->Fill(lepi);
   h1_up->Fill(up);
   h1_down->Fill(down);
-  if((hepo>=50 && hepo<=4000 )&&(hepi>=50 && hepi<=4000)) {
-    h1_hesum->Fill(0.25*(hepo+hepi));}
-  if((lepo>=50 && lepo<=4000 )&&(lepi>=50 && lepi<=4000)) {
-    h1_lesum->Fill(0.25*(lepo+lepi));}
-  if((up>0)&&(up<4000)&&(down>0)&&(down<4000)){
-    h1_udsum->Fill(0.5*(up+down));}    
+  if((hepo>=50 && hepo<=4000 )&&(hepi>=50 && hepi<=4000)) h1_hesum->Fill(0.25*(hepo+hepi));
+  if((lepo>=50 && lepo<=4000 )&&(lepi>=50 && lepi<=4000)) h1_lesum->Fill(0.25*(lepo+lepi));
+  if((up>0)&&(up<4000)&&(down>0)&&(down<4000)) h1_udsum->Fill(0.5*(up+down));
 
   h1_he->Fill(myppac->he);
   h2_hele->Fill(myppac->he,myppac->le);
@@ -796,16 +753,9 @@ if(iverb){
   h2_xde23->Fill(x,de[1]+de[2]);
   h2_xde4->Fill(x,de[3]);
   h2_xYpos->Fill(x, Ypos);
-  
-
   h2_rftof_spare->Fill(spare, rftof);
-
-
   h2_de4rftof->Fill(de[3],rftof);
-
-  // here starts the big unpacking loop for DSSD
-
-
+    
   Bool_t goodA=kFALSE;
   Bool_t goodT=kFALSE;
   Bool_t anygood=kFALSE;
@@ -823,47 +773,19 @@ if(iverb){
     hER1g->Fill(emaxR,nmaxR);
     if (rftof>2000 && rftof<3500) hER1g2->Fill(emaxR,nmaxR);
     hEW1g->Fill(emaxW,nmaxW);
-    if(checkcutg("xrfcut1",x,rftof)){
-      hER1_gtxrf1->Fill(emaxR,nmaxR);}
-    if(checkcutg("xrfcut2",x,rftof)){
-      hER1_gtxrf2->Fill(emaxR,nmaxR);}
-    if(checkcutg("xde4g1",x,de[3])){
-      hER1_gtxde41->Fill(emaxR,nmaxR);}
-    if(checkcutg("xde4g2",x,de[3])){
-      hER1_gtxde42->Fill(emaxR,nmaxR);}
-    if(checkcutg("xde4g3",x,de[3])){
-      hER1_gtxde43->Fill(emaxR,nmaxR);}
-    if(checkcutg("xde4g4",x,de[3])){
-      hER1_gtxde44->Fill(emaxR,nmaxR);}
-    if(checkcutg("de4rfg1",de[3],rftof)){
-      hER1_gtde4rf1->Fill(emaxR,nmaxR);}
-    if(checkcutg("de4rfg2",de[3],rftof)){
-      hER1_gtde4rf2->Fill(emaxR,nmaxR);}
-    if(checkcutg("de4rfg3",de[3],rftof)){
-      hER1_gtde4rf3->Fill(emaxR,nmaxR);}
-    if(checkcutg("de4rfg4",de[3],rftof)){
-      hER1_gtde4rf4->Fill(emaxR,nmaxR);}
+    if(checkcutg("xrfcut1",x,rftof)){ hER1_gtxrf1->Fill(emaxR,nmaxR);}
+    if(checkcutg("xrfcut2",x,rftof)){ hER1_gtxrf2->Fill(emaxR,nmaxR);}
+    if(checkcutg("xde4g1",x,de[3])){ hER1_gtxde41->Fill(emaxR,nmaxR);}
+    if(checkcutg("xde4g2",x,de[3])){ hER1_gtxde42->Fill(emaxR,nmaxR);}
+    if(checkcutg("xde4g3",x,de[3])){ hER1_gtxde43->Fill(emaxR,nmaxR);}
+    if(checkcutg("xde4g4",x,de[3])){ hER1_gtxde44->Fill(emaxR,nmaxR);}
+    if(checkcutg("de4rfg1",de[3],rftof)){ hER1_gtde4rf1->Fill(emaxR,nmaxR);}
+    if(checkcutg("de4rfg2",de[3],rftof)){ hER1_gtde4rf2->Fill(emaxR,nmaxR);}
+    if(checkcutg("de4rfg3",de[3],rftof)){ hER1_gtde4rf3->Fill(emaxR,nmaxR);}
+    if(checkcutg("de4rfg4",de[3],rftof)){ hER1_gtde4rf4->Fill(emaxR,nmaxR);}
   }
   
-  
-  //fill x-y hit patterns here;
-
-  // Float_t ran1,ran2,newR, newW;
-  // ran1 = 1.5 *(rand()%10000)/10000;
-  // ran2 = 22.5 *(rand()%10000)/10000;
-  // newR=Rremap[detmaxR][nmaxR];
-  // newW=Wremap[detmaxW][nmaxW];
-  // Float_t rad=11.75 + (15-newR-1)*1.5 + ran1;
-  // Float_t phi2=0 + (newW+1)*22.5 + ran2;
-  // Float_t x2=rad*cos(phi2*DEGRAD);
-  // Float_t y2=rad*sin(phi2*DEGRAD);
-  // switch(detmaxR)
-  //   {
-  //   case 0:
-  //     hHitxy1->Fill(x2,y2);
-  //     if(goodT) hHitxy2->Fill(x2,y2);
-  //     break;
-  //   }	   
+ 
   tree->Fill();
     if(iverb) cout << "treefill" << endl;
   delete rannum;
