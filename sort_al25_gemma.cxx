@@ -149,18 +149,19 @@ Float_t hepo, hepi, lepo, lepi, up, down;
 Float_t stime0, stime1, stime2;
 Float_t x;
 Int_t testrmult0, testrmult1, testwmult0, testwmult1;
+Int_t i;
 
 void treeinit(){
     if(iverb) cout << "in treeinit" << endl;
     for(Int_t i=0;i<16;i++){
-      dE_Fnum[i] = 0;
-      dE_Bnum[i] = 0;
+      dE_Fnum[i] = -5;
+      dE_Bnum[i] = -5;
       dE_Fenergy[i] = 0;
       dE_Benergy[i] = 0;
       dE_Fenergy_raw[i] = 0;
       dE_Benergy_raw[i] = 0;
-      E_Fnum[i] = 0;
-      E_Bnum[i] = 0;
+      E_Fnum[i] = -5;
+      E_Bnum[i] = -5;
       E_Fenergy[i] = 0;
       E_Benergy[i] = 0;
       E_Fenergy_raw[i] = 0;
@@ -168,13 +169,15 @@ void treeinit(){
     }
     dE_Fmult = 0; dE_Bmult = 0;
     E_Fmult = 0; E_Bmult = 0;
+    dE_Bmax = 0; dE_Fmax = 0; E_Bmax = 0; E_Fmax = 0;
+    dE_Bmaxnum = -5; dE_Fmaxnum = -5; E_Fmaxnum = -5; E_Bmaxnum = -5;
 
   cathode = grid = y = rftof = mon = spare = t1 = t2 = 0;
   hepo = hepi = lepo = lepi = up = down = 0;
   stime0 = stime1 = stime2 = 0;
   x = 0;
   for(Int_t i=0;i<5;i++){ de[i] = 0;}
-if(iverb) cout << "dE_Fmult = " << dE_Fmult << ", E_Fmult = " << E_Fmult << endl;
+//if(iverb) cout << "dE_Fmult = " << dE_Fmult << ", E_Fmult = " << E_Fmult << endl;
 }
 
 
@@ -300,10 +303,14 @@ for (int i=0;i<16;i++){
     in_dEf >> Rslope[1][i] >> Roffset[1][i];
     in_Ef >> Rslope[0][i] >> Roffset[0][i];
     in_Eb >> Wslope[0][i] >> Woffset[0][i];
+    if (Rslope[1][i] != 0) Rslope[1][i] = 1/Rslope[1][i];
+    if (Rslope[0][i] != 0) Rslope[0][i] = 1/Rslope[0][i];
+    if (Wslope[0][i] != 0) Wslope[0][i] = 1/Wslope[0][i];
     }
        
 for(int i=16;i<32;i++){ // old values
     in_dEb >> Woffset[1][i-16] >> Wslope[1][i-16];
+    if (Wslope[1][i-16] != 0) Wslope[1][i-16] = 1/ Wslope[1][i-16];
     }
     
 in_dEf.close(); in_Ef.close(); in_dEb.close(); in_Eb.close();
@@ -553,29 +560,32 @@ int userdecode(ScarletEvnt &event) {
     Wpat[ndet]=*p++;
       
     Wbitcnt[ndet]=cntbit(Wpat[ndet]);
-      
+      cout << "before wedge ndat" << endl;
 for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
       if(iverb) cout << "wedge " << ndet << endl;
       dataword=*p++;
       WChan[ndet][ndat] = ((dataword & 0x0000f000)>>12);
       WRawData[ndet][ndat] = (dataword & 0x00000fff);
-
-    WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
+    
+        WData[ndet][ndat] = (WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])*Wslope[ndet][WChan[ndet][ndat]];
+    WData[ndet][ndat] = WData[ndet][ndat]/1000;
+   // WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
         
     if(ndet==1){ //dE
-        if(WData[ndet][ndat]>100){  // threshold of 0.1 MeV in calibrated wedge energy
-            dE_Bmult++; // there's an event, so start at mult = 1
-            dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat]/1000;
+        //if(WData[ndet][ndat]>0.1){  // threshold of 0.1 MeV in calibrated wedge energy
+           
+            dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat];
             dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
-            dE_Benergy[dE_Bmult] = WData[ndet][ndat]/1000; //MeV
-        }
+            dE_Benergy[dE_Bmult] = WData[ndet][ndat]; //MeV
+         dE_Bmult++; // there's an event, so start at mult = 1
+        //}
     }else if(ndet==0){ //E
-        if(WData[ndet][ndat]>100){
-            E_Bmult++;
-            E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat]/1000;
+        //if(WData[ndet][ndat]>0.1){
+            E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat];
             E_Bnum[E_Bmult] = WChan[ndet][ndat];
-            E_Benergy[E_Bmult] = WData[ndet][ndat]/1000; // MeV
-        }
+            E_Benergy[E_Bmult] = WData[ndet][ndat]; // MeV
+            E_Bmult++;
+        //}
     }
        
     for(i=0;i<dE_Bmult;i++){
@@ -592,8 +602,8 @@ for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
        if(iverb){
        	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
        	cout << "WRawData["<<ndet<<"]["<<ndat<<"] = " << WRawData[ndet][ndat] << endl;
-        for(i=0;i<dE_Bmult;i++) cout << "dE_Benergy["<<dE_Bmult<<"]["<<dE_Bnum[dE_Bmult]<<"] = " << dE_Benergy[dE_Bmult] << endl;
-       	for(i=0;i<E_Bmult;i++) cout << ", E_Benergy["<<E_Bmult<<"]["<<E_Bnum[E_Bmult]<<"] = " << E_Benergy[E_Bmult] << endl;
+        for(i=0;i<dE_Bmult;i++) cout << "dE_Benergy["<<i<<"]["<<dE_Bnum[i]<<"] = " << dE_Benergy[i] << endl;
+       	for(i=0;i<E_Bmult;i++) cout << ", E_Benergy["<<i<<"]["<<E_Bnum[i]<<"] = " << E_Benergy[i] << endl;
        	cout << "dE_Bmax = " << dE_Bmax << ", dE_Bmaxnum = " << dE_Bmaxnum << endl;
         cout << "E_Bmax = " << E_Bmax << ", E_Bmaxnum = " << E_Bmaxnum << endl;
        }
@@ -613,27 +623,31 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
     Rbitcnt[ndet]=cntbit(Rpat[ndet]);
 
     for (Int_t ndat=0;ndat<Rbitcnt[ndet];ndat++) {
-        if(iverb) cout << "Ring " << ndet << endl;
+       // if(iverb) cout << "Ring " << ndet << endl;
         dataword=*p++;
       
         RChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
         RRawData[ndet][ndat]=(dataword & 0x00000fff);
-        RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
+       // RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
+        RData[ndet][ndat] = (RRawData[ndet][ndat] - Roffset[ndet][RChan[ndet][ndat]])*Rslope[ndet][RChan[ndet][ndat]];
+        RData[ndet][ndat] = RData[ndet][ndat]/1000;
         
         if(ndet==1){ //dE
-              if(RData[ndet][ndat]>100){  // threshold of 0.1 MeV in calibrated ring energy
-                  dE_Fmult++; // there's an event, so start at mult = 1
-                  dE_Fenergy_raw[dE_Fmult] = RRawData[ndet][ndat]/1000;
+              //if(RData[ndet][ndat]>0.1){  // threshold of 0.1 MeV in calibrated ring energy
+                  
+                  dE_Fenergy_raw[dE_Fmult] = RRawData[ndet][ndat];
                   dE_Fnum[dE_Fmult] = RChan[ndet][ndat];
-                  dE_Fenergy[dE_Fmult] = RData[ndet][ndat]/1000; //MeV
-              }
+                  dE_Fenergy[dE_Fmult] = RData[ndet][ndat]; //MeV
+                dE_Fmult++; // there's an event, so start at mult = 1
+              //}
           }else if(ndet==0){ //E
-              if(RData[ndet][ndat]>1000){
-                  E_Fmult++;
-                  E_Fenergy_raw[E_Fmult] = RRawData[ndet][ndat]/1000;
+              //if(RData[ndet][ndat]>0.1){
+                 
+                  E_Fenergy_raw[E_Fmult] = RRawData[ndet][ndat];
                   E_Fnum[E_Fmult] = RChan[ndet][ndat];
-                  E_Fenergy[E_Fmult] = RData[ndet][ndat]/1000; // MeV
-              }
+                  E_Fenergy[E_Fmult] = RData[ndet][ndat]; // MeV
+                E_Fmult++;
+              //}
           }
              
           for(i=0;i<dE_Fmult;i++){
@@ -647,14 +661,15 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
                E_Fmaxnum = E_Fnum[i];
            }}
           
-             if(iverb){
+            /* if(iverb){
               cout << "RChan["<<ndet<<"]["<<ndat<<"] = " << RChan[ndet][ndat] << endl;
               cout << "RRawData["<<ndet<<"]["<<ndat<<"] = " << RRawData[ndet][ndat] << endl;
-              for(i=0;i<dE_Fmult;i++) cout << "dE_Fenergy["<<dE_Fmult<<"]["<<dE_Fnum[dE_Fmult]<<"] = " << dE_Fenergy[dE_Fmult] << endl;
-              for(i=0;i<E_Fmult;i++) cout << ", E_Fenergy["<<E_Fmult<<"]["<<E_Fnum[E_Fmult]<<"] = " << E_Fenergy[E_Fmult] << endl;
+              cout << "Rdata["<<ndet<<"]["<<ndat<<"] = " << RData[ndet][ndat] << endl;
+              for(i=0;i<dE_Fmult;i++) cout << "dE_Fenergy["<<i<<"]["<<dE_Fnum[i]<<"] = " << dE_Fenergy[i] << endl;
+              for(i=0;i<E_Fmult;i++) cout << "E_Fenergy["<<i<<"]["<<E_Fnum[i]<<"] = " << E_Fenergy[i] << endl;
               cout << "dE_Fmax = " << dE_Fmax << ", dE_Fmaxnum = " << dE_Fmaxnum << endl;
               cout << "E_Fmax = " << E_Fmax << ", E_Fmaxnum = " << E_Fmaxnum << endl;
-             }
+             }*/
             
           hELudR1->Fill(RRawData[0][ndat],RChan[0][ndat]);
           hER1->Fill(RData[0][ndat],RChan[0][ndat]);
