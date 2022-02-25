@@ -308,9 +308,8 @@ for (int i=0;i<16;i++){
     if (Wslope[0][i] != 0) Wslope[0][i] = 1/Wslope[0][i];
     }
        
-for(int i=16;i<32;i++){ // old values
+for(int i=16;i<32;i++){ // old values - which I don't think are right. I'm not sure there are dE backs.
     in_dEb >> Woffset[1][i-16] >> Wslope[1][i-16];
-    if (Wslope[1][i-16] != 0) Wslope[1][i-16] = 1/ Wslope[1][i-16];
     }
     
 in_dEf.close(); in_Ef.close(); in_dEb.close(); in_Eb.close();
@@ -496,18 +495,14 @@ int userdecode(ScarletEvnt &event) {
   Float_t lowthresh=100;
   
   Bool_t done=kFALSE;
-  // Float_t ering,ewedge;
-  testrmult0 = 0; testrmult1 = 0; testwmult0 = 0; testwmult1 = 0;
+  
   Float_t ediff;
 
   Int_t Rpat[3],Wpat[3],Rbitcnt[3]={0,0,0},Wbitcnt[3]={0,0,0};
   Int_t RRawData[3][16],WRawData[3][16];
   Int_t RChan[3][16],WChan[3][16];
   Float_t RData[3][16],WData[3][16];
-  Float_t emaxR=0,emaxW=0,theta_max;
-  Float_t emaxrawR=0, emaxrawW=0, DSSD_E=0., DSSD_DE=0.;
-  Int_t nmaxR=-1,nmaxW=-1,detmaxR=-1,detmaxW=-1;
-  Int_t DSSD_E_ring, DSSD_DE_ring;
+  
   Int_t ndet=0;
  
   double stime, stime_1s;
@@ -555,7 +550,7 @@ int userdecode(ScarletEvnt &event) {
   for (Int_t ndet=0; ndet<2; ++ndet) {
     /* get Wedge hit pattern, count bits, then store data & channel */
     /* calibration constants put the energy into MeV */
-    /* emaxW, nmaxW and detmaxW have similar meanings to emaxR etc below */
+    /* E_Bmax, nmaxW and detmaxW have similar meanings to emaxR etc below */
 
     Wpat[ndet]=*p++;
       
@@ -623,7 +618,7 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
     Rbitcnt[ndet]=cntbit(Rpat[ndet]);
 
     for (Int_t ndat=0;ndat<Rbitcnt[ndet];ndat++) {
-       // if(iverb) cout << "Ring " << ndet << endl;
+        if(iverb) cout << "Ring " << ndet << endl;
         dataword=*p++;
       
         RChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
@@ -661,7 +656,7 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
                E_Fmaxnum = E_Fnum[i];
            }}
           
-            /* if(iverb){
+             if(iverb){
               cout << "RChan["<<ndet<<"]["<<ndat<<"] = " << RChan[ndet][ndat] << endl;
               cout << "RRawData["<<ndet<<"]["<<ndat<<"] = " << RRawData[ndet][ndat] << endl;
               cout << "Rdata["<<ndet<<"]["<<ndat<<"] = " << RData[ndet][ndat] << endl;
@@ -669,7 +664,7 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
               for(i=0;i<E_Fmult;i++) cout << "E_Fenergy["<<i<<"]["<<E_Fnum[i]<<"] = " << E_Fenergy[i] << endl;
               cout << "dE_Fmax = " << dE_Fmax << ", dE_Fmaxnum = " << dE_Fmaxnum << endl;
               cout << "E_Fmax = " << E_Fmax << ", E_Fmaxnum = " << E_Fmaxnum << endl;
-             }*/
+             }
             
           hELudR1->Fill(RRawData[0][ndat],RChan[0][ndat]);
           hER1->Fill(RData[0][ndat],RChan[0][ndat]);
@@ -787,19 +782,19 @@ if(iverb) cout << "spare = TAC between DSSD and PPAC = " << spare << endl;
     h1_posppb->Fill(rftof);
     xrftofg->Fill(x, rftof);
     h2_xde4g->Fill(x,de[3]);
-    hER1g->Fill(emaxR,nmaxR);
-    if (rftof>2000 && rftof<3500) hER1g2->Fill(emaxR,nmaxR);
-    hEW1g->Fill(emaxW,nmaxW);
-    if(checkcutg("xrfcut1",x,rftof)){ hER1_gtxrf1->Fill(emaxR,nmaxR);}
-    if(checkcutg("xrfcut2",x,rftof)){ hER1_gtxrf2->Fill(emaxR,nmaxR);}
-    if(checkcutg("xde4g1",x,de[3])){ hER1_gtxde41->Fill(emaxR,nmaxR);}
-    if(checkcutg("xde4g2",x,de[3])){ hER1_gtxde42->Fill(emaxR,nmaxR);}
-    if(checkcutg("xde4g3",x,de[3])){ hER1_gtxde43->Fill(emaxR,nmaxR);}
-    if(checkcutg("xde4g4",x,de[3])){ hER1_gtxde44->Fill(emaxR,nmaxR);}
-    if(checkcutg("de4rfg1",de[3],rftof)){ hER1_gtde4rf1->Fill(emaxR,nmaxR);}
-    if(checkcutg("de4rfg2",de[3],rftof)){ hER1_gtde4rf2->Fill(emaxR,nmaxR);}
-    if(checkcutg("de4rfg3",de[3],rftof)){ hER1_gtde4rf3->Fill(emaxR,nmaxR);}
-    if(checkcutg("de4rfg4",de[3],rftof)){ hER1_gtde4rf4->Fill(emaxR,nmaxR);}
+    hER1g->Fill(E_Fmax,E_Fmaxnum);
+    if (rftof>2000 && rftof<3500) hER1g2->Fill(E_Fmax,E_Bmaxnum);
+    hEW1g->Fill(E_Bmax,E_Bmaxnum);
+    if(checkcutg("xrfcut1",x,rftof)){ hER1_gtxrf1->Fill(E_Fmax,E_Bmaxnum);}
+    if(checkcutg("xrfcut2",x,rftof)){ hER1_gtxrf2->Fill(E_Fmax,E_Bmaxnum);}
+    if(checkcutg("xde4g1",x,de[3])){ hER1_gtxde41->Fill(E_Fmax,E_Bmaxnum);}
+    if(checkcutg("xde4g2",x,de[3])){ hER1_gtxde42->Fill(E_Fmax,E_Bmaxnum);}
+    if(checkcutg("xde4g3",x,de[3])){ hER1_gtxde43->Fill(E_Fmax,E_Bmaxnum);}
+    if(checkcutg("xde4g4",x,de[3])){ hER1_gtxde44->Fill(E_Fmax,E_Bmaxnum);}
+    if(checkcutg("de4rfg1",de[3],rftof)){ hER1_gtde4rf1->Fill(E_Fmax,E_Bmaxnum);}
+    if(checkcutg("de4rfg2",de[3],rftof)){ hER1_gtde4rf2->Fill(E_Fmax,E_Bmaxnum);}
+    if(checkcutg("de4rfg3",de[3],rftof)){ hER1_gtde4rf3->Fill(E_Fmax,E_Bmaxnum);}
+    if(checkcutg("de4rfg4",de[3],rftof)){ hER1_gtde4rf4->Fill(E_Fmax,E_Bmaxnum);}
   }
   
  
