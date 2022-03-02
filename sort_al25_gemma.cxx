@@ -43,7 +43,7 @@
 
 /********************************
  ********************************/
-/****/ Bool_t iverb = 1; /****/
+/****/ Bool_t iverb = 0; /****/
 /********************************
  ********************************/
 
@@ -105,8 +105,9 @@ TH2F *hTRF,*hTRFg,*hT0RF,*hT0RFg;
 TH2F *hADC2, *hADC3;
 TH2F *h2_EDE;
 TH2F *hER1_gtxrf1, *hER1_gtxrf2, *hER1_gtxde41, *hER1_gtxde42, *hER1_gtxde43, *hER1_gtxde44, *hER1_gtde4rf1, *hER1_gtde4rf2, *hER1_gtde4rf3, *hER1_gtde4rf4;
+TH2F *dEres_tac;
 
-PPAC *myppac = new PPAC("/disks/1/gwilson/25Al/offline/ppac.offline3.setup");
+PPAC *myppac = new PPAC("ppac.offline3.setup");
 
 // beginning of scaler part
 Float_t totals[NSCALERS], rates[NSCALERS];
@@ -408,6 +409,8 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
   h2_lepolepi = new TH2F("h2_lepolepi","lepi:lepo",512,0.,4096.,512,0.,4096.);
   h2_hesumlesum= new TH2F("h2_hesumlesum","lesum:hesum",512,0.,4096.,512,0.,4096.);
   h2_hele = new TH2F("h2_hele","le:he",512,0,4096,512,0,4096);
+
+  dEres_tac = new TH2F("dEres_tac","dE vs dE+E rings, 1000<tac<2000",1000,0,100,1000,0,100);
   
   h2_xrftof = new TH2F("h2_xrftof","rftof:x",512, 0.,1024.,1024,0.,4096.);
   h2_rftof_spare= new TH2F("h2_rftof_spare","rftof:dssd-ppac",1024, 0.,4096,1024,0.,4096.);
@@ -434,16 +437,16 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
  
   // DSSD histograms
 
-  hELudR1=new TH2F("hELudR1","Ring1 vs E raw",4096,0,4096,17,0,17); 
-  hELudW1=new TH2F("hELudW1","Wedge1 vs E raw",4096,0,4096,17,0,17); 
+  hELudR1=new TH2F("hELudR1","dE: raw E v ring",4096,0,4096,17,0,17); 
+  hELudW1=new TH2F("hELudW1","dE: raw E v wedge",4096,0,4096,17,0,17); 
  
-  hELudR2=new TH2F("hELudR2","Ring2 vs E raw",4096,0,4096,17,0,17); 
-  hELudW2=new TH2F("hELudW2","Wedge2 vs E raw",4096,0,4096,17,0,17);
+  hELudR2=new TH2F("hELudR2","E: raw E v ring",4096,0,4096,17,0,17); 
+  hELudW2=new TH2F("hELudW2","W: raw E v wedge",4096,0,4096,17,0,17);
 
-  hER1=new TH2F("hER1","Ring1 vs E calib",4000,0,100,17,0,17);  
-  hER2=new TH2F("hER2","Ring2 vs E calib",4000,0,100,17,0,17);
-  hEW1=new TH2F("hEW1","Wedge1 vs E calib",4000,0,100,17,0,17);
-  hEW2=new TH2F("hEW2","Wedge2 vs E calib",4000,0,100,17,0,17); 
+  hER1=new TH2F("hER1","dEF vs E calib",4000,0,100,17,0,17);  
+  hER2=new TH2F("hER2","EF vs E calib",4000,0,100,17,0,17);
+  hEW1=new TH2F("hEW1","dEB vs E calib",4000,0,100,17,0,17);
+  hEW2=new TH2F("hEW2","EB vs E calib",4000,0,100,17,0,17); 
 
   hER=new TH2F("hER","Ring vs Energy all",1000,0,100,50,0,50);
  
@@ -486,7 +489,7 @@ int userdecode(ScarletEvnt &event) {
     
   TRandom *rannum = new TRandom();
 
-  subevent1=event[1];
+ subevent1=event[1];
   int *p1 = reinterpret_cast<int*>(subevent1.body());
   int *p;
   
@@ -496,7 +499,9 @@ int userdecode(ScarletEvnt &event) {
   
   Float_t ediff;
 
-  Int_t Rpat[3],Wpat[3],Rbitcnt[3]={0,0,0},Wbitcnt[3]={0,0,0};
+  Int_t Rpat[3],Wpat[3];
+  Int_t Rbitcnt[3]={0,0,0};
+  Int_t Wbitcnt[3]={0,0,0};
   Int_t RRawData[3][16],WRawData[3][16];
   Int_t RChan[3][16],WChan[3][16];
   Float_t RData[3][16],WData[3][16];
@@ -553,7 +558,7 @@ int userdecode(ScarletEvnt &event) {
     Wpat[ndet]=*p++;
       
     Wbitcnt[ndet]=cntbit(Wpat[ndet]);
-      cout << "before wedge ndat" << endl;
+    if (iverb)  cout << "before wedge ndat" << endl;
 for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
       if(iverb) cout << "wedge " << ndet << endl;
       dataword=*p++;
@@ -565,20 +570,15 @@ for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
    // WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
         
     if(ndet==1){ //dE
-        //if(WData[ndet][ndat]>0.1){  // threshold of 0.1 MeV in calibrated wedge energy
-           
             dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat];
             dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
             dE_Benergy[dE_Bmult] = WData[ndet][ndat]; //MeV
-         dE_Bmult++; // there's an event, so start at mult = 1
-        //}
-    }else if(ndet==0){ //E
-        //if(WData[ndet][ndat]>0.1){
+	    dE_Bmult++; 
+        }else if(ndet==0){ //E
             E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat];
             E_Bnum[E_Bmult] = WChan[ndet][ndat];
             E_Benergy[E_Bmult] = WData[ndet][ndat]; // MeV
             E_Bmult++;
-        //}
     }
        
     for(i=0;i<dE_Bmult;i++){
@@ -621,26 +621,19 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
       
         RChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
         RRawData[ndet][ndat]=(dataword & 0x00000fff);
-       // RData[ndet][ndat]= Roffset[ndet][RChan[ndet][ndat]]+Rslope[ndet][RChan[ndet][ndat]]*RRawData[ndet][ndat];
-        RData[ndet][ndat] = (RRawData[ndet][ndat] - Roffset[ndet][RChan[ndet][ndat]])*Rslope[ndet][RChan[ndet][ndat]];
+        RData[ndet][ndat] = (RRawData[ndet][ndat] - Roffset[ndet][RChan[ndet][ndat]]) * Rslope[ndet][RChan[ndet][ndat]];
         RData[ndet][ndat] = RData[ndet][ndat]/1000;
         
         if(ndet==1){ //dE
-              //if(RData[ndet][ndat]>0.1){  // threshold of 0.1 MeV in calibrated ring energy
-                  
-                  dE_Fenergy_raw[dE_Fmult] = RRawData[ndet][ndat];
-                  dE_Fnum[dE_Fmult] = RChan[ndet][ndat];
-                  dE_Fenergy[dE_Fmult] = RData[ndet][ndat]; //MeV
-                dE_Fmult++; // there's an event, so start at mult = 1
-              //}
-          }else if(ndet==0){ //E
-              //if(RData[ndet][ndat]>0.1){
-                 
-                  E_Fenergy_raw[E_Fmult] = RRawData[ndet][ndat];
-                  E_Fnum[E_Fmult] = RChan[ndet][ndat];
-                  E_Fenergy[E_Fmult] = RData[ndet][ndat]; // MeV
-                E_Fmult++;
-              //}
+          dE_Fenergy_raw[dE_Fmult] = RRawData[ndet][ndat];
+          dE_Fnum[dE_Fmult] = RChan[ndet][ndat];
+          dE_Fenergy[dE_Fmult] = RData[ndet][ndat]; //MeV
+          dE_Fmult++; 
+         }else if(ndet==0){ //E
+          E_Fenergy_raw[E_Fmult] = RRawData[ndet][ndat];
+          E_Fnum[E_Fmult] = RChan[ndet][ndat];
+          E_Fenergy[E_Fmult] = RData[ndet][ndat]; // MeV
+          E_Fmult++;
           }
              
           for(i=0;i<dE_Fmult;i++){
@@ -725,6 +718,10 @@ if(iverb) cout << "TAC between RF and SSB = " << grid << endl;
 if(iverb) cout << "spare = TAC between DSSD and PPAC = " << spare << endl;
   t1=spare;
 
+  if(spare>1000 && spare<2000){
+    dEres_tac->Fill(dE_Fmax,dE_Fmax+E_Fmax);
+  }
+
   h1_E->Fill(E);
   h1_DE->Fill(DE);
   h1_ESUM->Fill(E+DE);
@@ -783,7 +780,7 @@ if(iverb) cout << "spare = TAC between DSSD and PPAC = " << spare << endl;
     hER1g->Fill(E_Fmax,E_Fmaxnum);
     if (rftof>2000 && rftof<3500) hER1g2->Fill(E_Fmax,E_Bmaxnum);
     hEW1g->Fill(E_Bmax,E_Bmaxnum);
-    if(checkcutg("xrfcut1",x,rftof)){ hER1_gtxrf1->Fill(E_Fmax,E_Bmaxnum);}
+     if(checkcutg("xrfcut1",x,rftof)){ hER1_gtxrf1->Fill(E_Fmax,E_Bmaxnum);}
     if(checkcutg("xrfcut2",x,rftof)){ hER1_gtxrf2->Fill(E_Fmax,E_Bmaxnum);}
     if(checkcutg("xde4g1",x,de[3])){ hER1_gtxde41->Fill(E_Fmax,E_Bmaxnum);}
     if(checkcutg("xde4g2",x,de[3])){ hER1_gtxde42->Fill(E_Fmax,E_Bmaxnum);}
