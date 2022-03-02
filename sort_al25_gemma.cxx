@@ -228,7 +228,6 @@ Bool_t checkcutg(Char_t *cutname,Float_t x, Float_t y)
   }
 }
 
-
 /* function to count the number of set bits in a 16 bit word */
 
 Int_t cntbit(Int_t word)
@@ -242,8 +241,7 @@ Int_t cntbit(Int_t word)
 
 /* function to deal with scalers, adapted from Elliot's program */
 void scalers(ScarletEvnt &e){
-    /* Adapted from Kanter's scaler program
-     */
+    /* Adapted from Kanter's scaler program   */
     unsigned int *p = reinterpret_cast<unsigned int*>(e.body());
     unsigned int ttotal, tdiff, ithscaler, ithrate;
     FILE *sf;
@@ -308,7 +306,7 @@ for (int i=0;i<16;i++){
     if (Wslope[0][i] != 0) Wslope[0][i] = 1/Wslope[0][i];
     }
        
-for(int i=16;i<32;i++){ // old values - which I don't think are right. I'm not sure there are dE backs.
+for(int i=16;i<32;i++){ // old values - which I don't think are right. I'm not sure there are dE backs
     in_dEb >> Woffset[1][i-16] >> Wslope[1][i-16];
     }
     
@@ -444,8 +442,8 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
 
   hER1=new TH2F("hER1","Ring1 vs E calib",4000,0,100,17,0,17);  
   hER2=new TH2F("hER2","Ring2 vs E calib",4000,0,100,17,0,17);
-  hEW1=new TH2F("hEW1","Wedge1 vs E calib",400,0,10000,17,0,17);
-  hEW2=new TH2F("hEW2","Wedge2 vs E calib",400,0,10000,17,0,17); 
+  hEW1=new TH2F("hEW1","Wedge1 vs E calib",4000,0,100,17,0,17);
+  hEW2=new TH2F("hEW2","Wedge2 vs E calib",4000,0,100,17,0,17); 
 
   hER=new TH2F("hER","Ring vs Energy all",1000,0,10,50,0,50);
  
