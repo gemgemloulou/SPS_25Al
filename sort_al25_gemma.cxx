@@ -445,7 +445,7 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
   hEW1=new TH2F("hEW1","Wedge1 vs E calib",4000,0,100,17,0,17);
   hEW2=new TH2F("hEW2","Wedge2 vs E calib",4000,0,100,17,0,17); 
 
-  hER=new TH2F("hER","Ring vs Energy all",1000,0,10,50,0,50);
+  hER=new TH2F("hER","Ring vs Energy all",1000,0,100,50,0,50);
  
   hTAC=new TH2F("hTAC","T(DSSD-PPAC)",512,0,4096,512,0,4096);
  
