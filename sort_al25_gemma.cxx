@@ -426,13 +426,13 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
   h2_de23 = new TH2F("h2_de23","de3:de2",1024,0.,4096.,1024,0.,4096.);
   
 
-  h1_E = new TH1F("h1_E","E",1024,0.,4096.);
-  h1_DE = new TH1F("h1_DE","DE",1024,0., 4096.);
-  h1_ESUM = new TH1F("h1_ESUM","h1_ESUM",1024,0,4096);
-  h2_EDE = new TH2F("h2_EDE","DE vs. E",1024,0.,4096.,1024,0.,4096.);
-  h2_Erf = new TH2F("h2_Erf","rf vs. E",512,0.,4096.,512,0.,4096.);
-  h2_DErf = new TH2F("h2_DErf","rf vs. DE",512,0.,4096.,512,0.,4096.);
-  h2_DErfg = new TH2F("h2_DErfg","rf vs. DE",512,0.,4096.,512,0.,4096.);
+  h1_E = new TH1F("h1_E","E",400,0.,100.);
+  h1_DE = new TH1F("h1_DE","DE",400,0., 100.);
+  h1_ESUM = new TH1F("h1_ESUM","h1_ESUM",400,0,100);
+  h2_EDE = new TH2F("h2_EDE","DE vs. E",400,0.,100.,400,0.,100.);
+  h2_Erf = new TH2F("h2_Erf","rf vs. E",400,0.,100.,400,0.,100.);
+  h2_DErf = new TH2F("h2_DErf","rf vs. DE",400,0.,100.,400,0.,100.);
+  h2_DErfg = new TH2F("h2_DErfg","rf vs. DE",400,0.,100.,400,0.,100.);
  
   // DSSD histograms
 
@@ -447,7 +447,7 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
   hEW1=new TH2F("hEW1","Wedge1 vs E calib",4000,0,100,17,0,17);
   hEW2=new TH2F("hEW2","Wedge2 vs E calib",4000,0,100,17,0,17);
 
-  hER=new TH2F("hER","Ring vs Energy all",1000,0,10,50,0,50);
+  hER=new TH2F("hER","Ring vs Energy all",1000,0,100,50,0,50);
  
   hTAC=new TH2F("hTAC","T(DSSD-PPAC)",512,0,4096,512,0,4096);
  
@@ -555,7 +555,7 @@ int userdecode(ScarletEvnt &event) {
     Wpat[ndet]=*p++;
       
     Wbitcnt[ndet]=cntbit(Wpat[ndet]);
-      cout << "before wedge ndat" << endl;
+     if (iverb) cout << "before wedge ndat" << endl;
 for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
       if(iverb) cout << "wedge " << ndet << endl;
       dataword=*p++;
