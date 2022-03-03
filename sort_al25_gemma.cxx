@@ -718,7 +718,7 @@ if(iverb) cout << "TAC between RF and SSB = " << grid << endl;
 if(iverb) cout << "spare = TAC between DSSD and PPAC = " << spare << endl;
   t1=spare;
 
-  if(spare>1000 && spare<2000){
+  if(spare>600 && spare<1000){
     dEres_tac->Fill(dE_Fmax,dE_Fmax+E_Fmax);
   }
 
