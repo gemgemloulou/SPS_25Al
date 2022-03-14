@@ -563,20 +563,12 @@ int userdecode(ScarletEvnt &event) {
 
    for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
       if(iverb) cout << "wedge " << ndet << endl;
-<<<<<<< HEAD
-      dataword=*p++;
-      WChan[ndet][ndat] = ((dataword & 0x0000f000)>>12);
-      WRawData[ndet][ndat] = (dataword & 0x00000fff);
-    
-        WData[ndet][ndat] = (WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])*Wslope[ndet][WChan[ndet][ndat]];
-        WData[ndet][ndat] = WData[ndet][ndat]/1000;
-=======
      dataword=*p++;
      WChan[ndet][ndat] = ((dataword & 0x0000f000)>>12);
      WRawData[ndet][ndat] = (dataword & 0x00000fff);
      WData[ndet][ndat] = (WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])*Wslope[ndet][WChan[ndet][ndat]];
      WData[ndet][ndat] = WData[ndet][ndat]/1000;
->>>>>>> e96d072ae30e21ce62d24d9fd57c9e4d35c6c8e3
+
    // WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
         
     if(ndet==0){ //E - swapped electronics from run 96!
