@@ -297,18 +297,17 @@ in_dEb.open("dEcal.dat");
 in_Ef.open("Efrontcal.dat");
 in_Eb.open("Ebackcal.dat");
 
-// using old cal for dE backs
 for (int i=0;i<16;i++){
     in_dEf >> Rslope[1][i] >> Roffset[1][i];
     in_Ef >> Rslope[0][i] >> Roffset[0][i];
-    in_Eb >> Wslope[0][i] >> Woffset[0][i];
+    in_Eb >> Wslope[1][i] >> Woffset[0][i]; // 1 because of swapped electronics
     if (Rslope[1][i] != 0) Rslope[1][i] = 1/Rslope[1][i];
     if (Rslope[0][i] != 0) Rslope[0][i] = 1/Rslope[0][i];
-    if (Wslope[0][i] != 0) Wslope[0][i] = 1/Wslope[0][i];
+    if (Wslope[1][i] != 0) Wslope[0][i] = 1/Wslope[0][i];
     }
        
 for(int i=16;i<32;i++){ // old values - which I don't think are right. I'm not sure there are dE backs
-    in_dEb >> Woffset[1][i-16] >> Wslope[1][i-16];
+    in_dEb >> Woffset[0][i-16] >> Wslope[0][i-16];
     }
     
 in_dEf.close(); in_Ef.close(); in_dEb.close(); in_Eb.close();
@@ -566,7 +565,7 @@ for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
       WRawData[ndet][ndat] = (dataword & 0x00000fff);
     
         WData[ndet][ndat] = (WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])*Wslope[ndet][WChan[ndet][ndat]];
-    WData[ndet][ndat] = WData[ndet][ndat]/1000;
+        WData[ndet][ndat] = WData[ndet][ndat]/1000;
    // WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
         
     if(ndet==1){ //dE
@@ -595,7 +594,9 @@ for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
        if(iverb){
        	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
        	cout << "WRawData["<<ndet<<"]["<<ndat<<"] = " << WRawData[ndet][ndat] << endl;
-        for(i=0;i<dE_Bmult;i++) cout << "dE_Benergy["<<i<<"]["<<dE_Bnum[i]<<"] = " << dE_Benergy[i] << endl;
+           for(i=0;i<dE_Bmult;i++){
+               cout << dE_Benergy_raw[i] << " - " << Woffset[ndet][WChan[ndet][ndat]] << " x " << Wslope[ndet][WChan[ndet][ndat]] << " = dE_Benergy["<<i<<"]["<<dE_Bnum[i]<<"] = " << dE_Benergy[i] << endl;
+           }
        	for(i=0;i<E_Bmult;i++) cout << ", E_Benergy["<<i<<"]["<<E_Bnum[i]<<"] = " << E_Benergy[i] << endl;
        	cout << "dE_Bmax = " << dE_Bmax << ", dE_Bmaxnum = " << dE_Bmaxnum << endl;
         cout << "E_Bmax = " << E_Bmax << ", E_Bmaxnum = " << E_Bmaxnum << endl;
@@ -720,6 +721,7 @@ if(iverb) cout << "spare = TAC between DSSD and PPAC = " << spare << endl;
 
   if(spare>600 && spare<1000){
     dEres_tac->Fill(dE_Fmax,dE_Fmax+E_Fmax);
+      //cout << "tac = " << spare << ", dE_Fmax = " << dE_Fmax << ", E_Fmax = " << E_Fmax << ", sum = " << dE_Fmax+E_Fmax << endl;
   }
 
   h1_E->Fill(E);
