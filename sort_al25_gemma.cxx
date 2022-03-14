@@ -297,7 +297,7 @@ in_dEb.open("dEcal.dat");
 in_Ef.open("Efrontcal.dat");
 in_Eb.open("Ebackcal.dat");
 
-// using old cal for dE backs
+// changed from division to multiplication, so I can easily 'turn off' crappy strips (i.e. x 0)
 for (int i=0;i<16;i++){
     in_dEf >> Rslope[1][i] >> Roffset[1][i];
     in_Ef >> Rslope[0][i] >> Roffset[0][i];
@@ -558,23 +558,22 @@ int userdecode(ScarletEvnt &event) {
     Wpat[ndet]=*p++;
       
     Wbitcnt[ndet]=cntbit(Wpat[ndet]);
-    if (iverb)  cout << "before wedge ndat" << endl;
-for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
+
+   for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
       if(iverb) cout << "wedge " << ndet << endl;
-      dataword=*p++;
-      WChan[ndet][ndat] = ((dataword & 0x0000f000)>>12);
-      WRawData[ndet][ndat] = (dataword & 0x00000fff);
-    
-        WData[ndet][ndat] = (WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])*Wslope[ndet][WChan[ndet][ndat]];
-    WData[ndet][ndat] = WData[ndet][ndat]/1000;
+     dataword=*p++;
+     WChan[ndet][ndat] = ((dataword & 0x0000f000)>>12);
+     WRawData[ndet][ndat] = (dataword & 0x00000fff);
+     WData[ndet][ndat] = (WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])*Wslope[ndet][WChan[ndet][ndat]];
+     WData[ndet][ndat] = WData[ndet][ndat]/1000;
    // WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
         
-    if(ndet==1){ //dE
+    if(ndet==0){ //E - swapped electronics from run 96!
             dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat];
             dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
             dE_Benergy[dE_Bmult] = WData[ndet][ndat]; //MeV
 	    dE_Bmult++; 
-        }else if(ndet==0){ //E
+        }else if(ndet==1){ //dE 
             E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat];
             E_Bnum[E_Bmult] = WChan[ndet][ndat];
             E_Benergy[E_Bmult] = WData[ndet][ndat]; // MeV
@@ -718,7 +717,7 @@ if(iverb) cout << "TAC between RF and SSB = " << grid << endl;
 if(iverb) cout << "spare = TAC between DSSD and PPAC = " << spare << endl;
   t1=spare;
 
-  if(spare>600 && spare<1000){
+  if(spare>600 && spare<2000){
     dEres_tac->Fill(dE_Fmax,dE_Fmax+E_Fmax);
   }
 
