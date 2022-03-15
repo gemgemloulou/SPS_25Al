@@ -151,6 +151,7 @@ Float_t stime0, stime1, stime2;
 Float_t x;
 Int_t testrmult0, testrmult1, testwmult0, testwmult1;
 Int_t i;
+Int_t deb, eb, def, ef;
 
 void treeinit(){
     if(iverb) cout << "in treeinit" << endl;
@@ -171,6 +172,7 @@ void treeinit(){
     dE_Fmult = 0; dE_Bmult = 0;
     E_Fmult = 0; E_Bmult = 0;
     dE_Bmax = 0; dE_Fmax = 0; E_Bmax = 0; E_Fmax = 0;
+    deb = def = eb = ef = 0;
     dE_Bmaxnum = -5; dE_Fmaxnum = -5; E_Fmaxnum = -5; E_Bmaxnum = -5;
 
   cathode = grid = y = rftof = mon = spare = t1 = t2 = 0;
@@ -551,7 +553,9 @@ int userdecode(ScarletEvnt &event) {
   p=p1;
 
   //unpack DSSD(s)
+
   if(iverb) cout << "unpacking DSSDs" << endl;
+ deb = eb = 0;
   for (Int_t ndet=0; ndet<2; ++ndet) {
     /* get Wedge hit pattern, count bits, then store data & channel */
     /* calibration constants put the energy into MeV */
@@ -560,30 +564,48 @@ int userdecode(ScarletEvnt &event) {
     Wpat[ndet]=*p++;
       
     Wbitcnt[ndet]=cntbit(Wpat[ndet]);
+   
 
    for (Int_t ndat=0; ndat<Wbitcnt[ndet]; ndat++) {
-      if(iverb) cout << "wedge " << ndet << endl;
      dataword=*p++;
      WChan[ndet][ndat] = ((dataword & 0x0000f000)>>12);
      WRawData[ndet][ndat] = (dataword & 0x00000fff);
      WData[ndet][ndat] = (WRawData[ndet][ndat] - Woffset[ndet][WChan[ndet][ndat]])*Wslope[ndet][WChan[ndet][ndat]];
      WData[ndet][ndat] = WData[ndet][ndat]/1000;
 
-   // WData[ndet][ndat] = Woffset[ndet][WChan[ndet][ndat]] + Wslope[ndet][WChan[ndet][ndat]]*WRawData[ndet][ndat];
+     // still in det, dat loop
         
-    if(ndet==0){ //E - swapped electronics from run 96!
-            dE_Benergy_raw[dE_Bmult] = WRawData[ndet][ndat];
-            dE_Bnum[dE_Bmult] = WChan[ndet][ndat];
-            dE_Benergy[dE_Bmult] = WData[ndet][ndat]; //MeV
-	    dE_Bmult++; 
-        }else if(ndet==1){ //dE 
-            E_Benergy_raw[E_Bmult] = WRawData[ndet][ndat];
-            E_Bnum[E_Bmult] = WChan[ndet][ndat];
-            E_Benergy[E_Bmult] = WData[ndet][ndat]; // MeV
-            E_Bmult++;
+    if(ndet==0){ //dE - swapped electronics from run 96!
+      hELudW1->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
+      hEW1->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
+
+            dE_Benergy_raw[deb] = WRawData[ndet][ndat];
+            dE_Bnum[deb] = WChan[ndet][ndat];
+            dE_Benergy[deb] = WData[ndet][ndat]; //MeV
+	    deb++; 
+        }else if(ndet==1){ //E       
+      hELudW2->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
+      hEW2->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
+
+            E_Benergy_raw[eb] = WRawData[ndet][ndat];
+            E_Bnum[eb] = WChan[ndet][ndat];
+            E_Benergy[eb] = WData[ndet][ndat]; // MeV
+            eb++;
     }
+
+    dE_Bmult = deb; // here, the indexing will start at 0 but the mult will be 'human'
+    E_Bmult = eb;
+      
+       if(iverb){
+       	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
+       	cout << "WRawData["<<ndet<<"]["<<ndat<<"] = " << WRawData[ndet][ndat] << endl;
+       	for(i=0;i<E_Bmult;i++) cout << ", E_Benergy["<<i<<"]["<<E_Bnum[i]<<"] = " << E_Benergy[i] << endl;
        
-    for(i=0;i<dE_Bmult;i++){
+       }
+   } // ndat
+  } // ndet
+
+  for(i=0;i<dE_Bmult;i++){
      if (dE_Benergy[i]>dE_Bmax){
          dE_Bmax=dE_Benergy[i];
          dE_Bmaxnum = dE_Bnum[i];
@@ -593,31 +615,21 @@ int userdecode(ScarletEvnt &event) {
          E_Bmax=E_Benergy[i];
          E_Bmaxnum = E_Bnum[i];
      }}
-    
-       if(iverb){
-       	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
-       	cout << "WRawData["<<ndet<<"]["<<ndat<<"] = " << WRawData[ndet][ndat] << endl;
-           for(i=0;i<dE_Bmult;i++){
-               cout << dE_Benergy_raw[i] << " - " << Woffset[ndet][WChan[ndet][ndat]] << " x " << Wslope[ndet][WChan[ndet][ndat]] << " = dE_Benergy["<<i<<"]["<<dE_Bnum[i]<<"] = " << dE_Benergy[i] << endl;
-           }
-       	for(i=0;i<E_Bmult;i++) cout << ", E_Benergy["<<i<<"]["<<E_Bnum[i]<<"] = " << E_Benergy[i] << endl;
-       	cout << "dE_Bmax = " << dE_Bmax << ", dE_Bmaxnum = " << dE_Bmaxnum << endl;
-        cout << "E_Bmax = " << E_Bmax << ", E_Bmaxnum = " << E_Bmaxnum << endl;
-       }
-      
-	hELudW1->Fill(WRawData[0][ndat],WChan[0][ndat]);
-	hEW1->Fill(WData[0][ndat],WChan[0][ndat]);
-	hELudW2->Fill(WRawData[1][ndat],WChan[1][ndat]);
-	hEW2->Fill(WData[1][ndat],WChan[1][ndat]);
-    }
-  }
 
+     if(iverb){
+	cout << "dE_Bmax = " << dE_Bmax << ", dE_Bmaxnum = " << dE_Bmaxnum << endl;
+        cout << "E_Bmax = " << E_Bmax << ", E_Bmaxnum = " << E_Bmaxnum << endl;
+     }
+    
+ def = ef = 0;
 for (Int_t ndet=0; ndet<2; ++ndet) {
     /* get Ring hit pattern, count bits, then store data & channel */
     /* calibration constants put the energy into MeV */
     
     Rpat[ndet]=*p++;
     Rbitcnt[ndet]=cntbit(Rpat[ndet]);
+
+   
 
     for (Int_t ndat=0;ndat<Rbitcnt[ndet];ndat++) {
         if(iverb) cout << "Ring " << ndet << endl;
@@ -629,27 +641,22 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
         RData[ndet][ndat] = RData[ndet][ndat]/1000;
         
         if(ndet==1){ //dE
-          dE_Fenergy_raw[dE_Fmult] = RRawData[ndet][ndat];
-          dE_Fnum[dE_Fmult] = RChan[ndet][ndat];
-          dE_Fenergy[dE_Fmult] = RData[ndet][ndat]; //MeV
-          dE_Fmult++; 
-         }else if(ndet==0){ //E
-          E_Fenergy_raw[E_Fmult] = RRawData[ndet][ndat];
-          E_Fnum[E_Fmult] = RChan[ndet][ndat];
-          E_Fenergy[E_Fmult] = RData[ndet][ndat]; // MeV
-          E_Fmult++;
-          }
+	  hELudR2->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
+          hER2->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
+          dE_Fenergy_raw[def] = RRawData[ndet][ndat];
+          dE_Fnum[def] = RChan[ndet][ndat];
+          dE_Fenergy[def] = RData[ndet][ndat]; //MeV 
+	  def++;
+	}else if(ndet==0){ //E
+	  hELudR1->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
+          hER1->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
+          E_Fenergy_raw[ef] = RRawData[ndet][ndat];
+          E_Fnum[ef] = RChan[ndet][ndat];
+          E_Fenergy[ef] = RData[ndet][ndat]; // MeV
+          ef++;
+	}
              
-          for(i=0;i<dE_Fmult;i++){
-           if (dE_Fenergy[i]>dE_Fmax){
-               dE_Fmax=dE_Fenergy[i];
-               dE_Fmaxnum = dE_Fnum[i];
-           }}
-           for(i=0;i<E_Fmult;i++){
-           if (E_Fenergy[i]>E_Fmax){
-               E_Fmax=E_Fenergy[i];
-               E_Fmaxnum = E_Fnum[i];
-           }}
+	dE_Fmult = def; E_Fmult = ef;
           
              if(iverb){
               cout << "RChan["<<ndet<<"]["<<ndat<<"] = " << RChan[ndet][ndat] << endl;
@@ -657,16 +664,26 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
               cout << "Rdata["<<ndet<<"]["<<ndat<<"] = " << RData[ndet][ndat] << endl;
               for(i=0;i<dE_Fmult;i++) cout << "dE_Fenergy["<<i<<"]["<<dE_Fnum[i]<<"] = " << dE_Fenergy[i] << endl;
               for(i=0;i<E_Fmult;i++) cout << "E_Fenergy["<<i<<"]["<<E_Fnum[i]<<"] = " << E_Fenergy[i] << endl;
-              cout << "dE_Fmax = " << dE_Fmax << ", dE_Fmaxnum = " << dE_Fmaxnum << endl;
-              cout << "E_Fmax = " << E_Fmax << ", E_Fmaxnum = " << E_Fmaxnum << endl;
              }
-            
-          hELudR1->Fill(RRawData[0][ndat],RChan[0][ndat]);
-          hER1->Fill(RData[0][ndat],RChan[0][ndat]);
-          hELudR2->Fill(RRawData[1][ndat],RChan[1][ndat]);
-          hER2->Fill(RData[1][ndat],RChan[1][ndat]);
-    }
-}
+    } // ndat
+ } // ndet
+
+ for(i=0;i<dE_Fmult;i++){
+   if (dE_Fenergy[i]>dE_Fmax){
+       dE_Fmax=dE_Fenergy[i];
+       dE_Fmaxnum = dE_Fnum[i];
+           }}
+ for(i=0;i<E_Fmult;i++){
+  if (E_Fenergy[i]>E_Fmax){
+      E_Fmax=E_Fenergy[i];
+      E_Fmaxnum = E_Fnum[i];
+           }}
+
+ if(iverb){
+   cout << "dE_Fmax = " << dE_Fmax << ", dE_Fmaxnum = " << dE_Fmaxnum << endl;
+   cout << "E_Fmax = " << E_Fmax << ", E_Fmaxnum = " << E_Fmaxnum << endl;
+ }
+
   p1=p;
   
   // TDC part
