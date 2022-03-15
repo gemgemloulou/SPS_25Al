@@ -303,10 +303,10 @@ in_Eb.open("Ebackcal.dat");
 for (int i=0;i<16;i++){
     in_dEf >> Rslope[1][i] >> Roffset[1][i];
     in_Ef >> Rslope[0][i] >> Roffset[0][i];
-    in_Eb >> Wslope[1][i] >> Woffset[0][i]; // 1 because of swapped electronics
+    in_Eb >> Wslope[1][i] >> Woffset[1][i]; // 1 because of swapped electronics
     if (Rslope[1][i] != 0) Rslope[1][i] = 1/Rslope[1][i];
     if (Rslope[0][i] != 0) Rslope[0][i] = 1/Rslope[0][i];
-    if (Wslope[1][i] != 0) Wslope[0][i] = 1/Wslope[0][i];
+    if (Wslope[1][i] != 0) Wslope[1][i] = 1/Wslope[1][i];
     }
        
 for(int i=16;i<32;i++){ // old values - which I don't think are right. I'm not sure there are dE backs
