@@ -139,10 +139,10 @@ Float_t E_Fmax;
 Float_t E_Bmax;
 Float_t dE_Fmax;
 Float_t dE_Bmax;
-Float_t E_Fmaxnum;
-Float_t E_Bmaxnum;
-Float_t dE_Fmaxnum;
-Float_t dE_Bmaxnum;
+Int_t E_Fmaxnum;
+Int_t E_Bmaxnum;
+Int_t dE_Fmaxnum;
+Int_t dE_Bmaxnum;
 
 Float_t de[5], cathode, grid, y, rftof, mon, spare, t1, t2;
 Float_t E, DE;
@@ -171,7 +171,7 @@ void treeinit(){
     }
     dE_Fmult = 0; dE_Bmult = 0;
     E_Fmult = 0; E_Bmult = 0;
-    dE_Bmax = 0; dE_Fmax = 0; E_Bmax = 0; E_Fmax = 0;
+    dE_Bmax = -5; dE_Fmax = -5; E_Bmax = -5; E_Fmax = -5;
     deb = def = eb = ef = 0;
     dE_Bmaxnum = -5; dE_Fmaxnum = -5; E_Fmaxnum = -5; E_Bmaxnum = -5;
 
@@ -326,8 +326,8 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
   f = new TFile("output.root","recreate");
   tree = new TTree("tree","sorted data");
 
-  tree->Branch("dE_FMult",&dE_Fmult,"dE_Fmult/i");
-  tree->Branch("dE_BMult",&dE_Bmult,"dE_Bmult/i");
+  tree->Branch("dE_Fmult",&dE_Fmult,"dE_Fmult/i");
+  tree->Branch("dE_Bmult",&dE_Bmult,"dE_Bmult/i");
   tree->Branch("dE_Fenergy",dE_Fenergy,"dE_Fenergy[dE_Fmult]/f");
   tree->Branch("dE_Benergy",dE_Benergy,"dE_Benergy[dE_Bmult]/f");
   tree->Branch("dE_Fnum",dE_Fnum,"dE_Fnum[dE_Fmult]/i");
@@ -335,8 +335,8 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
   tree->Branch("dE_Fenergy_raw",dE_Fenergy_raw,"dE_Fenergy_raw[dE_Fmult]/f");
   tree->Branch("dE_Benergy_raw",dE_Benergy_raw,"dE_Benergy_raw[dE_Bmult]/f");
 
-  tree->Branch("E_FMult",&E_Fmult,"E_Fmult/i");
-  tree->Branch("E_BMult",&E_Bmult,"E_Bmult/i");
+  tree->Branch("E_Fmult",&E_Fmult,"E_Fmult/i");
+  tree->Branch("E_Bmult",&E_Bmult,"E_Bmult/i");
   tree->Branch("E_Fenergy",E_Fenergy,"E_Fenergy[E_Fmult]/f");
   tree->Branch("E_Benergy",E_Benergy,"E_Benergy[E_Bmult]/f");
   tree->Branch("E_Fnum",E_Fnum,"E_Fnum[E_Fmult]/i");
@@ -591,35 +591,33 @@ int userdecode(ScarletEvnt &event) {
             E_Bnum[eb] = WChan[ndet][ndat];
             E_Benergy[eb] = WData[ndet][ndat]; // MeV
             eb++;
-    }
-
-    dE_Bmult = deb; // here, the indexing will start at 0 but the mult will be 'human'
-    E_Bmult = eb;
-      
+    } 
        if(iverb){
        	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
        	cout << "WRawData["<<ndet<<"]["<<ndat<<"] = " << WRawData[ndet][ndat] << endl;
-       	for(i=0;i<E_Bmult;i++) cout << ", E_Benergy["<<i<<"]["<<E_Bnum[i]<<"] = " << E_Benergy[i] << endl;
-       
+         
        }
    } // ndat
   } // ndet
 
+  dE_Bmult = deb; // here, the indexing will start at 0 but the mult will be 'human'
+  E_Bmult = eb;
+
   for(i=0;i<dE_Bmult;i++){
-     if (dE_Benergy[i]>dE_Bmax){
+     if (dE_Benergy[i]>0 && dE_Benergy[i]>dE_Bmax){
          dE_Bmax=dE_Benergy[i];
          dE_Bmaxnum = dE_Bnum[i];
      }}
      for(i=0;i<E_Bmult;i++){
-     if (E_Benergy[i]>E_Bmax){
+     if (E_Benergy[i]>0 && E_Benergy[i]>E_Bmax){
          E_Bmax=E_Benergy[i];
          E_Bmaxnum = E_Bnum[i];
      }}
 
-     if(iverb){
+      if(iverb){
 	cout << "dE_Bmax = " << dE_Bmax << ", dE_Bmaxnum = " << dE_Bmaxnum << endl;
         cout << "E_Bmax = " << E_Bmax << ", E_Bmaxnum = " << E_Bmaxnum << endl;
-     }
+	 }
     
  def = ef = 0;
 for (Int_t ndet=0; ndet<2; ++ndet) {
@@ -654,27 +652,26 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
           E_Fnum[ef] = RChan[ndet][ndat];
           E_Fenergy[ef] = RData[ndet][ndat]; // MeV
           ef++;
-	}
-             
-	dE_Fmult = def; E_Fmult = ef;
-          
+	 } 
              if(iverb){
               cout << "RChan["<<ndet<<"]["<<ndat<<"] = " << RChan[ndet][ndat] << endl;
               cout << "RRawData["<<ndet<<"]["<<ndat<<"] = " << RRawData[ndet][ndat] << endl;
               cout << "Rdata["<<ndet<<"]["<<ndat<<"] = " << RData[ndet][ndat] << endl;
-              for(i=0;i<dE_Fmult;i++) cout << "dE_Fenergy["<<i<<"]["<<dE_Fnum[i]<<"] = " << dE_Fenergy[i] << endl;
-              for(i=0;i<E_Fmult;i++) cout << "E_Fenergy["<<i<<"]["<<E_Fnum[i]<<"] = " << E_Fenergy[i] << endl;
              }
     } // ndat
  } // ndet
 
+
+dE_Fmult = def; E_Fmult = ef;
+
+
  for(i=0;i<dE_Fmult;i++){
-   if (dE_Fenergy[i]>dE_Fmax){
+   if (dE_Fenergy[i]>0 && dE_Fenergy[i]>dE_Fmax){
        dE_Fmax=dE_Fenergy[i];
        dE_Fmaxnum = dE_Fnum[i];
            }}
  for(i=0;i<E_Fmult;i++){
-  if (E_Fenergy[i]>E_Fmax){
+   if (E_Fenergy[i]>0 && E_Fenergy[i]>E_Fmax){
       E_Fmax=E_Fenergy[i];
       E_Fmaxnum = E_Fnum[i];
            }}
