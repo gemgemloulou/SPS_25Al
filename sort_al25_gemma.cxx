@@ -582,7 +582,8 @@ int userdecode(ScarletEvnt &event) {
             dE_Benergy_raw[deb] = WRawData[ndet][ndat];
             dE_Bnum[deb] = WChan[ndet][ndat];
             dE_Benergy[deb] = WData[ndet][ndat]; //MeV
-	    deb++; 
+if(iverb)cout << "dE_Benergy["<<deb<<"], chan " << dE_Bnum[deb] << " = " << dE_Benergy[deb] << endl;
+	    if(dE_Benergy[deb]>0.5) deb++; 
         }else if(ndet==1){ //E       
       hELudW2->Fill(WRawData[ndet][ndat],WChan[ndet][ndat]);
       hEW2->Fill(WData[ndet][ndat],WChan[ndet][ndat]);
@@ -590,13 +591,9 @@ int userdecode(ScarletEvnt &event) {
             E_Benergy_raw[eb] = WRawData[ndet][ndat];
             E_Bnum[eb] = WChan[ndet][ndat];
             E_Benergy[eb] = WData[ndet][ndat]; // MeV
-            eb++;
+if(iverb)cout << "E_Benergy["<<eb<<"], chan " << E_Bnum[eb] << " = " << E_Benergy[eb] << endl;
+            if(E_Benergy[eb] > 0.5) eb++;
     } 
-       if(iverb){
-       	cout << "WChan["<<ndet<<"]["<<ndat<<"] = " << WChan[ndet][ndat] << endl;
-       	cout << "WRawData["<<ndet<<"]["<<ndat<<"] = " << WRawData[ndet][ndat] << endl;
-         
-       }
    } // ndat
   } // ndet
 
@@ -630,7 +627,6 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
    
 
     for (Int_t ndat=0;ndat<Rbitcnt[ndet];ndat++) {
-        if(iverb) cout << "Ring " << ndet << endl;
         dataword=*p++;
       
         RChan[ndet][ndat]=((dataword & 0x0000f000)>>12);
@@ -644,20 +640,17 @@ for (Int_t ndet=0; ndet<2; ++ndet) {
           dE_Fenergy_raw[def] = RRawData[ndet][ndat];
           dE_Fnum[def] = RChan[ndet][ndat];
           dE_Fenergy[def] = RData[ndet][ndat]; //MeV 
-	  def++;
+if(iverb)cout << "dE_Fenergy["<<def<<"], chan " << dE_Fnum[def] << " = " << dE_Fenergy[def] << endl;
+	  if(dE_Fenergy[def] > 0.1) def++;
 	}else if(ndet==0){ //E
 	  hELudR1->Fill(RRawData[ndet][ndat],RChan[ndet][ndat]);
           hER1->Fill(RData[ndet][ndat],RChan[ndet][ndat]);
           E_Fenergy_raw[ef] = RRawData[ndet][ndat];
           E_Fnum[ef] = RChan[ndet][ndat];
           E_Fenergy[ef] = RData[ndet][ndat]; // MeV
-          ef++;
+	  if(iverb)cout << "E_Fenergy["<<ef<<"], chan " << E_Fnum[ef] << " = " << E_Fenergy[ef] << endl;
+          if(E_Fenergy[ef] > 0.1)ef++;
 	 } 
-             if(iverb){
-              cout << "RChan["<<ndet<<"]["<<ndat<<"] = " << RChan[ndet][ndat] << endl;
-              cout << "RRawData["<<ndet<<"]["<<ndat<<"] = " << RRawData[ndet][ndat] << endl;
-              cout << "Rdata["<<ndet<<"]["<<ndat<<"] = " << RData[ndet][ndat] << endl;
-             }
     } // ndat
  } // ndet
 
@@ -709,8 +702,12 @@ dE_Fmult = def; E_Fmult = ef;
   stime = (stime2*65536.0 + stime1)*65536.0 + stime0;
   stime_1s = stime/1e6;
 
+  if(stime_1s != 0) cout << "stime_1s = " << stime_1s << endl;
+
   myppac->GetPosition(hepo,hepi,lepo,lepi,up,down); // old version
   if(iverb) cout << endl << "myppac routine: " << hepo << " " << hepi << " " << lepo << " " << lepi << " " << up << " " << down << endl;
+
+  if(up < 4095 || down < 4095) cout << "up = " << up << ", down = " << down << endl;
 
   // select whether high/low/both (he/le/pospp) energy side  
   //Float_t x = myppac->pospp;
@@ -730,6 +727,7 @@ dE_Fmult = def; E_Fmult = ef;
   h1_grid->Fill(grid);
   t2=grid; // grid is TAC between RF and SSB =t2
 if(iverb) cout << "TAC between RF and SSB = " << grid << endl;
+ hTAC->Fill(grid);
   h1_rftof->Fill(rftof);
   h1_mon->Fill(mon);
   h1_spare->Fill(spare); //spare is TAC between DSSD and PPAC =t1
