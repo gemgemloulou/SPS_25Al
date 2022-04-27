@@ -733,11 +733,10 @@ if(iverb) cout << "TAC between RF and SSB = " << grid << endl;
   h1_spare->Fill(spare); //spare is TAC between DSSD and PPAC =t1
 if(iverb) cout << "spare = TAC between DSSD and PPAC = " << spare << endl;
   t1=spare;
-
-  if(spare>1000 && spare<2000){
+    if(spare>1000 && spare<2000){
     dEres_tac->Fill(dE_Fmax,dE_Fmax+E_Fmax);
-      for(i=0;i<E_Bmult;i++){
-          hEW2g->Fill(E_Benergy[i],E_Bnum[i]);
+      for(int b=0;b<E_Bmult;b++){
+          hEW2g->Fill(E_Benergy[b],E_Bnum[b]);
       }
     
       //cout << "tac = " << spare << ", dE_Fmax = " << dE_Fmax << ", E_Fmax = " << E_Fmax << ", sum = " << dE_Fmax+E_Fmax << endl;
