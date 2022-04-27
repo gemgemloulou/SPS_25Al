@@ -458,7 +458,7 @@ for(int i=0;i<16;i++) cout << Woffset[0][i] << "\t" << Wslope[0][i] << "\t" << W
  
   hER1g=new TH2F("hER1g","Ring1 vs E calib gated",1000,0,80,17,0,17);  
   hER1g2=new TH2F("hER1g2","Ring1 vs E calib time and pid gated",1000,0,50,17,0,17);  
-  hEW1g=new TH2F("hEW1g","Wedge1 vs E calib gated",1000,0,80,17,0,17);
+  hEW2g=new TH2F("hEW2g","Wedge2 vs E calib gated",4000,0,100,17,0,17);
   hER1_gtxrf1=new TH2F("hER1_gtxrf1","Ring1 vs E calib gated, time and xrfcut1",1000,0,80,17,0,17);  
   hER1_gtxrf2=new TH2F("hER1_gtxrf2","Ring1 vs E calib gated time and xrfcut2",1000,0,80,17,0,17);  
   hER1_gtxde41=new TH2F("hER1_gtxde41","Ring1 vs E calib gated, time and xde4g1",1000,0,80,17,0,17);  
@@ -734,8 +734,12 @@ if(iverb) cout << "TAC between RF and SSB = " << grid << endl;
 if(iverb) cout << "spare = TAC between DSSD and PPAC = " << spare << endl;
   t1=spare;
 
-  if(spare>600 && spare<2000){
+  if(spare>1000 && spare<2000){
     dEres_tac->Fill(dE_Fmax,dE_Fmax+E_Fmax);
+      for(i=0;i<E_Bmult;i++){
+          hEW2g->Fill(E_Benergy[i],E_Bnum[i]);
+      }
+    
       //cout << "tac = " << spare << ", dE_Fmax = " << dE_Fmax << ", E_Fmax = " << E_Fmax << ", sum = " << dE_Fmax+E_Fmax << endl;
   }
 
